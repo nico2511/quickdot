@@ -46,6 +46,8 @@ jobs:
           fi
           echo "$KEYSTORE_BASE64" | base64 -d > presentation/my-release-key.keystore
           chmod 600 presentation/my-release-key.keystore
+          # The release keystore is PKCS12. Gradle sets storeType PKCS12; alias and
+          # passwords come from KEY_ALIAS, KEYSTORE_PASSWORD, and KEY_PASSWORD.
           {
             echo "keystore_password=$KEYSTORE_PASSWORD"
             echo "key_alias=$KEY_ALIAS"

@@ -28,8 +28,8 @@ android {
         applicationId 'com.nico2511.quickdot'
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 2239
-        versionName '4.3.7'
+        versionCode 1
+        versionName '0.1.0'
         setProperty("archivesBaseName", "Quickdot-v${versionName}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -40,7 +40,8 @@ android {
             def keystoreProps = new Properties()
             def keystorePropsFile = rootProject.file('./.gradle/.gradlerc')
             storeFile file('./my-release-key.keystore')
-            keyAlias 'quik_release'
+            storeType 'PKCS12'
+            keyAlias 'quickdot'
             if (keystorePropsFile.exists()) {
                 keystoreProps.load(new FileInputStream(keystorePropsFile))
             } else {

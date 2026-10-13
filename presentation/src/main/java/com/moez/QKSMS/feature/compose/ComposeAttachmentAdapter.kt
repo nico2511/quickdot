@@ -81,7 +81,7 @@ class ComposeAttachmentAdapter @Inject constructor(
             } catch (e: Exception) {
                 // npe from Ezvcard first() call above can be thrown if resource bytes cannot
                 // be retrieved from contact resource provider
-                binding.vCardAvatar.setImageResource(android.R.drawable.ic_delete)
+                binding.vCardAvatar.setImageResource(R.drawable.ic_missing)
                 binding.name.text = context.getString(R.string.attachment_missing)
                 binding.name.isVisible = true
             }

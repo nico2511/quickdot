@@ -217,7 +217,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
-            app:icon="@android:drawable/stat_sys_warning"
+            app:icon="@drawable/ic_warning"
             app:title="@string/settings_mms_weblink_title"
             tools:summary="100KB" />
 

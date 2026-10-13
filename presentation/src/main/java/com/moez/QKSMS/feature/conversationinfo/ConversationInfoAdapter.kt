@@ -8,6 +8,7 @@ import com.jakewharton.rxbinding2.view.clicks
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkAdapter
 import dev.octoshrimpy.quik.common.base.QkViewHolder
+import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.extensions.setVisible
 import dev.octoshrimpy.quik.databinding.ConversationInfoSectionBinding
 import dev.octoshrimpy.quik.databinding.ConversationInfoSettingsBinding
@@ -21,8 +22,11 @@ import io.reactivex.subjects.Subject
 import javax.inject.Inject
 
 class ConversationInfoAdapter @Inject constructor(
-    private val context: Context
+    private val context: Context,
+    private val colors: Colors
 ) : QkAdapter<ConversationInfoItem, QkViewHolder>() {
+
+    var threadId: Long = 0
 
     val recipientClicks: Subject<Long> = PublishSubject.create()
     val recipientLongClicks: Subject<Long> = PublishSubject.create()
@@ -123,7 +127,7 @@ class ConversationInfoAdapter @Inject constructor(
                     false -> R.string.info_block
                 })
 
-                val accent = context.getColor(R.color.accent)
+                val accent = colors.accentForThread(threadId)
                 binding.block.setIconTint(accent)
                 binding.delete.setIconTint(accent)
                 binding.block.titleView.setTextColor(accent)

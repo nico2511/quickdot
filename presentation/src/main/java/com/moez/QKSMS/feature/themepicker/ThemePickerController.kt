@@ -1,36 +1,17 @@
-/*
- * Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
- *
- * This file is part of QKSMS.
- *
- * QKSMS is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * QKSMS is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
- */
 package dev.octoshrimpy.quik.feature.themepicker
 
-import android.animation.ObjectAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
+import android.widget.ImageView
+import androidx.core.view.isVisible
 import com.jakewharton.rxbinding2.view.clicks
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkController
 import dev.octoshrimpy.quik.common.util.Colors
-import dev.octoshrimpy.quik.common.util.extensions.dpToPx
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
-import dev.octoshrimpy.quik.common.util.extensions.setVisible
+import dev.octoshrimpy.quik.common.util.extensions.setTint
+import dev.octoshrimpy.quik.databinding.AccentSwatchBinding
 import dev.octoshrimpy.quik.databinding.ThemePickerControllerBinding
 import dev.octoshrimpy.quik.feature.themepicker.injection.ThemePickerModule
 import dev.octoshrimpy.quik.injection.appComponent
@@ -40,21 +21,16 @@ import io.reactivex.subjects.Subject
 import javax.inject.Inject
 
 class ThemePickerController(
-    val recipientId: Long = 0L
+    val threadId: Long = 0L
 ) : QkController<ThemePickerControllerBinding, ThemePickerView, ThemePickerState, ThemePickerPresenter>(), ThemePickerView {
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup): ThemePickerControllerBinding =
         ThemePickerControllerBinding.inflate(inflater, container, false)
 
     @Inject override lateinit var presenter: ThemePickerPresenter
+    @Inject lateinit var colors: Colors
 
-    @Inject
-    lateinit var colors: Colors
-
-    @Inject
-    lateinit var themeAdapter: ThemeAdapter
-    @Inject
-    lateinit var themePagerAdapter: ThemePagerAdapter
+    private val themeSelected: Subject<Int> = PublishSubject.create()
 
     init {
         appComponent
@@ -65,14 +41,16 @@ class ThemePickerController(
     }
 
     override fun onViewCreated() {
-        binding.pager.offscreenPageLimit = 1
-        binding.pager.adapter = themePagerAdapter
-        binding.tabs.pager = binding.pager
-
-        themeAdapter.data = colors.materialColors
-
-        binding.materialColors.layoutManager = LinearLayoutManager(activity)
-        binding.materialColors.adapter = themeAdapter
+        val inflater = LayoutInflater.from(activity)
+        colors.accents.forEach { accent ->
+            val swatch = AccentSwatchBinding.inflate(inflater, binding.swatches, false)
+            swatch.root.tag = accent.color
+            swatch.label.text = activity?.getString(accent.nameRes)
+            swatch.swatch.setTint(accent.color)
+            swatch.root.setOnClickListener { themeSelected.onNext(accent.color) }
+            binding.swatches.addView(swatch.root)
+        }
+        binding.styleConversation.isVisible = threadId != 0L
     }
 
     override fun onAttach(view: View) {
@@ -80,41 +58,33 @@ class ThemePickerController(
         presenter.bindIntents(this)
         setTitle(R.string.title_theme)
         showBackButton(true)
-
-        themedActivity?.supportActionBar?.let { toolbar ->
-            ObjectAnimator.ofFloat(toolbar, "elevation", toolbar.elevation, 0f).start()
-        }
     }
 
-    override fun onDetach(view: View) {
-        super.onDetach(view)
+    override fun themeSelected(): Observable<Int> = themeSelected
 
-        themedActivity?.supportActionBar?.let { toolbar ->
-            ObjectAnimator.ofFloat(toolbar, "elevation", toolbar.elevation, 8.dpToPx(toolbar.themedContext).toFloat()).start()
-        }
-    }
-
-    override fun themeSelected(): Observable<Int> = themeAdapter.colorSelected
-
-    override fun hsvThemeSelected(): Observable<Int> = binding.hsvPicker.picker.selectedColor
-
-    override fun clearHsvThemeClicks(): Observable<*> = binding.hsvPicker.clear.clicks()
-
-    override fun applyHsvThemeClicks(): Observable<*> = binding.hsvPicker.apply.clicks()
-
-    override fun render(state: ThemePickerState) {
-        binding.tabs.setRecipientId(state.recipientId)
-
-        binding.hsvPicker.hex.setText(Integer.toHexString(state.newColor).takeLast(6))
-
-        binding.hsvPicker.applyGroup.setVisible(state.applyThemeVisible)
-        binding.hsvPicker.apply.setBackgroundTint(state.newColor)
-        binding.hsvPicker.apply.setTextColor(state.newTextColor)
-    }
+    override fun styleConversationClicks(): Observable<*> = binding.styleConversation.clicks()
 
     override fun setCurrentTheme(color: Int) {
-        binding.hsvPicker.picker.setColor(color)
-        themeAdapter.selectedColor = color
+        val snapped = colors.snapAccent(color)
+        binding.previewSend.setBackgroundTint(snapped)
+        binding.previewAvatar.setBackgroundTint(snapped)
+        binding.styleConversation.setTextColor(snapped)
+        for (index in 0 until binding.swatches.childCount) {
+            val child = binding.swatches.getChildAt(index)
+            val selected = child.tag == snapped
+            val frame = child.findViewById<View>(R.id.swatchFrame)
+            if (selected) frame.setBackgroundTint(snapped) else frame.backgroundTintList = null
+            child.findViewById<ImageView>(R.id.swatch).setTint(child.tag as Int)
+        }
     }
+
+    override fun showStyled(styled: Boolean) {
+        binding.styleConversation.setText(
+            if (styled) R.string.theme_style_conversation_done
+            else R.string.theme_style_conversation
+        )
+    }
+
+    override fun render(state: ThemePickerState) = Unit
 
 }

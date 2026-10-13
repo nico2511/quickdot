@@ -1,57 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (C) 2019 Moez Bhatti <moez.bhatti@gmail.com>
-  ~
-  ~ This file is part of QKSMS.
-  ~
-  ~ QKSMS is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU General Public License as published by
-  ~ the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
-  ~
-  ~ QKSMS is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License
-  ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/contentView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    android:background="?android:attr/windowBackground"
-    android:orientation="vertical">
+    android:background="?android:attr/windowBackground">
 
-    <dev.octoshrimpy.quik.common.widget.PagerTitleView
-        android:id="@+id/tabs"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="?attr/colorPrimary"
-        android:elevation="8dp"
-        android:orientation="horizontal"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp" />
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingStart="16dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="24dp">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/materialColors"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <include
-            android:id="@+id/hsvPicker"
-            layout="@layout/theme_picker_hsv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                style="@style/TextTertiary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:drawableStart="@drawable/matrix_band"
+                android:drawableEnd="@drawable/matrix_band"
+                android:drawablePadding="8dp"
+                android:drawableTint="?android:attr/textColorTertiary"
+                android:letterSpacing="0.14"
+                android:text="@string/theme_section_preview"
+                android:textAllCaps="true"
+                app:textFont="label" />
 
-    </androidx.viewpager.widget.ViewPager>
+            <LinearLayout
+                android:id="@+id/preview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="?attr/bubbleColor"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-</LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/previewAvatar"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:background="@drawable/rounded_rectangle_4dp" />
+
+                    <dev.octoshrimpy.quik.common.widget.QkTextView
+                        android:id="@+id/previewIncoming"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/square_outline"
+                        android:paddingStart="12dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="8dp"
+                        android:text="@string/theme_preview_in"
+                        android:textColor="?android:attr/textColorPrimary" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="end|center_vertical"
+                    android:orientation="horizontal">
+
+                    <dev.octoshrimpy.quik.common.widget.QkTextView
+                        android:id="@+id/previewOutgoing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/square_key"
+                        android:backgroundTint="@color/bubbleOutgoing"
+                        android:paddingStart="12dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="8dp"
+                        android:text="@string/theme_preview_out"
+                        android:textColor="@color/bubbleOutgoingText" />
+
+                    <ImageView
+                        android:id="@+id/previewSend"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/square_key"
+                        android:contentDescription="@string/compose_send_cd"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_send_black_24dp"
+                        app:tint="@color/white" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                style="@style/TextTertiary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:drawableStart="@drawable/matrix_band"
+                android:drawableEnd="@drawable/matrix_band"
+                android:drawablePadding="8dp"
+                android:drawableTint="?android:attr/textColorTertiary"
+                android:letterSpacing="0.14"
+                android:text="@string/theme_section_accent"
+                android:textAllCaps="true"
+                app:textFont="label" />
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/swatches"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:flexWrap="wrap"
+                app:justifyContent="center" />
+
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                android:id="@+id/styleConversation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="@string/theme_style_conversation"
+                android:textColor="@color/accent"
+                android:visibility="gone"
+                app:textFont="label"
+                app:textSize="secondary" />
+
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                android:id="@+id/proNote"
+                style="@style/TextSecondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:text="@string/theme_pro_note"
+                app:textFont="body" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <View
+        android:layout_width="12dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/sprocket_rail"
+        android:importantForAccessibility="no" />
+
+</FrameLayout>

@@ -118,13 +118,18 @@
     <style name="PreferenceCategory">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">16dp</item>
-        <item name="android:layout_marginEnd">24dp</item>
-        <item name="android:layout_marginStart">72dp</item>
-        <item name="android:layout_marginTop">16dp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="textColor">theme</item>
-        <item name="textSize">secondary</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginTop">18dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:drawableStart">@drawable/matrix_band</item>
+        <item name="android:drawableEnd">@drawable/matrix_band</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:drawableTint">?android:attr/textColorTertiary</item>
+        <item name="android:letterSpacing">0.14</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">?android:attr/textColorTertiary</item>
+        <item name="textFont">label</item>
+        <item name="textSize">tertiary</item>
     </style>
 
     <style name="CollapsingToolbarCollapsedText">
@@ -184,6 +189,7 @@
         <item name="android:layout_height">8dp</item>
         <item name="android:layout_marginEnd">12dp</item>
         <item name="android:background">@drawable/drawer_active_mark</item>
+        <item name="android:tag">accentMark</item>
         <item name="android:duplicateParentState">true</item>
         <item name="android:importantForAccessibility">no</item>
     </style>

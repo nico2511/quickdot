@@ -89,6 +89,18 @@ class Preferences @Inject constructor(
         const val DEFAULT_THEME_COLOR = 0xFFE10600.toInt()
     }
 
+    /**
+     * Quickdot Pro, 1 EUR one-time. Play Billing is not wired up.
+     * Only [dev.octoshrimpy.quik.util.ProBillingHook.grant] should set this.
+     */
+    val quickdotPro = rxPrefs.getBoolean("quickdotPro", false)
+
+    /**
+     * The one conversation a free account keeps full style on, once billing
+     * enforcement is turned on. 0 means the user has not chosen one yet.
+     */
+    val styledThreadId = rxPrefs.getLong("styledThreadId", 0L)
+
     // Internal
     val didSetReferrer = rxPrefs.getBoolean("didSetReferrer", false)
     val night = rxPrefs.getBoolean("night", false)

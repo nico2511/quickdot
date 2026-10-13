@@ -28,6 +28,7 @@ import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -157,7 +158,7 @@ class MainActivity : QkThemedActivity(), MainView {
         }
 
         syncingBinding = MainSyncingBinding.bind(binding.syncing.inflate()).also {
-            val accent = getColorCompat(R.color.accent)
+            val accent = colors.accentColor()
             it.syncingProgress.progressTintList = ColorStateList.valueOf(accent)
             it.syncingProgress.indeterminateTintList = ColorStateList.valueOf(accent)
         }
@@ -179,8 +180,10 @@ class MainActivity : QkThemedActivity(), MainView {
         // Set the theme color tint to the recyclerView, progressbar, and FAB
         theme
                 .autoDisposable(scope())
-                .subscribe {
-                    val accent = getColorCompat(R.color.accent)
+                .subscribe { theme ->
+                    val accent = theme.theme
+                    tintAccentMarks(binding.drawer.root, accent)
+                    binding.drawer.rateOkay.setTextColor(accent)
                     val states = arrayOf(
                             intArrayOf(android.R.attr.state_activated),
                             intArrayOf(-android.R.attr.state_activated))
@@ -203,6 +206,7 @@ class MainActivity : QkThemedActivity(), MainView {
                     binding.drawer.rateIcon.setTint(accent)
                     binding.compose.setBackgroundTint(accent)
                     binding.compose.setTint(getColorCompat(android.R.color.white))
+                    conversationsAdapter.notifyDataSetChanged()
                 }
     }
 
@@ -482,6 +486,17 @@ class MainActivity : QkThemedActivity(), MainView {
         optionsItemIntent.onNext(item.itemId).let { true }
 
     override fun onBackPressed() = backPressedSubject.onNext(NavItem.BACK)
+
+    private fun tintAccentMarks(root: View, color: Int) {
+        if (root.tag == "accentMark") {
+            root.backgroundTintList = ColorStateList.valueOf(color)
+        }
+        if (root is ViewGroup) {
+            for (index in 0 until root.childCount) {
+                tintAccentMarks(root.getChildAt(index), color)
+            }
+        }
+    }
 
     override fun drawerToggled(opened: Boolean) {
         if (opened) {

@@ -50,7 +50,10 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-class AudioBinder @Inject constructor(colors: Colors, private val context: Context) :
+class AudioBinder @Inject constructor(
+    private val colors: Colors,
+    private val context: Context
+) :
     PartBinder() {
 
     @Inject lateinit var navigator: Navigator
@@ -210,7 +213,7 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
 
         // seek bar
         binding.seekBar.apply {
-            setTint(ctx.getColorCompat(R.color.accent))
+            setTint(colors.accentForThread(message.threadId))
             thumbTintList = ColorStateList.valueOf(primaryColor)
 
             setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {

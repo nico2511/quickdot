@@ -249,6 +249,9 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                     val surface = resolveThemeColor(R.attr.bubbleColor)
                     val onSurface = resolveThemeColor(android.R.attr.textColorPrimary)
                     binding.loading.setTint(onSurface)
+                    val accent = colors.accentForThread(threadId.blockingFirst())
+                    binding.send.setBackgroundTint(accent)
+                    binding.scheduledSend.setBackgroundTint(accent)
                     // Attach stays an outline. The menu behind it is monochrome.
                     // Red is reserved for send and failure.
                     binding.attach.backgroundTintList = null
@@ -279,6 +282,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                     }
 
                     messageAdapter.theme = it
+                    messageAdapter.notifyDataSetChanged()
                 }
                 .autoDisposable(scope())
                 .subscribe()

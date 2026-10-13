@@ -34,12 +34,14 @@ import javax.inject.Inject
 class ChipsAdapter @Inject constructor() : QkAdapter<Recipient, QkBindingViewHolder<ContactChipBinding>>() {
 
     var view: RecyclerView? = null
+    var interactive: Boolean = true
     val chipDeleted: PublishSubject<Recipient> = PublishSubject.create()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkBindingViewHolder<ContactChipBinding> {
         val binding = ContactChipBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return QkBindingViewHolder(binding).apply {
             binding.root.setOnClickListener {
+                if (!interactive) return@setOnClickListener
                 val chip = getItem(adapterPosition)
                 showDetailedChip(binding.root.context, chip)
             }
@@ -49,7 +51,8 @@ class ChipsAdapter @Inject constructor() : QkAdapter<Recipient, QkBindingViewHol
     override fun onBindViewHolder(holder: QkBindingViewHolder<ContactChipBinding>, position: Int) {
         val recipient = getItem(position)
 
-        holder.binding.avatar.monochrome = true
+        holder.binding.avatar.square = true
+        holder.binding.avatar.speakerInk = true
         holder.binding.avatar.setRecipient(recipient)
         holder.binding.name.text = recipient.contact?.name?.takeIf { it.isNotBlank() } ?: recipient.address
     }

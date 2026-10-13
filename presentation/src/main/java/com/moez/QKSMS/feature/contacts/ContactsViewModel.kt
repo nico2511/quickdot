@@ -29,6 +29,8 @@ import dev.octoshrimpy.quik.feature.compose.editing.PhoneNumberAction
 import dev.octoshrimpy.quik.filter.ContactFilter
 import dev.octoshrimpy.quik.filter.ContactGroupFilter
 import dev.octoshrimpy.quik.interactor.SetDefaultPhoneNumber
+import dev.octoshrimpy.quik.interactor.SyncContacts
+import dev.octoshrimpy.quik.manager.PermissionManager
 import dev.octoshrimpy.quik.model.Contact
 import dev.octoshrimpy.quik.model.ContactGroup
 import dev.octoshrimpy.quik.model.Conversation
@@ -54,13 +56,19 @@ class ContactsViewModel @Inject constructor(
     private val contactsRepo: ContactRepository,
     private val conversationRepo: ConversationRepository,
     private val phoneNumberUtils: PhoneNumberUtils,
-    private val setDefaultPhoneNumber: SetDefaultPhoneNumber
-) : QkViewModel<ContactsContract, ContactsState>(ContactsState()) {
+    private val setDefaultPhoneNumber: SetDefaultPhoneNumber,
+    private val permissionManager: PermissionManager,
+    private val syncContacts: SyncContacts
+) : QkViewModel<ContactsContract, ContactsState>(ContactsState(
+        hasContactsPermission = permissionManager.hasContacts()
+)) {
 
     private val contactGroups: Observable<List<ContactGroup>> by lazy { contactsRepo.getUnmanagedContactGroups() }
     private val contacts: Observable<List<Contact>> by lazy { contactsRepo.getUnmanagedContacts() }
     private val recents: Observable<List<Conversation>> by lazy {
-        if (sharing) conversationRepo.getUnmanagedConversations() else Observable.just(listOf())
+        // Recent threads stay on the picker for a new message and for a share target.
+        if (sharing) conversationRepo.getUnmanagedConversations()
+        else conversationRepo.getUnmanagedConversations()
     }
     private val starredContacts: Observable<List<Contact>> by lazy { contactsRepo.getUnmanagedContacts(true) }
 
@@ -77,10 +85,27 @@ class ContactsViewModel @Inject constructor(
     override fun bindView(view: ContactsContract) {
         super.bindView(view)
 
-        if (shouldOpenKeyboard) {
+        if (shouldOpenKeyboard && permissionManager.hasContacts()) {
             view.openKeyboard()
             shouldOpenKeyboard = false
         }
+
+        view.contactsPermissionChangedIntent
+                .distinctUntilChanged()
+                .autoDisposable(view.scope())
+                .subscribe { granted ->
+                    newState { copy(hasContactsPermission = granted) }
+                    if (granted) syncContacts.execute(Unit)
+                }
+
+        view.requestContactsPermissionIntent
+                .autoDisposable(view.scope())
+                .subscribe { view.requestContactsPermission() }
+
+        selectedChips
+                .observeOn(AndroidSchedulers.mainThread())
+                .autoDisposable(view.scope())
+                .subscribe { chips -> newState { copy(selectedRecipients = chips) } }
 
         // Update the state's query, so we know if we should show the cancel button
         view.queryChangedIntent
@@ -167,7 +192,7 @@ class ContactsViewModel @Inject constructor(
                 }
                 .subscribeOn(Schedulers.computation())
                 .autoDisposable(view.scope())
-                .subscribe { items -> newState { copy(composeItems = items) } }
+                .subscribe { items -> newState { copy(composeItems = items, contactsLoaded = true) } }
 
         // Listen for ComposeItems being selected, and then send them off to the number picker dialog in case
         // the user needs to select a phone number

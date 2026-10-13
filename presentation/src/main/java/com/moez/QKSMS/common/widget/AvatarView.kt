@@ -69,6 +69,13 @@ class AvatarView @JvmOverloads constructor(
             }
         }
 
+    /** Compose and contact rows use a square stamp instead of the inbox circle. */
+    var square: Boolean = false
+        set(value) {
+            field = value
+            if (inflated) applyShape()
+        }
+
     init {
         if (!isInEditMode) {
             appComponent.inject(this)
@@ -77,9 +84,13 @@ class AvatarView @JvmOverloads constructor(
         theme = colors.theme()
 
         layout = AvatarViewBinding.inflate(LayoutInflater.from(context), this)
-        setBackgroundResource(R.drawable.circle)
-        clipToOutline = true
         inflated = true
+        applyShape()
+    }
+
+    private fun applyShape() {
+        setBackgroundResource(if (square) R.drawable.rounded_rectangle_4dp else R.drawable.circle)
+        clipToOutline = true
     }
 
     /**

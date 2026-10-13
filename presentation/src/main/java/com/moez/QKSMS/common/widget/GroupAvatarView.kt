@@ -45,6 +45,23 @@ class GroupAvatarView @JvmOverloads constructor(
             layout.avatar2.monochrome = value
         }
 
+    var speakerInk: Boolean = false
+        set(value) {
+            field = value
+            layout.avatar1.speakerInk = value
+            layout.avatar2.speakerInk = value
+        }
+
+    var square: Boolean = false
+        set(value) {
+            field = value
+            layout.avatar1.square = value
+            layout.avatar2.square = value
+            layout.avatar1Frame.setBackgroundResource(
+                if (value) R.drawable.rounded_rectangle_4dp else R.drawable.circle
+            )
+        }
+
     init {
         context.obtainStyledAttributes(attrs, R.styleable.GroupAvatarView).run {
             monochrome = getBoolean(R.styleable.GroupAvatarView_monochrome, false)

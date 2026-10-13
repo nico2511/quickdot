@@ -46,7 +46,8 @@ class DetailedChipView(context: Context) : RelativeLayout(context) {
     }
 
     fun setRecipient(recipient: Recipient) {
-        binding.avatar.monochrome = true
+        binding.avatar.square = true
+        binding.avatar.speakerInk = true
         binding.avatar.setRecipient(recipient)
         binding.name.text = recipient.contact?.name?.takeIf { it.isNotBlank() } ?: recipient.address
         binding.info.text = recipient.address

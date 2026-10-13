@@ -18,17 +18,22 @@
  */
 package dev.octoshrimpy.quik.feature.contacts
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.editorActions
 import com.jakewharton.rxbinding2.widget.textChanges
 import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.ExternalNavigator
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.ViewModelFactory
 import dev.octoshrimpy.quik.common.base.QkThemedActivity
@@ -37,10 +42,12 @@ import dev.octoshrimpy.quik.common.util.extensions.showKeyboard
 import dev.octoshrimpy.quik.common.widget.QkDialog
 import dev.octoshrimpy.quik.databinding.ContactsActivityBinding
 import dev.octoshrimpy.quik.extensions.Optional
+import dev.octoshrimpy.quik.feature.compose.editing.ChipsAdapter
 import dev.octoshrimpy.quik.feature.compose.editing.ComposeItem
 import dev.octoshrimpy.quik.feature.compose.editing.ComposeItemAdapter
 import dev.octoshrimpy.quik.feature.compose.editing.PhoneNumberAction
 import dev.octoshrimpy.quik.feature.compose.editing.PhoneNumberPickerAdapter
+import dev.octoshrimpy.quik.manager.PermissionManager
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
@@ -56,9 +63,12 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
     private lateinit var binding: ContactsActivityBinding
 
     @Inject lateinit var contactsAdapter: ComposeItemAdapter
+    @Inject lateinit var chipsAdapter: ChipsAdapter
     @Inject lateinit var phoneNumberAdapter: PhoneNumberPickerAdapter
     @Inject lateinit var viewModelFactory: ViewModelFactory
     @Inject lateinit var navigator: Navigator
+    @Inject lateinit var externalNavigator: ExternalNavigator
+    @Inject lateinit var permissionManager: PermissionManager
 
     override val queryChangedIntent: Observable<CharSequence> by lazy { binding.search.textChanges() }
     override val queryClearedIntent: Observable<*> by lazy { binding.cancel.clicks() }
@@ -67,6 +77,18 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
     override val composeItemLongPressedIntent: Subject<ComposeItem> by lazy { contactsAdapter.longClicks }
     override val phoneNumberSelectedIntent: Subject<Optional<Long>> by lazy { phoneNumberAdapter.selectedItemChanges }
     override val phoneNumberActionIntent: Subject<PhoneNumberAction> = PublishSubject.create()
+    override val contactsPermissionChangedIntent: Subject<Boolean> = PublishSubject.create()
+    override val requestContactsPermissionIntent: Observable<*> by lazy { binding.permissionButton.clicks() }
+
+    private val contactsPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            contactsPermissionChangedIntent.onNext(true)
+        } else if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
+            externalNavigator.showPermissionsInSettings()
+        }
+    }
 
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[ContactsViewModel::class.java] }
 
@@ -88,8 +110,12 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
         binding = ContactsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         showBackButton(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         viewModel.bindView(this)
 
+        chipsAdapter.interactive = false
+        binding.chips.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.chips.adapter = chipsAdapter
         binding.contacts.adapter = contactsAdapter
 
         val callback = object : OnBackPressedCallback(true) {
@@ -100,10 +126,32 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
         onBackPressedDispatcher.addCallback(this, callback)
     }
 
+    override fun onResume() {
+        super.onResume()
+        contactsPermissionChangedIntent.onNext(permissionManager.hasContacts())
+    }
+
     override fun render(state: ContactsState) {
         binding.cancel.isVisible = state.query.length > 1
 
         contactsAdapter.data = state.composeItems
+        chipsAdapter.data = state.selectedRecipients
+        binding.chips.isVisible = state.selectedRecipients.isNotEmpty()
+
+        val contactRows = state.composeItems.any { item ->
+            item is ComposeItem.Person || item is ComposeItem.Starred || item is ComposeItem.Group
+        }
+        val showPermission = state.contactsLoaded && !state.hasContactsPermission && !contactRows
+        val showEmpty = state.contactsLoaded && state.hasContactsPermission && state.composeItems.isEmpty()
+        binding.permission.isVisible = showPermission
+        binding.empty.isVisible = showEmpty
+        binding.emptyTitle.setText(
+                if (state.query.isBlank()) R.string.contacts_empty_title else R.string.contacts_search_empty_title
+        )
+        binding.emptyMessage.setText(
+                if (state.query.isBlank()) R.string.contacts_empty_message else R.string.contacts_search_empty_message
+        )
+        binding.contacts.isVisible = state.composeItems.isNotEmpty()
 
         if (state.selectedContact != null && !phoneNumberDialog.isShowing) {
             phoneNumberAdapter.data = state.selectedContact.numbers
@@ -116,6 +164,14 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
 
     override fun clearQuery() {
         binding.search.text = null
+    }
+
+    override fun requestContactsPermission() {
+        if (permissionManager.hasContacts()) {
+            contactsPermissionChangedIntent.onNext(true)
+            return
+        }
+        contactsPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
     }
 
     override fun openKeyboard() {

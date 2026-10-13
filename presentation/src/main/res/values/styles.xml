@@ -48,6 +48,23 @@
         <item name="textSize">secondary</item>
     </style>
 
+    <style name="SearchSquare">
+        <item name="android:background">@drawable/search_square</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:drawableStart">@drawable/ic_search_black_24dp</item>
+        <item name="android:drawableTint">?android:attr/textColorTertiary</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:hint">@string/title_compose</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:inputType">textFilter|textNoSuggestions</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingEnd">40dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textColorHint">?android:attr/textColorTertiary</item>
+        <item name="textSize">secondary</item>
+    </style>
+
     <style name="SearchPill">
         <item name="android:background">@drawable/search_pill</item>
         <item name="android:drawablePadding">8dp</item>

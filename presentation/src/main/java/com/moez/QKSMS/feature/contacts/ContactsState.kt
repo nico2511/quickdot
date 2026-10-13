@@ -20,9 +20,13 @@ package dev.octoshrimpy.quik.feature.contacts
 
 import dev.octoshrimpy.quik.feature.compose.editing.ComposeItem
 import dev.octoshrimpy.quik.model.Contact
+import dev.octoshrimpy.quik.model.Recipient
 
 data class ContactsState(
     val query: String = "",
     val composeItems: List<ComposeItem> = ArrayList(),
+    val selectedRecipients: List<Recipient> = ArrayList(),
+    val contactsLoaded: Boolean = false,
+    val hasContactsPermission: Boolean = true,
     val selectedContact: Contact? = null // For phone number picker
 )

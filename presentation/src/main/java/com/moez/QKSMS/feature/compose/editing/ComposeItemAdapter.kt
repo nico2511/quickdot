@@ -61,7 +61,9 @@ class ComposeItemAdapter @Inject constructor(
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ContactListItemBinding.inflate(layoutInflater, parent, false)
 
-        binding.icon.setTint(parent.context.resolveThemeColor(android.R.attr.textColorSecondary))
+        binding.sectionIcon.setTint(parent.context.resolveThemeColor(android.R.attr.textColorSecondary))
+        binding.avatar.square = true
+        binding.avatar.speakerInk = true
 
         binding.numbers.setRecycledViewPool(numbersViewPool)
         binding.numbers.adapter = PhoneNumberAdapter()
@@ -93,9 +95,7 @@ class ComposeItemAdapter @Inject constructor(
     }
 
     private fun bindNew(binding: ContactListItemBinding, contact: Contact) {
-        binding.index.isVisible = false
-
-        binding.icon.isVisible = false
+        showSection(binding, binding.root.context.getString(R.string.contacts_section_new), R.drawable.ic_add_black_24dp)
 
         binding.avatar.recipients = listOf(createRecipient(contact))
 
@@ -107,10 +107,11 @@ class ComposeItemAdapter @Inject constructor(
     }
 
     private fun bindRecent(binding: ContactListItemBinding, conversation: Conversation, prev: ComposeItem?) {
-        binding.index.isVisible = false
-
-        binding.icon.isVisible = prev !is ComposeItem.Recent
-        binding.icon.setImageResource(R.drawable.ic_history_black_24dp)
+        if (prev !is ComposeItem.Recent) {
+            showSection(binding, binding.root.context.getString(R.string.contacts_section_recent), R.drawable.ic_history_black_24dp)
+        } else {
+            hideSection(binding)
+        }
 
         binding.avatar.recipients = conversation.recipients
 
@@ -129,10 +130,11 @@ class ComposeItemAdapter @Inject constructor(
     }
 
     private fun bindStarred(binding: ContactListItemBinding, contact: Contact, prev: ComposeItem?) {
-        binding.index.isVisible = false
-
-        binding.icon.isVisible = prev !is ComposeItem.Starred
-        binding.icon.setImageResource(R.drawable.ic_star_black_24dp)
+        if (prev !is ComposeItem.Starred) {
+            showSection(binding, binding.root.context.getString(R.string.contacts_section_starred), R.drawable.ic_star_black_24dp)
+        } else {
+            hideSection(binding)
+        }
 
         binding.avatar.recipients = listOf(createRecipient(contact))
 
@@ -145,10 +147,11 @@ class ComposeItemAdapter @Inject constructor(
     }
 
     private fun bindGroup(binding: ContactListItemBinding, group: ContactGroup, prev: ComposeItem?) {
-        binding.index.isVisible = false
-
-        binding.icon.isVisible = prev !is ComposeItem.Group
-        binding.icon.setImageResource(R.drawable.ic_people_black_24dp)
+        if (prev !is ComposeItem.Group) {
+            showSection(binding, binding.root.context.getString(R.string.contacts_section_groups), R.drawable.ic_people_black_24dp)
+        } else {
+            hideSection(binding)
+        }
 
         binding.avatar.recipients = group.contacts.map(::createRecipient)
 
@@ -162,13 +165,18 @@ class ComposeItemAdapter @Inject constructor(
     }
 
     private fun bindPerson(binding: ContactListItemBinding, contact: Contact, prev: ComposeItem?) {
-        binding.index.isVisible = true
-        binding.index.text = if (contact.name.getOrNull(0)?.isLetter() == true) contact.name[0].toString() else "#"
-        binding.index.isVisible = prev !is ComposeItem.Person ||
-                (contact.name[0].isLetter() && !contact.name[0].equals(prev.value.name[0], ignoreCase = true)) ||
-                (!contact.name[0].isLetter() && prev.value.name[0].isLetter())
-
-        binding.icon.isVisible = false
+        val current = contact.name.firstOrNull()
+        val previous = (prev as? ComposeItem.Person)?.value?.name?.firstOrNull()
+        val letter = if (current?.isLetter() == true) current.toString() else "#"
+        val newSection = prev !is ComposeItem.Person ||
+                current?.isLetter() != previous?.isLetter() ||
+                (current != null && previous != null && current.isLetter() &&
+                        !current.equals(previous, ignoreCase = true))
+        if (newSection) {
+            showSection(binding, letter, null)
+        } else {
+            hideSection(binding)
+        }
 
         binding.avatar.recipients = listOf(createRecipient(contact))
 
@@ -178,6 +186,17 @@ class ComposeItemAdapter @Inject constructor(
 
         binding.numbers.isVisible = true
         (binding.numbers.adapter as PhoneNumberAdapter).data = contact.numbers
+    }
+
+    private fun showSection(binding: ContactListItemBinding, label: String, icon: Int?) {
+        binding.sectionRow.isVisible = true
+        binding.section.text = label
+        binding.sectionIcon.isVisible = icon != null
+        if (icon != null) binding.sectionIcon.setImageResource(icon)
+    }
+
+    private fun hideSection(binding: ContactListItemBinding) {
+        binding.sectionRow.isVisible = false
     }
 
     private fun createRecipient(contact: Contact): Recipient {

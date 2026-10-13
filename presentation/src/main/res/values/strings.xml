@@ -32,6 +32,17 @@
     <string name="main_screen_title">Messages</string>
     <string name="main_empty_mark" translatable="false">···</string>
     <string name="title_compose">Type a name or number</string>
+    <string name="contacts_title">New message</string>
+    <string name="contacts_section_recent">Recent</string>
+    <string name="contacts_section_starred">Starred</string>
+    <string name="contacts_section_groups">Groups</string>
+    <string name="contacts_section_new">Send to</string>
+    <string name="contacts_empty_title">No contacts</string>
+    <string name="contacts_empty_message">Type a number above, or add people to your contacts.</string>
+    <string name="contacts_search_empty_title">No matches</string>
+    <string name="contacts_search_empty_message">No one matches that search.</string>
+    <string name="contacts_permission_title">Contacts are off</string>
+    <string name="contacts_clear">Clear search</string>
 
     <string name="setup_skip">Skip</string>
     <string name="setup_next">Continue</string>

@@ -143,6 +143,9 @@ class MainActivity : QkThemedActivity(), MainView {
         super.onCreate(savedInstanceState)
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        // The large screen title and the selection label live in custom views.
+        // Leave the default action-bar title off so "0 selected" does not show.
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         viewModel.bindView(this)
         onNewIntentIntent.onNext(intent)
 

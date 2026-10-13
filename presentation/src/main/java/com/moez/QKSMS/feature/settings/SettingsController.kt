@@ -20,6 +20,7 @@ package dev.octoshrimpy.quik.feature.settings
 
 import android.animation.ObjectAnimator
 import android.app.TimePickerDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.Context
 import android.os.Build
 import android.text.format.DateFormat
@@ -87,6 +88,7 @@ class SettingsController : QkController<SettingsControllerBinding, SettingsView,
         retainViewMode = RetainViewMode.RETAIN_DETACH
 
         colors.themeObservable()
+                .skip(1)
                 .autoDisposable(scope())
                 .subscribe { activity?.recreate() }
     }
@@ -140,7 +142,20 @@ class SettingsController : QkController<SettingsControllerBinding, SettingsView,
     override fun messageLinkHandlingSelected(): Observable<Int> = messageLinkHandlingDialog.adapter.menuItemClicks
 
     override fun render(state: SettingsState) {
-        binding.theme.findViewById<View>(R.id.themePreview)?.setBackgroundTint(state.theme)
+        binding.theme.findViewById<View>(R.id.themePreview)?.setBackgroundTint(colors.snapAccent(state.theme))
+        binding.theme.summary = context.getString(
+            R.string.settings_theme_summary_applied,
+            colors.accentLabel(state.theme)
+        )
+        binding.proPrice.setTextColor(colors.snapAccent(state.theme))
+        binding.quickdotPro.setOnClickListener {
+            // UI only. ProBillingHook.grant() is reserved for Play Billing.
+            AlertDialog.Builder(activity!!)
+                .setTitle(R.string.settings_pro_title)
+                .setMessage(R.string.settings_pro_message)
+                .setPositiveButton(R.string.settings_pro_dismiss, null)
+                .show()
+        }
         binding.night.summary = state.nightModeSummary
         nightModeDialog.adapter.selectedItem = state.nightModeId
         binding.nightStart.setVisible(state.nightModeId == Preferences.NIGHT_MODE_AUTO)

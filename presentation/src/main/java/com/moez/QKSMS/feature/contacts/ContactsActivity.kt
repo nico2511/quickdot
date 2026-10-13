@@ -29,6 +29,8 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakewharton.rxbinding2.view.clicks
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import com.jakewharton.rxbinding2.widget.editorActions
 import com.jakewharton.rxbinding2.widget.textChanges
 import dagger.android.AndroidInjection
@@ -38,6 +40,7 @@ import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.ViewModelFactory
 import dev.octoshrimpy.quik.common.base.QkThemedActivity
 import dev.octoshrimpy.quik.common.util.extensions.hideKeyboard
+import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.showKeyboard
 import dev.octoshrimpy.quik.common.widget.QkDialog
 import dev.octoshrimpy.quik.databinding.ContactsActivityBinding
@@ -112,6 +115,10 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
         showBackButton(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         viewModel.bindView(this)
+
+        theme.autoDisposable(scope()).subscribe {
+            binding.permissionButton.setBackgroundTint(it.theme)
+        }
 
         chipsAdapter.interactive = false
         binding.chips.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)

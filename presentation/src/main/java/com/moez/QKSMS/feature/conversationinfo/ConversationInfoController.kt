@@ -70,6 +70,7 @@ class ConversationInfoController(
     }
 
     override fun onViewCreated() {
+        adapter.threadId = threadId
         binding.recyclerView.adapter = adapter
         binding.recyclerView.addItemDecoration(GridSpacingItemDecoration(adapter, activity!!))
         binding.recyclerView.layoutManager = GridLayoutManager(activity, 3).apply {
@@ -115,7 +116,7 @@ class ConversationInfoController(
     override fun showNameDialog(name: String) = nameDialog.setText(name).show()
 
     override fun showThemePicker(recipientId: Long) {
-        router.pushController(RouterTransaction.with(ThemePickerController(recipientId))
+        router.pushController(RouterTransaction.with(ThemePickerController(threadId))
                 .pushChangeHandler(QkChangeHandler())
                 .popChangeHandler(QkChangeHandler()))
     }

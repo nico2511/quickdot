@@ -17,12 +17,16 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/windowBackground">
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/preferences"
@@ -32,6 +36,10 @@
         android:orientation="vertical"
         android:paddingTop="8dp"
         android:paddingBottom="8dp">
+
+        <dev.octoshrimpy.quik.common.widget.QkTextView
+            style="@style/PreferenceCategory"
+            android:text="@string/settings_about_title" />
 
         <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/version"
@@ -92,3 +100,11 @@
     </LinearLayout>
 
 </ScrollView>
+
+    <View
+        android:layout_width="12dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/sprocket_rail"
+        android:importantForAccessibility="no" />
+
+</FrameLayout>

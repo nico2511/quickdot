@@ -17,13 +17,17 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/contentView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/windowBackground">
+
+<ScrollView
+    android:id="@+id/contentView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/preferences"
@@ -32,6 +36,48 @@
         android:orientation="vertical"
         android:paddingTop="8dp"
         android:paddingBottom="8dp">
+
+        <LinearLayout
+            android:id="@+id/quickdotPro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/square_outline"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                style="@style/TextTertiary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.14"
+                android:text="@string/settings_pro_title"
+                android:textAllCaps="true"
+                app:textFont="label" />
+
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                android:id="@+id/proPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/settings_pro_price"
+                android:textColor="@color/accent"
+                app:textFont="label"
+                app:textSize="secondary" />
+
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                style="@style/TextSecondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/settings_pro_summary" />
+
+        </LinearLayout>
 
         <dev.octoshrimpy.quik.common.widget.QkTextView
             style="@style/PreferenceCategory"
@@ -88,6 +134,7 @@
             android:id="@+id/autoColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:icon="@drawable/ic_person_black_24dp"
             app:title="@string/settings_automatic_colors_title"
             app:widget="@layout/settings_switch_widget" />
@@ -107,13 +154,6 @@
             app:icon="@drawable/ic_speech_to_text_black"
             app:title="@string/settings_system_show_stt_title"
             app:widget="@layout/settings_switch_widget" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="?android:attr/divider" />
 
         <dev.octoshrimpy.quik.common.widget.QkTextView
             style="@style/PreferenceCategory"
@@ -230,12 +270,9 @@
             app:title="@string/settings_disable_screenshots_title"
             app:widget="@layout/settings_switch_widget" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="?android:attr/divider" />
+        <dev.octoshrimpy.quik.common.widget.QkTextView
+            style="@style/PreferenceCategory"
+            android:text="@string/settings_category_about" />
 
         <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/sync"
@@ -267,3 +304,11 @@
     </LinearLayout>
 
 </ScrollView>
+
+    <View
+        android:layout_width="12dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/sprocket_rail"
+        android:importantForAccessibility="no" />
+
+</FrameLayout>

@@ -29,7 +29,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_gravity="center"
-        android:background="@drawable/circle"
+        android:background="@drawable/dot_matrix_swatch"
         tools:backgroundTint="@color/tools_theme" />
 
 </FrameLayout>

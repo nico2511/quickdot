@@ -154,7 +154,7 @@ class MessagesAdapter @Inject constructor(
             body = binding.body
             parts = binding.parts
             status = binding.status
-            val accent = context.getColorCompat(R.color.accent)
+            val accent = colors.accentColor()
             binding.cancelIcon.setTint(accent)
             binding.cancel.setTint(accent)
             binding.sendNowIcon.setTint(accent)
@@ -271,7 +271,10 @@ class MessagesAdapter @Inject constructor(
                 binding.resendIcon.visibility = View.GONE
             }
 
-            val accent = context.getColorCompat(R.color.accent)
+            val accent = colors.accentForThread(message.threadId)
+            binding.cancelIcon.setTint(accent)
+            binding.sendNowIcon.setTint(accent)
+            binding.resendIcon.setTint(accent)
             body.apply {
                 highlightColor = accent.withAlpha(0x33)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -302,7 +305,7 @@ class MessagesAdapter @Inject constructor(
             identity = binding.identity
             identity.setBackgroundTint(speaker)
 
-            val accent = context.getColorCompat(R.color.accent)
+            val accent = colors.accentForThread(message.threadId)
             body.apply {
                 highlightColor = accent.withAlpha(0x33)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -486,7 +489,7 @@ class MessagesAdapter @Inject constructor(
         speaker: Int
     ) {
         val quiet = context.resolveThemeColor(android.R.attr.textColorTertiary)
-        val red = context.getColorCompat(R.color.accent)
+        val red = colors.accentForThread(message.threadId)
         val groupName = !message.isMe() && (conversation?.recipients?.size ?: 0) > 1
         statusView.apply {
             setTextColor(when {

@@ -26,6 +26,7 @@ import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
 import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.util.Preferences
+import dev.octoshrimpy.quik.util.ProBillingHook
 import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -35,8 +36,51 @@ import kotlin.math.pow
 @Singleton
 class Colors @Inject constructor(
     private val context: Context,
-    private val prefs: Preferences
+    private val prefs: Preferences,
+    private val proBillingHook: ProBillingHook
 ) {
+
+    data class Accent(val nameRes: Int, val color: Int)
+
+    /**
+     * Print inks for the monochrome dot-matrix UI. Signal red is the default.
+     * Anything saved from the old Material grid is snapped to the nearest one.
+     */
+    val accents: List<Accent> = listOf(
+        Accent(R.string.accent_signal, 0xFFE10600.toInt()),
+        Accent(R.string.accent_cobalt, 0xFF2457C5.toInt()),
+        Accent(R.string.accent_pine, 0xFF1B7F4E.toInt()),
+        Accent(R.string.accent_oxide, 0xFFC44914.toInt()),
+        Accent(R.string.accent_plum, 0xFF8A3D6E.toInt()),
+        Accent(R.string.accent_graphite, 0xFF3A3A3A.toInt())
+    )
+
+    fun snapAccent(color: Int): Int {
+        return accents.minBy { accent ->
+            val dr = Color.red(color) - Color.red(accent.color)
+            val dg = Color.green(color) - Color.green(accent.color)
+            val db = Color.blue(color) - Color.blue(accent.color)
+            dr * dr + dg * dg + db * db
+        }.color
+    }
+
+    /** The accent chosen in Settings. This is what app chrome paints. */
+    fun accentColor(): Int = snapAccent(prefs.theme().get())
+
+    fun accentLabel(color: Int = accentColor()): String {
+        val snapped = snapAccent(color)
+        val name = accents.first { it.color == snapped }.nameRes
+        return context.getString(name)
+    }
+
+    /**
+     * Accent for one conversation. App-wide until [ProBillingHook.enforcementEnabled]
+     * is turned on with Play Billing.
+     */
+    fun accentForThread(threadId: Long): Int {
+        return if (proBillingHook.accentAppliesTo(threadId)) accentColor()
+        else Preferences.DEFAULT_THEME_COLOR
+    }
 
     data class Theme(val theme: Int, private val colors: Colors) {
         val highlight by lazy { colors.highlightColorForTheme(theme) }
@@ -67,9 +111,6 @@ class Colors @Inject constructor(
         R.array.material_blue_gray)
             .map { res -> context.resources.obtainTypedArray(res) }
             .map { typedArray -> (0 until typedArray.length()).map(typedArray::getColorOrThrow) }
-
-    private val randomColors: List<Int> = context.resources.obtainTypedArray(R.array.random_colors)
-            .let { typedArray -> (0 until typedArray.length()).map(typedArray::getColorOrThrow) }
 
     private val minimumContrastRatio = 2
 
@@ -108,23 +149,15 @@ class Colors @Inject constructor(
         return context.getColorCompat(slots[index])
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun theme(recipient: Recipient? = null): Theme {
-        val pref = prefs.theme(recipient?.id ?: 0)
-        val color = when {
-            recipient == null || !prefs.autoColor.get() || pref.isSet -> pref.get()
-            else -> generateColor(recipient)
-        }
-        return Theme(color, this)
+        return Theme(accentColor(), this)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun themeObservable(recipient: Recipient? = null): Observable<Theme> {
-        val pref = when {
-            recipient == null -> prefs.theme()
-            prefs.autoColor.get() -> prefs.theme(recipient.id, generateColor(recipient))
-            else -> prefs.theme(recipient.id, prefs.theme().get())
-        }
-        return pref.asObservable()
-                .map { color -> Theme(color, this) }
+        return prefs.theme().asObservable()
+                .map { color -> Theme(snapAccent(color), this) }
     }
 
     fun highlightColorForTheme(theme: Int): Int = FloatArray(3)
@@ -164,8 +197,4 @@ class Colors @Inject constructor(
         return 0.2126 * array[0] + 0.7152 * array[1] + 0.0722 * array[2] + 0.05
     }
 
-    private fun generateColor(recipient: Recipient): Int {
-        val index = recipient.address.hashCode().absoluteValue % randomColors.size
-        return randomColors[index]
-    }
 }

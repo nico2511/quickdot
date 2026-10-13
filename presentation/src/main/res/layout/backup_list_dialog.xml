@@ -30,10 +30,11 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
+        android:letterSpacing="0.08"
         android:text="@string/backup_restore_dialog_title"
         android:textColor="?android:attr/textColorPrimary"
-        android:textStyle="bold"
-        app:textSize="primary" />
+        app:textFont="display"
+        app:textSize="toolbar" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:layout_width="match_parent"
@@ -41,15 +42,11 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="24dp"
+        android:letterSpacing="0.06"
         android:text="@string/backup_restore_dialog_summary"
         android:textColor="?android:attr/textColorTertiary"
-        app:textSize="primary" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="16dp"
-        android:background="?android:attr/divider" />
+        app:textFont="label"
+        app:textSize="tertiary" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/files"
@@ -68,6 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
         android:gravity="center"

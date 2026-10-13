@@ -39,6 +39,13 @@ class QkSwitch @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         if (!isInEditMode) {
             appComponent.inject(this)
         }
+
+        // Square stamp, matching the 4dp Quickdot marks. Tinting stays in onAttachedToWindow.
+        setThumbResource(R.drawable.qk_switch_thumb)
+        setTrackResource(R.drawable.qk_switch_track)
+        setSwitchMinWidth((40 * resources.displayMetrics.density).toInt())
+        showText = false
+        splitTrack = false
     }
 
     override fun onAttachedToWindow() {

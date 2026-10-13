@@ -36,8 +36,6 @@ class AboutPresenter @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { preference ->
                     when (preference.id) {
-                        R.id.credits -> externalNavigator.showLicense()
-
                         R.id.developer -> externalNavigator.showDeveloper()
 
                         R.id.source -> externalNavigator.showSourceCode()

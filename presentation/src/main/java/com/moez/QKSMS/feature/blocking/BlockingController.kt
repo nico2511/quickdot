@@ -28,6 +28,7 @@ import dev.octoshrimpy.quik.common.QkChangeHandler
 import dev.octoshrimpy.quik.common.base.QkController
 import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.extensions.animateLayoutChanges
+import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
 import dev.octoshrimpy.quik.feature.blocking.manager.BlockingManagerController
 import dev.octoshrimpy.quik.feature.blocking.messages.BlockedMessagesController
 import dev.octoshrimpy.quik.feature.blocking.numbers.BlockedNumbersController
@@ -57,6 +58,8 @@ class BlockingController : QkController<BlockingControllerBinding, BlockingView,
 
     override fun onViewCreated() {
         super.onViewCreated()
+        // Dropping messages deletes them. Signal red stays on that icon; the switch follows the accent.
+        binding.drop.setIconTint(binding.root.context.getColorCompat(R.color.accent))
         binding.parent.postDelayed({ binding.parent.animateLayoutChanges = true }, 100)
     }
 

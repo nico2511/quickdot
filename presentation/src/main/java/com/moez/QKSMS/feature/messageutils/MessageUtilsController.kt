@@ -11,6 +11,7 @@ import com.jakewharton.rxbinding2.view.clicks
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkController
 import dev.octoshrimpy.quik.common.util.extensions.animateLayoutChanges
+import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
 import dev.octoshrimpy.quik.databinding.MessageUtilsControllerBinding
 import dev.octoshrimpy.quik.feature.settings.autodelete.AutoDeleteDialog
 import dev.octoshrimpy.quik.injection.appComponent
@@ -47,6 +48,10 @@ class MessageUtilsController : QkController<MessageUtilsControllerBinding, Messa
 
     override fun onViewCreated() {
         super.onViewCreated()
+        val destructive = context.getColorCompat(R.color.accent)
+        binding.deduplicateMessages.setIconTint(destructive)
+        binding.autoDeduplicate.setIconTint(destructive)
+        binding.autoDelete.setIconTint(destructive)
         binding.root.postDelayed({
             binding.parent.animateLayoutChanges = true
         }, 100)

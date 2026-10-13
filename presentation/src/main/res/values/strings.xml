@@ -226,6 +226,8 @@
     <string name="gallery_toast_saved">Saved to gallery</string>
 
     <string name="backup_title">Backup and restore</string>
+    <string name="backup_category">Files</string>
+    <string name="backup_category_note">Note</string>
     <string name="backup_backing_up">Backing up messages</string>
     <string name="backup_restoring">Restoring from backup</string>
     <string name="backup_loading">Loading…</string>
@@ -261,6 +263,7 @@
     <string name="clipboard_unable_to_copy_to">Unable to copy to the clipboard</string>
 
     <string name="scheduled_title">Scheduled</string>
+    <string name="scheduled_category_preview">Preview</string>
     <string name="scheduled_empty_description">Automatically send a message, at the exact moment you\'d like</string>
     <string name="scheduled_empty_message_1">Hey! When was your birthday again?</string>
     <string name="scheduled_empty_message_2">It\'s on December 23rd</string>
@@ -377,11 +380,14 @@
     <string name="settings_delay_duration_hint">Enter duration (seconds)</string>
 
     <string name="blocking_title">Blocking</string>
+    <string name="blocking_category_sources">Sources</string>
+    <string name="blocking_category_messages">Messages</string>
     <string name="blocking_drop_title">Drop messages</string>
     <string name="blocking_drop_summary">Drop incoming messages from blocked senders instead of hiding them</string>
     <string name="blocking_conversations">Blocked conversations</string>
 
     <string name="blocking_manager_title">Blocking Manager</string>
+    <string name="blocking_manager_category">Managers</string>
     <string name="blocking_manager_qksms_summary">Built-in blocking functionality in Quickdot</string>
     <string name="blocking_manager_call_blocker_title" translatable="false">Call Blocker - Incoming/Outgoing</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
@@ -460,6 +466,7 @@
     <string name="theme_apply">Apply</string>
 
     <string name="about_developer">Quickdot</string>
+    <string name="about_credits_names" translatable="false">Quik · QKSMS</string>
     <string name="about_credits" translatable="false">Quickdot is a fork of Quik, which continues QKSMS. Quik and QKSMS are free software under the GNU General Public License v3.</string>
     <string name="about_source" translatable="false">https://github.com/nico2511/quickdot</string>
     <string name="about_changelog" translatable="false">https://github.com/nico2511/quickdot/releases</string>

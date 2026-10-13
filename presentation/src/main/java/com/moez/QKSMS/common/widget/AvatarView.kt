@@ -47,6 +47,17 @@ class AvatarView @JvmOverloads constructor(
     private var theme: Colors.Theme
     private var layout: AvatarViewBinding
 
+    private var inflated = false
+
+    var monochrome: Boolean = false
+        set(value) {
+            field = value
+            if (inflated && this::colors.isInitialized) {
+                theme = avatarTheme(null)
+                updateView()
+            }
+        }
+
     init {
         if (!isInEditMode) {
             appComponent.inject(this)
@@ -57,6 +68,7 @@ class AvatarView @JvmOverloads constructor(
         layout = AvatarViewBinding.inflate(LayoutInflater.from(context), this)
         setBackgroundResource(R.drawable.circle)
         clipToOutline = true
+        inflated = true
     }
 
     /**
@@ -67,8 +79,12 @@ class AvatarView @JvmOverloads constructor(
         fullName = recipient?.contact?.name
         photoUri = recipient?.contact?.photoUri
         lastUpdated = recipient?.contact?.lastUpdate
-        theme = colors.theme(recipient)
+        theme = avatarTheme(recipient)
         updateView()
+    }
+
+    private fun avatarTheme(recipient: Recipient?): Colors.Theme {
+        return if (monochrome) colors.neutral() else colors.theme(recipient)
     }
 
     override fun onFinishInflate() {

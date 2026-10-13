@@ -38,16 +38,31 @@
         <enum name="toolbar" value="3" />
         <enum name="dialog" value="4" />
         <enum name="emoji" value="5" />
+        <enum name="display" value="6" />
     </attr>
+
+    <attr name="textFont" format="enum">
+        <enum name="body" value="0" />
+        <enum name="display" value="1" />
+        <enum name="label" value="2" />
+    </attr>
+
+    <attr name="monochrome" format="boolean" />
 
     <declare-styleable name="QkTextView">
         <attr name="textColor" />
         <attr name="textSize" />
+        <attr name="textFont" />
     </declare-styleable>
 
     <declare-styleable name="QkEditText">
         <attr name="textColor" />
         <attr name="textSize" />
+        <attr name="textFont" />
+    </declare-styleable>
+
+    <declare-styleable name="GroupAvatarView">
+        <attr name="monochrome" />
     </declare-styleable>
 
     <declare-styleable name="PreferenceView">

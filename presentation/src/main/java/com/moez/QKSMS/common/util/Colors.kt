@@ -19,6 +19,7 @@
 package dev.octoshrimpy.quik.common.util
 
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Color
 import androidx.core.content.res.getColorOrThrow
 import dev.octoshrimpy.quik.R
@@ -76,6 +77,19 @@ class Colors @Inject constructor(
     private val primaryTextLuminance = measureLuminance(context.getColorCompat(R.color.textPrimaryDark))
     private val secondaryTextLuminance = measureLuminance(context.getColorCompat(R.color.textSecondaryDark))
     private val tertiaryTextLuminance = measureLuminance(context.getColorCompat(R.color.textTertiaryDark))
+
+    /**
+     * Monochrome avatar colour. List rows use this so per-contact colours stay
+     * off the conversation list; the red accent is reserved for unread and actions.
+     */
+    fun neutral(): Theme {
+        val night = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK ==
+                Configuration.UI_MODE_NIGHT_YES
+        val color = context.getColorCompat(
+            if (night) R.color.avatarNeutralDark else R.color.avatarNeutralLight
+        )
+        return Theme(color, this)
+    }
 
     fun theme(recipient: Recipient? = null): Theme {
         val pref = prefs.theme(recipient?.id ?: 0)

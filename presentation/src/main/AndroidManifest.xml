@@ -58,7 +58,7 @@
             android:name=".feature.main.MainActivity"
             android:exported="true"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="stateAlwaysHidden">
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -257,9 +257,6 @@
         <meta-data
             android:name="com.callcontrol.datashare.messaging"
             android:value="true" />
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
     </application>
 
     <queries>

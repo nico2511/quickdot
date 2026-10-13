@@ -26,9 +26,9 @@
     <attr name="switchTrackDisabled" format="color" />
 
     <style name="AppLaunchTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:navigationBarColor">@color/backgroundDark</item>
-        <item name="android:statusBarColor">@color/backgroundDark</item>
-        <item name="android:windowBackground">@color/backgroundDark</item>
+        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:windowBackground">@color/black</item>
     </style>
 
     <style name="AppTheme" parent="AppBaseTheme">
@@ -47,6 +47,7 @@
         <item name="android:windowContentTransitions">true</item>
         <item name="actionBarPopupTheme">@style/PopupTheme</item>
         <item name="bubbleColor">@color/bubbleLight</item>
+        <item name="colorAccent">@color/accent</item>
         <item name="colorPrimary">@color/backgroundLight</item>
         <item name="colorPrimaryDark">@color/backgroundLight</item>
         <item name="selectableItemBackground">@drawable/ripple</item>
@@ -64,6 +65,7 @@
         <item name="android:windowBackground">@color/backgroundLight</item>
         <item name="actionBarPopupTheme">@style/PopupTheme</item>
         <item name="bubbleColor">@color/bubbleLight</item>
+        <item name="colorAccent">@color/accent</item>
         <item name="colorPrimary">@color/backgroundLight</item>
         <item name="colorPrimaryDark">@color/backgroundLight</item>
         <item name="selectableItemBackground">@drawable/ripple</item>

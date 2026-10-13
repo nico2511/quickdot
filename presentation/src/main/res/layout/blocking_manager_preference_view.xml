@@ -27,22 +27,23 @@
 
     <ImageView
         android:id="@+id/iconView"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:layout_marginStart="16dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="24dp"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/titleView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@mipmap/ic_launcher" />
+        app:tint="?android:attr/textColorSecondary"
+        tools:src="@drawable/ic_block_white_24dp" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/titleView"
         style="@style/TextPrimary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toStartOf="@id/widgetFrame"
         app:layout_constraintStart_toEndOf="@id/iconView"

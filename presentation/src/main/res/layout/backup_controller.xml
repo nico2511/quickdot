@@ -106,25 +106,26 @@
                     app:layout_constraintStart_toStartOf="@id/progressTitle"
                     app:layout_constraintTop_toBottomOf="@id/progressSummary" />
 
-                <View
+                <Space
                     android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="16dp"
-                    android:background="?android:attr/divider"
+                    android:layout_height="16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/progressBar" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                style="@style/PreferenceCategory"
+                android:text="@string/backup_category" />
 
             <dev.octoshrimpy.quik.common.widget.PreferenceView
                 android:id="@+id/location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/ic_baseline_folder_24"
-                app:title="@string/backup_location_title"
-                app:summary="@string/backup_location_summary" />
+                app:summary="@string/backup_location_summary"
+                app:title="@string/backup_location_title" />
 
             <dev.octoshrimpy.quik.common.widget.PreferenceView
                 android:id="@+id/restore"
@@ -134,15 +135,17 @@
                 app:summary="@string/backup_restore_summary"
                 app:title="@string/backup_restore_title" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?android:attr/divider" />
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                style="@style/PreferenceCategory"
+                android:text="@string/backup_category_note" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="24dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="24dp"
                 android:text="@string/backup_disclaimer"
                 android:textColor="?android:attr/textColorTertiary"
                 app:textSize="secondary" />
@@ -157,7 +160,7 @@
         android:layout_height="48dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:background="@drawable/rounded_rectangle_24dp"
+        android:background="@drawable/square_ripple"
         android:elevation="4dp"
         android:gravity="center"
         tools:backgroundTint="@color/tools_theme">
@@ -182,5 +185,11 @@
             app:textSize="primary" />
 
     </LinearLayout>
+
+    <View
+        android:layout_width="12dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/sprocket_rail"
+        android:importantForAccessibility="no" />
 
 </FrameLayout>

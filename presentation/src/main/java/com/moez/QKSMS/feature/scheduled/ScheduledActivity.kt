@@ -71,8 +71,6 @@ class ScheduledActivity : QkThemedActivity(), ScheduledView {
         binding.messages.adapter = scheduledMessageAdapter
 
         colors.theme().let { theme ->
-            binding.sampleMessage.setBackgroundTint(theme.theme)
-            binding.sampleMessage.setTextColor(theme.textPrimary)
             binding.compose.setTint(theme.textPrimary)
             binding.compose.setBackgroundTint(theme.theme)
         }

@@ -22,16 +22,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
+    android:background="@drawable/conversation_item_background"
+    android:foreground="?attr/selectableItemBackground"
     android:paddingTop="4dp"
     android:paddingBottom="4dp"
     app:layout_constraintVertical_chainStyle="packed">
 
     <dev.octoshrimpy.quik.common.widget.GroupAvatarView
         android:id="@+id/avatars"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="12dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="20dp"
+        app:monochrome="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/title"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,6 +66,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/title"
         app:layout_constraintTop_toTopOf="@id/title"
+        app:textFont="display"
         app:textSize="tertiary"
         tools:text="Oct 5" />
 
@@ -73,11 +76,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:textColor="?android:attr/textColorTertiary"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/title"
         app:layout_constraintTop_toBottomOf="@id/title"
-        app:textSize="secondary"
+        app:textFont="label"
+        app:textSize="tertiary"
         tools:text="Call Control" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView

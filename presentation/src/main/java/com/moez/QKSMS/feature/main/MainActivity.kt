@@ -323,6 +323,7 @@ class MainActivity : QkThemedActivity(), MainView {
 
         binding.drawer.inbox.isActivated = state.page is Inbox
         binding.drawer.archived.isActivated = state.page is Archived
+        binding.sprocket.setVisible(state.page is Archived)
 
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START) && !state.drawerOpen)
             binding.drawerLayout.closeDrawer(GravityCompat.START)

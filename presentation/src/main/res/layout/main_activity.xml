@@ -145,6 +145,18 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/sprocket"
+            android:layout_width="12dp"
+            android:layout_height="0dp"
+            android:background="@drawable/sprocket_rail"
+            android:importantForAccessibility="no"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/bottomBar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            tools:visibility="visible" />
+
+        <View
             android:id="@+id/bottom"
             android:layout_width="match_parent"
             android:layout_height="1dp"

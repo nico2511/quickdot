@@ -18,21 +18,27 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="48dp"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:minHeight="56dp"
+    android:orientation="horizontal"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/filter"
         style="@style/TextPrimary"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center_vertical"
         android:paddingStart="24dp"
-        tools:text="value"
-        android:textDirection="ltr" />
+        android:paddingEnd="4dp"
+        android:textDirection="ltr"
+        tools:text="value" />
 
     <ImageView
         android:id="@+id/caseIcon"
@@ -40,7 +46,7 @@
         android:layout_height="48dp"
         android:padding="12dp"
         android:src="@drawable/ic_format_size_black_24dp"
-        android:tint="?android:attr/textColorSecondary" />
+        app:tint="?android:attr/textColorSecondary" />
 
     <ImageView
         android:id="@+id/regexIcon"
@@ -48,7 +54,7 @@
         android:layout_height="48dp"
         android:padding="12dp"
         android:src="@drawable/ic_regex_24px"
-        android:tint="?android:attr/textColorSecondary" />
+        app:tint="?android:attr/textColorSecondary" />
 
     <ImageView
         android:id="@+id/contactsIcon"
@@ -56,7 +62,7 @@
         android:layout_height="48dp"
         android:padding="12dp"
         android:src="@drawable/ic_person_black_24dp"
-        android:tint="?android:attr/textColorSecondary" />
+        app:tint="?android:attr/textColorSecondary" />
 
     <ImageView
         android:id="@+id/removeFilter"
@@ -67,6 +73,6 @@
         android:background="?android:attr/selectableItemBackground"
         android:padding="12dp"
         android:src="@drawable/ic_close_black_24dp"
-        android:tint="?android:attr/textColorSecondary" />
+        app:tint="?android:attr/textColorSecondary" />
 
 </LinearLayout>

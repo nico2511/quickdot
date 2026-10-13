@@ -37,6 +37,43 @@
         android:paddingTop="8dp"
         android:paddingBottom="8dp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/square_outline"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                style="@style/TextTertiary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.14"
+                android:text="@string/about_credits_title"
+                android:textAllCaps="true"
+                app:textFont="label" />
+
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/about_credits_names"
+                android:textColor="?android:attr/textColorPrimary"
+                app:textFont="display"
+                app:textSize="secondary" />
+
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                style="@style/TextSecondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/about_credits" />
+
+        </LinearLayout>
+
         <dev.octoshrimpy.quik.common.widget.QkTextView
             style="@style/PreferenceCategory"
             android:text="@string/settings_about_title" />
@@ -45,20 +82,15 @@
             android:id="@+id/version"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:icon="@drawable/qd_info"
             app:title="@string/about_version_title"
-            tools:summary="3.0.8" />
-
-        <dev.octoshrimpy.quik.common.widget.PreferenceView
-            android:id="@+id/credits"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:summary="@string/about_credits"
-            app:title="@string/about_credits_title" />
+            tools:summary="0.1.1" />
 
         <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/developer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:icon="@drawable/ic_person_black_24dp"
             app:summary="@string/about_developer"
             app:title="@string/about_developer_title" />
 
@@ -66,6 +98,7 @@
             android:id="@+id/source"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:icon="@drawable/qd_share"
             app:summary="@string/about_source"
             app:title="@string/about_source_title" />
 
@@ -73,6 +106,7 @@
             android:id="@+id/changelog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:icon="@drawable/ic_history_black_24dp"
             app:summary="@string/about_changelog"
             app:title="@string/about_changelog_title" />
 
@@ -80,6 +114,7 @@
             android:id="@+id/contact"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:icon="@drawable/ic_send_black_24dp"
             app:summary="@string/about_contact"
             app:title="@string/about_contact_title" />
 
@@ -87,6 +122,7 @@
             android:id="@+id/license"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:icon="@drawable/ic_title_black_24dp"
             app:summary="@string/about_license"
             app:title="@string/about_license_title" />
 
@@ -94,6 +130,7 @@
             android:id="@+id/copyright"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:icon="@drawable/ic_info_black_24dp"
             app:summary="@string/about_copyright"
             app:title="@string/about_copyright_title" />
 

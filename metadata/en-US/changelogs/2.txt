@@ -1,0 +1,1 @@
+0.1.1 restyles the contact picker: square search, sprocket rail, matrix bands, speaker-ink avatars, and a permission card when contacts access is denied.

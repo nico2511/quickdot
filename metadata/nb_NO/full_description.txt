@@ -1,4 +1,5 @@
-Open-source-erstatning for den innebygde SMS-appen på Android. En gjenoppliving av QKSMS.
+Quickdot is a fork of Quik, which continues QKSMS. Quik and QKSMS are free software under the GNU General Public License v3.
+
 ## Funksjoner
 - Planlagte meldinger
 - Backup av meldinger
@@ -8,5 +9,3 @@ Open-source-erstatning for den innebygde SMS-appen på Android. En gjenoppliving
 - Vedlegg av alle filtyper
 - Sortering av meldinger
 - Forsinket sending
-
-Du kan chatte med communityet under <a href="https://matrix.to/#/#quik-sms:matrix.org">#quik-sms:matrix.org</a>

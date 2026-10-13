@@ -1,0 +1,22 @@
+PackageName: com.nico2511.quickdot
+Name: Quickdot
+Summary: SMS messenger based on Quik and QKSMS
+License: GPL-3.0
+AuthorName: nico2511
+SourceCode: https://github.com/nico2511/quickdot
+IssueTracker: https://github.com/nico2511/quickdot/issues
+WebSite: ""
+Categories:
+  - Communication
+  - Internet
+AntiFeatures: NonFreeNet
+CurrentVersion: "4.3.7"
+CurrentVersionCode: 2239
+Description: |
+  Quickdot is an SMS messenger for Android. It is a fork of Quik, which
+  continues QKSMS. Quik and QKSMS are free software under the GNU General
+  Public License v3, and Quickdot is released under the same license.
+  It displays SMS/MMS conversations, supports scheduled sends, backups, voice
+  messages, speech-to-text and text-to-speech, and more.
+  Quickdot connects to public APIs (e.g. Space Devs) for news and may fetch
+  thumbnails from third-party hosts, so it is marked as NonFreeNet.

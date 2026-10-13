@@ -1,1 +1,1 @@
-Remplacement open source de l'appli SMS Android. Renaissance de QKSMS.
+Quickdot SMS. A fork of Quik, continuing QKSMS under GPLv3.

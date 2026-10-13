@@ -161,6 +161,8 @@ class MainActivity : QkThemedActivity(), MainView {
         }
 
         toggle.syncState()
+        toggle.isDrawerIndicatorEnabled = false
+        showBackButton(false)
         binding.toolbar.setNavigationOnClickListener {
             dismissKeyboard()
             homeIntent.onNext(Unit)
@@ -396,14 +398,11 @@ class MainActivity : QkThemedActivity(), MainView {
     override fun onDestroy() =
         super.onDestroy().also { disposables.dispose() }
 
-    override fun showBackButton(show: Boolean) =
-        toggle.let {
-            it.onDrawerSlide(binding.drawer.root, if (show) 1f else 0f)
-            it.drawerArrowDrawable.color = when (show) {
-                true -> resolveThemeColor(android.R.attr.textColorSecondary)
-                false -> resolveThemeColor(android.R.attr.textColorPrimary)
-            }
-        }
+    override fun showBackButton(show: Boolean) {
+        toggle.isDrawerIndicatorEnabled = false
+        binding.toolbar.setNavigationIcon(if (show) R.drawable.qd_back else R.drawable.qd_menu)
+        binding.toolbar.navigationIcon?.setTint(resolveThemeColor(android.R.attr.textColorSecondary))
+    }
 
     override fun requestDefaultSms() =
         externalNavigator.showDefaultSmsDialog(this)

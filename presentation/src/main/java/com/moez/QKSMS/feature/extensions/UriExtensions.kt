@@ -30,7 +30,7 @@ fun Uri.loadBestIconIntoImageView(context: Context, imageView: ImageView)
     if (!resourceExists(context)) {
         Glide
             .with(context)
-            .load(android.R.drawable.ic_delete)
+            .load(R.drawable.ic_missing)
             .into(imageView)
         return LoadBestIconIntoImageView.Missing
     }

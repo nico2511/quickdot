@@ -600,7 +600,7 @@
         android:contentDescription="@string/compose_audio_message_cd"
         android:elevation="4dp"
         android:padding="10dp"
-        android:src="@android:drawable/ic_btn_speak_now"
+        android:src="@drawable/ic_mic"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/gallery"
         app:layout_constraintEnd_toEndOf="@id/attach"
@@ -729,7 +729,7 @@
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/compose_record_audio_msg_cd"
         android:padding="8dp"
-        android:src="@android:drawable/ic_btn_speak_now"
+        android:src="@drawable/ic_mic"
         app:layout_constraintBottom_toBottomOf="@id/messageBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="?android:textColorSecondary" />
@@ -837,7 +837,7 @@
                     android:layout_width="76dp"
                     android:layout_height="76dp"
                     android:layout_gravity="center"
-                    app:srcCompat="@android:drawable/stat_sys_data_bluetooth" />
+                    app:srcCompat="@drawable/ic_bluetooth" />
 
                 <dev.octoshrimpy.quik.common.widget.MicInputCloudView
                     android:id="@+id/audioMsgRecord"
@@ -846,7 +846,7 @@
                     android:layout_gravity="center"
                     android:background="?android:attr/selectableItemBackgroundBorderless"
                     app:pauseIcon="@drawable/exo_icon_stop"
-                    app:playIcon="@android:drawable/ic_btn_speak_now"
+                    app:playIcon="@drawable/ic_mic"
                     app:primaryColor="@color/textPrimaryDark" />
             </FrameLayout>
 

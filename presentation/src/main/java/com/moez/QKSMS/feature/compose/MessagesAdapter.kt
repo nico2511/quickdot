@@ -211,6 +211,7 @@ class MessagesAdapter @Inject constructor(
         val reactions: View
         val reactionText: TextView
         val status: TextView
+        val meters: List<ImageView>
 
         if (isOutgoing) {
             val binding = MessageListItemOutBinding.bind(holder.itemView)
@@ -222,6 +223,7 @@ class MessagesAdapter @Inject constructor(
             reactions = binding.reactions
             reactionText = binding.reactionText
             status = binding.status
+            meters = listOf(binding.meter1, binding.meter2, binding.meter3)
 
             // bind the cancelFrame (cancel button) and send now button
             val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
@@ -285,6 +287,7 @@ class MessagesAdapter @Inject constructor(
             reactions = binding.reactions
             reactionText = binding.reactionText
             status = binding.status
+            meters = listOf(binding.meter1, binding.meter2, binding.meter3)
 
             // Bind the avatar and bubble colour
             binding.avatar.apply {
@@ -327,7 +330,7 @@ class MessagesAdapter @Inject constructor(
         }
 
         // Bind the message status
-        bindStatus(status, isMsgTextTruncated, message, next)
+        bindStatus(status, meters, isMsgTextTruncated, message, next)
 
         // Bind the timestamp
         val subscription = subs.find { it.subscriptionId == message.subId }
@@ -463,15 +466,15 @@ class MessagesAdapter @Inject constructor(
 
     private fun bindStatus(
         statusView: TextView,
+        meters: List<ImageView>,
         bodyTextTruncated: Boolean,
         message: Message,
         next: Message?
     ) {
+        val quiet = context.resolveThemeColor(android.R.attr.textColorTertiary)
+        val red = context.getColorCompat(R.color.accent)
         statusView.apply {
-            setTextColor(
-                if (message.isFailedMessage()) context.getColorCompat(R.color.accent)
-                else context.resolveThemeColor(android.R.attr.textColorTertiary)
-            )
+            setTextColor(if (message.isFailedMessage()) red else quiet)
 
             text = when {
                 message.isSending() -> context.getString(R.string.message_status_sending)
@@ -492,22 +495,31 @@ class MessagesAdapter @Inject constructor(
                 System.currentTimeMillis() - message.date
             )
 
-            setVisible(
-                when {
-                    expanded[message.id] == true -> true
-                    message.isSending() -> true
-                    message.isFailedMessage() -> true
-                    bodyTextTruncated -> true
-                    expanded[message.id] == false -> false
-                    ((conversation?.recipients?.size ?: 0) > 1) &&
-                            !message.isMe() && next?.compareSender(message) != true -> true
-                    (message.isDelivered() &&
-                            (next?.isDelivered() != true) &&
-                            (age <= BubbleUtils.TIMESTAMP_THRESHOLD)) -> true
+            val visible = when {
+                expanded[message.id] == true -> true
+                message.isSending() -> true
+                message.isFailedMessage() -> true
+                bodyTextTruncated -> true
+                expanded[message.id] == false -> false
+                ((conversation?.recipients?.size ?: 0) > 1) &&
+                        !message.isMe() && next?.compareSender(message) != true -> true
+                (message.isDelivered() &&
+                        (next?.isDelivered() != true) &&
+                        (age <= BubbleUtils.TIMESTAMP_THRESHOLD)) -> true
 
-                    else -> false
-                }
-            )
+                else -> false
+            }
+            setVisible(visible)
+            val marks = when {
+                message.isFailedMessage() -> listOf(red, red, red)
+                message.isDelivered() -> listOf(quiet, quiet, red)
+                message.isSending() -> listOf(quiet, quiet.withAlpha(0x66), quiet.withAlpha(0x33))
+                else -> listOf(quiet, quiet, quiet)
+            }
+            meters.forEachIndexed { index, mark ->
+                mark.setTint(marks[index])
+                mark.setVisible(visible)
+            }
         }
     }
 

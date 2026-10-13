@@ -46,8 +46,8 @@ class BubbleImageView @JvmOverloads constructor(context: Context, attrs: Attribu
         }
 
     private val path = Path()
-    private val radiusSmall = 4.dpToPx(context).toFloat()
-    private val radiusLarge = 18.dpToPx(context).toFloat()
+    private val radiusSmall = 2.dpToPx(context).toFloat()
+    private val radiusLarge = 6.dpToPx(context).toFloat()
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)

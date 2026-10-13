@@ -50,7 +50,7 @@
                 android:drawablePadding="10dp"
                 android:drawableTint="?android:attr/textColorTertiary"
                 android:gravity="center"
-                android:letterSpacing="0.08"
+                android:letterSpacing="0.16"
                 android:paddingTop="12dp"
                 android:paddingBottom="8dp"
                 app:textFont="display"
@@ -174,21 +174,50 @@
 
         </LinearLayout>
 
-        <dev.octoshrimpy.quik.common.widget.QkTextView
-            android:id="@+id/status"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_marginStart="72dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
-            android:textColor="?android:attr/textColorTertiary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/body"
-            app:textFont="label"
-            app:textSize="tertiary"
-            tools:text="Sending..." />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/meter1"
+                android:layout_width="5dp"
+                android:layout_height="5dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/pixel_square" />
+
+            <ImageView
+                android:id="@+id/meter2"
+                android:layout_width="5dp"
+                android:layout_height="5dp"
+                android:layout_marginStart="3dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/pixel_square" />
+
+            <ImageView
+                android:id="@+id/meter3"
+                android:layout_width="5dp"
+                android:layout_height="5dp"
+                android:layout_marginStart="3dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/pixel_square" />
+
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textColor="?android:attr/textColorTertiary"
+                app:textFont="label"
+                app:textSize="tertiary"
+                tools:text="Sending..." />
+
+        </LinearLayout>
 
     </LinearLayout>
 

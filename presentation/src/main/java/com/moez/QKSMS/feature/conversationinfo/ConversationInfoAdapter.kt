@@ -8,9 +8,8 @@ import com.jakewharton.rxbinding2.view.clicks
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkAdapter
 import dev.octoshrimpy.quik.common.base.QkViewHolder
-import dev.octoshrimpy.quik.common.util.Colors
-import dev.octoshrimpy.quik.common.util.extensions.setTint
 import dev.octoshrimpy.quik.common.util.extensions.setVisible
+import dev.octoshrimpy.quik.databinding.ConversationInfoSectionBinding
 import dev.octoshrimpy.quik.databinding.ConversationInfoSettingsBinding
 import dev.octoshrimpy.quik.databinding.ConversationMediaListItemBinding
 import dev.octoshrimpy.quik.databinding.ConversationRecipientListItemBinding
@@ -22,8 +21,7 @@ import io.reactivex.subjects.Subject
 import javax.inject.Inject
 
 class ConversationInfoAdapter @Inject constructor(
-    private val context: Context,
-    private val colors: Colors
+    private val context: Context
 ) : QkAdapter<ConversationInfoItem, QkViewHolder>() {
 
     val recipientClicks: Subject<Long> = PublishSubject.create()
@@ -83,6 +81,8 @@ class ConversationInfoAdapter @Inject constructor(
                 }
             }
 
+            3 -> QkViewHolder(ConversationInfoSectionBinding.inflate(inflater, parent, false).root)
+
             else -> throw IllegalStateException()
         }
     }
@@ -92,6 +92,10 @@ class ConversationInfoAdapter @Inject constructor(
             is ConversationInfoRecipient -> {
                 val binding = ConversationRecipientListItemBinding.bind(holder.itemView)
                 val recipient = item.value
+                binding.section.isVisible = position == 0
+                        || getItem(position - 1) !is ConversationInfoRecipient
+                binding.avatar.square = true
+                binding.avatar.speakerInk = true
                 binding.avatar.setRecipient(recipient)
 
                 binding.name.text = recipient.contact?.name ?: recipient.address
@@ -100,9 +104,6 @@ class ConversationInfoAdapter @Inject constructor(
                 binding.address.setVisible(recipient.contact != null)
 
                 binding.add.setVisible(recipient.contact == null)
-
-                val theme = colors.theme(recipient)
-                binding.theme.setTint(theme.theme)
             }
 
             is ConversationInfoSettings -> {
@@ -121,7 +122,15 @@ class ConversationInfoAdapter @Inject constructor(
                     true -> R.string.info_unblock
                     false -> R.string.info_block
                 })
+
+                val accent = context.getColor(R.color.accent)
+                binding.block.setIconTint(accent)
+                binding.delete.setIconTint(accent)
+                binding.block.titleView.setTextColor(accent)
+                binding.delete.titleView.setTextColor(accent)
             }
+
+            is ConversationInfoAttachments -> Unit
 
             is ConversationInfoMedia -> {
                 val binding = ConversationMediaListItemBinding.bind(holder.itemView)
@@ -142,6 +151,7 @@ class ConversationInfoAdapter @Inject constructor(
             is ConversationInfoRecipient -> 0
             is ConversationInfoSettings -> 1
             is ConversationInfoMedia -> 2
+            is ConversationInfoAttachments -> 3
         }
     }
 
@@ -158,6 +168,8 @@ class ConversationInfoAdapter @Inject constructor(
             old is ConversationInfoMedia && new is ConversationInfoMedia -> {
                 old.value.id == new.value.id
             }
+
+            old is ConversationInfoAttachments && new is ConversationInfoAttachments -> true
 
             else -> false
         }

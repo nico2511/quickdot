@@ -102,7 +102,10 @@ class ConversationInfoPresenter @Inject constructor(
                             recipients = conversation.recipients,
                             archived = conversation.archived,
                             blocked = conversation.blocked)
-                    data += parts.map(::ConversationInfoMedia)
+                    if (parts.isNotEmpty()) {
+                        data += ConversationInfoItem.ConversationInfoAttachments
+                        data += parts.map(::ConversationInfoMedia)
+                    }
 
                     newState { copy(data = data) }
                 }

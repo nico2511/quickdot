@@ -29,36 +29,25 @@
 
     <FrameLayout
         android:id="@+id/speechToTextFrame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="12dp"
-        android:elevation="3dp"
-        android:padding="8dp"
+        android:background="@drawable/stt_button_background"
+        android:elevation="4dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sendAsGroupBackground"
         tools:visibility="visible">
 
         <ImageView
-            android:id="@+id/speechToTextIconBorder"
-            android:layout_width="78dp"
-            android:layout_height="78dp"
-            android:background="@drawable/square_key"
-            android:padding="6dp"
-            tools:backgroundTint="@color/tools_theme"
-            tools:tint="@color/textPrimaryDark" />
-
-        <ImageView
             android:id="@+id/speechToTextIcon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:background="@drawable/square_key"
-            android:elevation="1dp"
-            android:padding="8dp"
-            app:srcCompat="@drawable/ic_speech_to_text_black"
-            tools:tint="@color/tools_theme" />
+            android:padding="12dp"
+            android:contentDescription="@string/settings_system_show_stt_title"
+            app:srcCompat="@drawable/ic_mic"
+            app:tint="?android:attr/textColorPrimary" />
 
     </FrameLayout>
 

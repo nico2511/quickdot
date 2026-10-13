@@ -19,6 +19,7 @@
 package dev.octoshrimpy.quik.common.widget
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -100,6 +101,10 @@ class PreferenceView @JvmOverloads constructor(
 
             recycle()
         }
+    }
+
+    fun setIconTint(color: Int) {
+        layout.icon.imageTintList = ColorStateList.valueOf(color)
     }
 
 }

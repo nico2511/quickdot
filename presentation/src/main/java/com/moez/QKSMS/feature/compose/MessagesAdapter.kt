@@ -294,6 +294,7 @@ class MessagesAdapter @Inject constructor(
 
             // Bind the avatar and bubble colour
             binding.avatar.apply {
+                square = true
                 speakerInk = true
                 setRecipient(contactCache[message.address])
                 setVisible(!canGroup(message, next), View.INVISIBLE)
@@ -438,7 +439,11 @@ class MessagesAdapter @Inject constructor(
 
         // Bind the parts
         parts.adapter = partsAdapterProvider.get().apply {
-            this.theme = if (message.isMe()) colors.theme() else Colors.Theme(speaker, colors)
+            this.theme = if (message.isMe()) {
+                Colors.Theme(context.getColorCompat(R.color.bubbleOutgoing), colors)
+            } else {
+                Colors.Theme(speaker, colors)
+            }
             setData(message, previous, next, holder, audioState)
             contextMenuValue = message.id
             clicks.subscribe(partClicks)    // part clicks gets passed back to compose view model

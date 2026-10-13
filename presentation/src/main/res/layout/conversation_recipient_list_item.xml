@@ -17,73 +17,102 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:paddingStart="24dp"
-    android:paddingTop="8dp"
-    android:paddingEnd="16dp"
-    android:paddingBottom="8dp">
-
-    <dev.octoshrimpy.quik.common.widget.AvatarView
-        android:id="@+id/avatar"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:orientation="vertical">
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
-        android:id="@+id/name"
-        style="@style/TextPrimary"
-        android:layout_width="0dp"
+        android:id="@+id/section"
+        style="@style/TextTertiary"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@id/address"
-        app:layout_constraintEnd_toStartOf="@id/add"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@id/avatar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        tools:text="Moez Bhatti" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:drawableStart="@drawable/matrix_band"
+        android:drawableEnd="@drawable/matrix_band"
+        android:drawablePadding="8dp"
+        android:drawableTint="?android:attr/textColorTertiary"
+        android:gravity="center"
+        android:letterSpacing="0.14"
+        android:text="@string/info_section_people"
+        android:textAllCaps="true"
+        android:visibility="gone"
+        app:textFont="label"
+        tools:visibility="visible" />
 
-    <dev.octoshrimpy.quik.common.widget.QkTextView
-        android:id="@+id/address"
-        style="@style/TextSecondary"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/name"
-        app:layout_constraintStart_toStartOf="@id/name"
-        app:layout_constraintTop_toBottomOf="@id/name"
-        tools:text="(123) 456-7890" />
+        android:background="?attr/selectableItemBackground"
+        android:paddingStart="12dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp">
 
-    <ImageView
-        android:id="@+id/add"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="16dp"
-        android:padding="8dp"
-        android:src="@drawable/ic_person_add_black_24dp"
-        app:tint="?android:attr/textColorSecondary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/theme"
-        app:layout_constraintTop_toTopOf="parent" />
+        <dev.octoshrimpy.quik.common.widget.AvatarView
+            android:id="@+id/avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/theme"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:padding="8dp"
-        android:src="@drawable/ic_palette_black_24dp"
-        app:tint="?android:attr/textColorSecondary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <dev.octoshrimpy.quik.common.widget.QkTextView
+            android:id="@+id/name"
+            style="@style/TextPrimary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@id/address"
+            app:layout_constraintEnd_toStartOf="@id/add"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/avatar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Moez Bhatti" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <dev.octoshrimpy.quik.common.widget.QkTextView
+            android:id="@+id/address"
+            style="@style/TextSecondary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/name"
+            app:layout_constraintStart_toStartOf="@id/name"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            app:textFont="label"
+            tools:text="(123) 456-7890" />
+
+        <ImageView
+            android:id="@+id/add"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/square_outline"
+            android:padding="8dp"
+            android:src="@drawable/ic_person_add_black_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/theme"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?android:attr/textColorPrimary" />
+
+        <ImageView
+            android:id="@+id/theme"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/square_outline"
+            android:padding="8dp"
+            android:src="@drawable/ic_palette_black_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?android:attr/textColorPrimary" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

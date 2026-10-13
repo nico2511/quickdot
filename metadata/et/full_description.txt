@@ -1,4 +1,5 @@
-Avatud lähtekoodil põhinev asendus Androidi standardsele lühisõnumirakendusele. Varasema QKSMS-nimelise rakenduse edasiarendus.
+Quickdot is a fork of Quik, which continues QKSMS. Quik and QKSMS are free software under the GNU General Public License v3.
+
 ## Funktsionaalsused:
 - Sõnumite ajastamine
 - Sõnumite varundus
@@ -8,5 +9,3 @@ Avatud lähtekoodil põhinev asendus Androidi standardsele lühisõnumirakenduse
 - Kõiki tüüpi failid manustena
 - Sõnumite järjestamine
 - Viivitusega saatmine
-
-Osale kogukonna suhtluses <a href="https://matrix.to/#/#quik-sms:matrix.org">#quik-sms:matrix.org</a> jututoas

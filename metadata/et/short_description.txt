@@ -1,1 +1,1 @@
-Avatud lähtekoodiga asendus standardsele Androidi tekstisõnumirakendusele. Varasema QKSMS-rakenduse edasiarendus.
+Quickdot SMS. A fork of Quik, continuing QKSMS under GPLv3.

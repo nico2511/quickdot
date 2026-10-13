@@ -1,4 +1,5 @@
-Open source replacement to the stock SMS app on Android. A revival of QKSMS.
+Quickdot is a fork of Quik, which continues QKSMS. Quik and QKSMS are free software under the GNU General Public License v3.
+
 ## Features
 - Scheduled Messages
 - Message Backup
@@ -8,5 +9,3 @@ Open source replacement to the stock SMS app on Android. A revival of QKSMS.
 - Attachments of any type of file
 - Message Sorting
 - Delayed Sending
-
-You can chat with the community over at <a href="https://matrix.to/#/#quik-sms:matrix.org">#quik-sms:matrix.org</a>

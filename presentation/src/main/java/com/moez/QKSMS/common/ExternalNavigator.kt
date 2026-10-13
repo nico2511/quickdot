@@ -29,7 +29,6 @@ import android.provider.ContactsContract
 import android.provider.Settings
 import android.provider.Telephony
 import androidx.core.net.toUri
-import dev.octoshrimpy.quik.BuildConfig
 import dev.octoshrimpy.quik.manager.PermissionManager
 import javax.inject.Inject
 import dev.octoshrimpy.quik.feature.notificationprefs.NotificationPrefsActivity
@@ -45,14 +44,14 @@ class ExternalNavigator @Inject constructor(
     private val notificationManager: NotificationManager
 ) : QkNavigator(context) {
     fun showDeveloper() =
-        openExternalActivity("https://github.com/quik-sms/quik/graphs/contributors")
+        openExternalActivity("https://github.com/nico2511/quickdot")
 
-    fun showSourceCode() = openExternalActivity("https://github.com/quik-sms/quik")
+    fun showSourceCode() = openExternalActivity("https://github.com/nico2511/quickdot")
 
-    fun showChangelog() = openExternalActivity("https://github.com/quik-sms/quik/releases")
+    fun showChangelog() = openExternalActivity("https://github.com/nico2511/quickdot/releases")
 
     fun showLicense() =
-        openExternalActivity("https://github.com/quik-sms/quik/blob/master/LICENSE")
+        openExternalActivity("https://github.com/nico2511/quickdot/blob/master/LICENSE")
 
     fun makePhoneCall(address: String) {
         val action = if (permissions.hasCalling()) Intent.ACTION_CALL else Intent.ACTION_DIAL
@@ -60,10 +59,10 @@ class ExternalNavigator @Inject constructor(
         startActivityExternal(intent)
     }
 
-    fun showDonation() = openExternalActivity("https://github.com/quik-sms/quik")
+    fun showDonation() = openExternalActivity("https://github.com/nico2511/quickdot")
 
     fun showRating() {
-        val intent = Intent(Intent.ACTION_VIEW, "https://github.com/quik-sms/quik".toUri())
+        val intent = Intent(Intent.ACTION_VIEW, "https://github.com/nico2511/quickdot".toUri())
             .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY
                     or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
                     or Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
@@ -71,7 +70,7 @@ class ExternalNavigator @Inject constructor(
         try {
             startActivityExternal(intent)
         } catch (_: ActivityNotFoundException) {
-            val url = "https://github.com/quik-sms/quik"
+            val url = "https://github.com/nico2511/quickdot"
             startActivityExternal(Intent(Intent.ACTION_VIEW, url.toUri()))
         }
     }
@@ -91,27 +90,13 @@ class ExternalNavigator @Inject constructor(
             "https://play.google.com/store/apps/details?id=org.mistergroup.shouldianswer"
         )
 
-    fun showSupport() {
-        val intent = Intent(Intent.ACTION_SENDTO)
-        intent.data = "mailto:".toUri()
-        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("quik@octo.sh"))
-        intent.putExtra(Intent.EXTRA_SUBJECT, "QUIK Support")
-        intent.putExtra(
-            Intent.EXTRA_TEXT, StringBuilder("\n\n")
-                .append("\n\n--- Please write your message above this line ---\n\n")
-                .append("Package: ${context.packageName}\n")
-                .append("Version: ${BuildConfig.VERSION_NAME}\n")
-                .append("Device: ${Build.BRAND} ${Build.MODEL}\n")
-                .append("SDK: ${Build.VERSION.SDK_INT}\n")
-                .toString()
-        )
-        startActivityExternal(intent)
-    }
+    fun showSupport() =
+        openExternalActivity("https://github.com/nico2511/quickdot/issues")
 
     fun showInvite() {
         Intent(Intent.ACTION_SEND)
             .setType("text/plain")
-            .putExtra(Intent.EXTRA_TEXT, "https://github.com/quik-sms/quik/releases/latest")
+            .putExtra(Intent.EXTRA_TEXT, "https://github.com/nico2511/quickdot/releases/latest")
             .let { Intent.createChooser(it, null) }
             .let(::startActivityExternal)
     }

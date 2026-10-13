@@ -1,0 +1,1 @@
+First Quickdot release (0.1.0). A fork of Quik, which continues QKSMS, under GPLv3.

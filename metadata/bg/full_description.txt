@@ -1,4 +1,5 @@
-Заместител на стандартното приложение за SMS на Андроид с отворен код. Съживяване на QKSMS.
+Quickdot is a fork of Quik, which continues QKSMS. Quik and QKSMS are free software under the GNU General Public License v3.
+
 ## Възможности
 - Планирани съобщения
 - Архивиране на съобщения
@@ -8,5 +9,3 @@
 - Прикачени файлове от всякакъв вид
 - Сортиране на съобщения
 - Отложено изпращане
-
-Можете да общувате с общността на адрес <a href="https://matrix.to/#/#quik-sms:matrix.org">#quik-sms:matrix.org</a>

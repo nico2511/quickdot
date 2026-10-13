@@ -1,0 +1,1 @@
+0.1.2 restyles conversation details, the drawer, Settings, and the other drawer screens. Six Quickdot accent inks replace the Material color grid and apply across the app. Switches are square, and signal red stays on destructive actions.

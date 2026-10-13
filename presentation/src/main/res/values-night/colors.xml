@@ -22,4 +22,11 @@
     <color name="bubbleOutgoingText">#111111</color>
     <color name="bubbleIncomingStroke">#C8C8C8</color>
     <color name="selectionWash">#33E10600</color>
+
+    <!-- Speaker inks. Light enough for AA text on #1B1B1B, with #111111 initials on the ink. -->
+    <color name="speakerInk0">#E4E4E4</color>
+    <color name="speakerInk1">#E7C3B2</color>
+    <color name="speakerInk2">#B7D0E4</color>
+    <color name="speakerInk3">#C9D6B4</color>
+    <color name="speakerInk4">#E4C6D6</color>
 </resources>

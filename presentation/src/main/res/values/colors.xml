@@ -61,6 +61,13 @@
     <color name="bubbleIncomingStroke">#111111</color>
     <color name="selectionWash">#1AE10600</color>
 
+    <!-- Speaker inks. Dark enough for AA text on white, and for white initials on the ink. -->
+    <color name="speakerInk0">#2C2C2C</color>
+    <color name="speakerInk1">#6B3E2E</color>
+    <color name="speakerInk2">#2E4A62</color>
+    <color name="speakerInk3">#3F4F32</color>
+    <color name="speakerInk4">#4C3450</color>
+
     <color name="separatorLight">#14000000</color>
     <color name="separatorDark">#1AFFFFFF</color>
 

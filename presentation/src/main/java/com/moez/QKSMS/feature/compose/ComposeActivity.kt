@@ -222,7 +222,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         setContentView(binding.root)
         showBackButton(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        binding.toolbarAvatar.monochrome = true
+        binding.toolbarAvatar.speakerInk = true
         viewModel.bindView(this)
 
         binding.contentView.layoutTransition = LayoutTransition().apply {
@@ -787,10 +787,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         optionsItemIntent.onNext(item.itemId)
         return true
-    }
-
-    override fun getColoredMenuItems(): List<Int> {
-        return super.getColoredMenuItems() + R.id.call
     }
 
     override fun onCreateContextMenu(

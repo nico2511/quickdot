@@ -23,6 +23,7 @@ import androidx.core.view.isVisible
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkViewHolder
 import dev.octoshrimpy.quik.common.util.Colors
+import dev.octoshrimpy.quik.common.util.extensions.applySpeakerStroke
 import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
 import dev.octoshrimpy.quik.common.util.extensions.getDisplayName
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
@@ -81,7 +82,7 @@ class VCardBinder @Inject constructor(colors: Colors, private val context: Conte
             binding.name.setTextColor(ctx.getColorCompat(R.color.bubbleOutgoingText))
             binding.label.setTextColor(ctx.getColorCompat(R.color.bubbleOutgoingText))
         } else {
-            binding.vCardBackground.backgroundTintList = null
+            binding.vCardBackground.applySpeakerStroke(theme.theme)
             binding.vCardAvatar.setTint(ctx.resolveThemeColor(android.R.attr.textColorSecondary))
             binding.name.setTextColor(ctx.resolveThemeColor(android.R.attr.textColorPrimary))
             binding.label.setTextColor(ctx.resolveThemeColor(android.R.attr.textColorTertiary))

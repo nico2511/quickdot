@@ -112,12 +112,23 @@
                 android:paddingEnd="4dp"
                 android:paddingStart="4dp">
 
+                <View
+                    android:id="@+id/identity"
+                    android:layout_width="4dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/parts"
+                    android:layout_alignBottom="@id/body"
+                    android:layout_alignParentStart="true"
+                    android:background="@drawable/identity_rail"
+                    android:importantForAccessibility="no" />
+
                 <dev.octoshrimpy.quik.common.widget.QkContextMenuRecyclerViewLongMmsPart
                     android:id="@+id/parts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
+                    android:layout_marginStart="8dp"
+                    android:layout_toEndOf="@id/identity"
                     android:nestedScrollingEnabled="false"
                     android:orientation="vertical"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -129,9 +140,10 @@
                     style="@style/TextPrimary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
                     android:layout_below="@id/parts"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="2dp"
+                    android:layout_toEndOf="@id/identity"
                     android:autoLink="email|phone|web"
                     android:background="@drawable/message_only"
                     android:gravity="start|center_vertical"

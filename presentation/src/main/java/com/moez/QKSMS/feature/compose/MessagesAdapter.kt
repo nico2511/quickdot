@@ -50,6 +50,7 @@ import dev.octoshrimpy.quik.common.util.TextViewStyler
 import dev.octoshrimpy.quik.common.util.extensions.dpToPx
 import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
+import dev.octoshrimpy.quik.common.util.extensions.applySpeakerStroke
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setPadding
 import dev.octoshrimpy.quik.common.util.extensions.setTint
@@ -212,6 +213,8 @@ class MessagesAdapter @Inject constructor(
         val reactionText: TextView
         val status: TextView
         val meters: List<ImageView>
+        var identity: View? = null
+        val speaker = if (isOutgoing) 0 else colors.speakerInk(message.address)
 
         if (isOutgoing) {
             val binding = MessageListItemOutBinding.bind(holder.itemView)
@@ -291,10 +294,12 @@ class MessagesAdapter @Inject constructor(
 
             // Bind the avatar and bubble colour
             binding.avatar.apply {
-                monochrome = true
+                speakerInk = true
                 setRecipient(contactCache[message.address])
                 setVisible(!canGroup(message, next), View.INVISIBLE)
             }
+            identity = binding.identity
+            identity.setBackgroundTint(speaker)
 
             val accent = context.getColorCompat(R.color.accent)
             body.apply {
@@ -330,7 +335,7 @@ class MessagesAdapter @Inject constructor(
         }
 
         // Bind the message status
-        bindStatus(status, meters, isMsgTextTruncated, message, next)
+        bindStatus(status, meters, isMsgTextTruncated, message, next, speaker)
 
         // Bind the timestamp
         val subscription = subs.find { it.subscriptionId == message.subId }
@@ -421,16 +426,19 @@ class MessagesAdapter @Inject constructor(
                     setTextColor(context.getColorCompat(R.color.bubbleOutgoingText))
                     setBackgroundTint(context.getColorCompat(R.color.bubbleOutgoing))
                 } else {
-                    // Stroke colour lives on the drawable. A view tint would fill the bubble.
+                    // Body text stays the theme primary so it clears AA on the page.
+                    // The speaker ink is the stroke only; a view tint would fill the bubble.
                     setTextColor(context.resolveThemeColor(android.R.attr.textColorPrimary))
-                    backgroundTintList = null
+                    applySpeakerStroke(speaker)
                 }
             }
         }
 
+        identity?.setVisible(!emojiOnly && !isOutgoing)
+
         // Bind the parts
         parts.adapter = partsAdapterProvider.get().apply {
-            this.theme = if (message.isMe()) colors.theme() else colors.neutral()
+            this.theme = if (message.isMe()) colors.theme() else Colors.Theme(speaker, colors)
             setData(message, previous, next, holder, audioState)
             contextMenuValue = message.id
             clicks.subscribe(partClicks)    // part clicks gets passed back to compose view model
@@ -469,12 +477,18 @@ class MessagesAdapter @Inject constructor(
         meters: List<ImageView>,
         bodyTextTruncated: Boolean,
         message: Message,
-        next: Message?
+        next: Message?,
+        speaker: Int
     ) {
         val quiet = context.resolveThemeColor(android.R.attr.textColorTertiary)
         val red = context.getColorCompat(R.color.accent)
+        val groupName = !message.isMe() && (conversation?.recipients?.size ?: 0) > 1
         statusView.apply {
-            setTextColor(if (message.isFailedMessage()) red else quiet)
+            setTextColor(when {
+                message.isFailedMessage() -> red
+                groupName && speaker != 0 -> speaker
+                else -> quiet
+            })
 
             text = when {
                 message.isSending() -> context.getString(R.string.message_status_sending)

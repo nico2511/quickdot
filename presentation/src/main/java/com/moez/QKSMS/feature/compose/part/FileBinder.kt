@@ -24,6 +24,7 @@ import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkViewHolder
 import dev.octoshrimpy.quik.common.util.Colors
+import dev.octoshrimpy.quik.common.util.extensions.applySpeakerStroke
 import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
@@ -90,7 +91,7 @@ class FileBinder @Inject constructor(colors: Colors, private val context: Contex
             binding.filename.setTextColor(ctx.getColorCompat(R.color.bubbleOutgoingText))
             binding.size.setTextColor(ctx.getColorCompat(R.color.bubbleOutgoingText))
         } else {
-            binding.fileBackground.backgroundTintList = null
+            binding.fileBackground.applySpeakerStroke(theme.theme)
             binding.icon.setTint(ctx.resolveThemeColor(android.R.attr.textColorSecondary))
             binding.filename.setTextColor(ctx.resolveThemeColor(android.R.attr.textColorPrimary))
             binding.size.setTextColor(ctx.resolveThemeColor(android.R.attr.textColorTertiary))

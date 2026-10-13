@@ -824,7 +824,7 @@
                 android:layout_weight="1"
                 android:contentDescription="@string/compose_record_audio_msg_abort_cd"
                 app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@drawable/ic_delete_white_24dp"
+                app:srcCompat="@drawable/qd_delete"
                 app:tint="?android:attr/textColorPrimary" />
 
             <FrameLayout

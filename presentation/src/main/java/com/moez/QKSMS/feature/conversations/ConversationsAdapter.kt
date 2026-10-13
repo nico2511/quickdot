@@ -35,7 +35,6 @@ import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
 import dev.octoshrimpy.quik.common.util.extensions.setTint
 import dev.octoshrimpy.quik.databinding.ConversationListItemBinding
 import dev.octoshrimpy.quik.model.Conversation
-import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
@@ -43,8 +42,7 @@ class ConversationsAdapter @Inject constructor(
     private val colors: Colors,
     private val context: Context,
     private val dateFormatter: DateFormatter,
-    private val navigator: Navigator,
-    private val phoneNumberUtils: PhoneNumberUtils
+    private val navigator: Navigator
 ) : QkRealmAdapter<Conversation, QkBindingViewHolder<ConversationListItemBinding>>() {
     private val disposables = CompositeDisposable()
 
@@ -100,16 +98,6 @@ class ConversationsAdapter @Inject constructor(
         val conversation = getItem(position) ?: return
         val binding = holder.binding
 
-        // If the last message wasn't incoming, then the colour doesn't really matter anyway
-        val lastMessage = conversation.lastMessage
-        val recipient = when {
-            conversation.recipients.size == 1 || lastMessage == null -> conversation.recipients.firstOrNull()
-            else -> conversation.recipients.find { recipient ->
-                phoneNumberUtils.compare(recipient.address, lastMessage.address)
-            }
-        }
-        val theme = colors.theme(recipient).theme
-
         holder.itemView.isActivated = isSelected(conversation.id)
 
         binding.avatars.recipients = conversation.recipients
@@ -124,13 +112,18 @@ class ConversationsAdapter @Inject constructor(
             else -> conversation.snippet
         }
 
-        // Make the preview in italics if draft
-        if (conversation.draft.isNotEmpty()) binding.snippet.setTypeface(null, Typeface.ITALIC)
+        val style = when {
+            conversation.draft.isNotEmpty() && conversation.unread -> Typeface.BOLD_ITALIC
+            conversation.draft.isNotEmpty() -> Typeface.ITALIC
+            conversation.unread -> Typeface.BOLD
+            else -> Typeface.NORMAL
+        }
+        binding.snippet.setTypeface(binding.snippet.typeface, style)
 
         binding.scheduled.isVisible = conversation.id in hasScheduledConversation
 
         binding.pinned.isVisible = conversation.pinned
-        binding.unread.setTint(theme)
+        binding.unread.setTint(colors.theme().theme)
     }
 
     override fun getItemId(position: Int): Long {

@@ -24,6 +24,7 @@ import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
@@ -36,6 +37,20 @@ class GroupAvatarView @JvmOverloads constructor(
 
     private var layout: GroupAvatarViewBinding =
         GroupAvatarViewBinding.inflate(LayoutInflater.from(context), this)
+
+    var monochrome: Boolean = false
+        set(value) {
+            field = value
+            layout.avatar1.monochrome = value
+            layout.avatar2.monochrome = value
+        }
+
+    init {
+        context.obtainStyledAttributes(attrs, R.styleable.GroupAvatarView).run {
+            monochrome = getBoolean(R.styleable.GroupAvatarView_monochrome, false)
+            recycle()
+        }
+    }
 
     var recipients: List<Recipient> = ArrayList()
         set(value) {

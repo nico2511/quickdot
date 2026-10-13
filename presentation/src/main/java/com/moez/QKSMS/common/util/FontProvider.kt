@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
+ * Copyright (C) 2026 nico2511
  *
  * This file is part of QKSMS.
  *
@@ -26,29 +27,24 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Bundled OFL faces. Doto is for headings and numbers, Space Mono for labels,
+ * Inter for body and message text. Nothing is downloaded at runtime.
+ */
 @Singleton
 class FontProvider @Inject constructor(context: Context) {
 
-    private var lato: Typeface? = null
-    private val pendingCallbacks = ArrayList<(Typeface) -> Unit>()
+    val body: Typeface = load(context, R.font.inter, Typeface.SANS_SERIF)
+    val display: Typeface = load(context, R.font.doto, Typeface.SANS_SERIF)
+    val label: Typeface = load(context, R.font.space_mono, Typeface.MONOSPACE)
 
-    init {
-        ResourcesCompat.getFont(context, R.font.lato, object : ResourcesCompat.FontCallback() {
-            override fun onFontRetrievalFailed(reason: Int) {
-                Timber.w("Font retrieval failed: $reason")
-            }
-
-            override fun onFontRetrieved(typeface: Typeface) {
-                lato = typeface
-
-                pendingCallbacks.forEach { lato?.run(it) }
-                pendingCallbacks.clear()
-            }
-        }, null)
-    }
-
-    fun getLato(callback: (Typeface) -> Unit) {
-        lato?.run(callback) ?: pendingCallbacks.add(callback)
+    private fun load(context: Context, fontRes: Int, fallback: Typeface): Typeface {
+        return try {
+            ResourcesCompat.getFont(context, fontRes) ?: fallback
+        } catch (e: Exception) {
+            Timber.w(e, "Bundled font failed to load")
+            fallback
+        }
     }
 
 }

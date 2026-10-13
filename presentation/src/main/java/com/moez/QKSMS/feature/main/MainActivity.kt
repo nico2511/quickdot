@@ -186,6 +186,14 @@ class MainActivity : QkThemedActivity(), MainView {
                             binding.drawer.archivedIcon.imageTintList = tintList
                         }
 
+                    ColorStateList(states, intArrayOf(theme.theme,
+                        resolveThemeColor(android.R.attr.textColorPrimary)
+                    ))
+                        .let { textColors ->
+                            binding.drawer.inboxLabel.setTextColor(textColors)
+                            binding.drawer.archivedLabel.setTextColor(textColors)
+                        }
+
                 // Miscellaneous views
                 syncingBinding.syncingProgress.progressTintList =
                     ColorStateList.valueOf(theme.theme)
@@ -236,12 +244,17 @@ class MainActivity : QkThemedActivity(), MainView {
             is Archived -> state.page.selected
             else -> 0
         }
-
-        binding.toolbarSearch.setVisible(state.page is Inbox &&
-                state.page.selected == 0 ||
-                state.page is Searching
-        )
-        binding.toolbarTitle.setVisible(binding.toolbarSearch.visibility != View.VISIBLE)
+        val showSearch = (state.page is Inbox && selectedConversations == 0) || state.page is Searching
+        binding.toolbarSearch.setVisible(showSearch)
+        binding.screenTitle.setVisible(selectedConversations == 0)
+        binding.toolbarTitle.setVisible(selectedConversations > 0)
+        binding.emptyMark.setVisible(state.page !is Searching)
+        if (selectedConversations == 0) {
+            binding.screenTitle.setText(when (state.page) {
+                is Archived -> R.string.title_archived
+                else -> R.string.main_screen_title
+            })
+        }
 
         binding.toolbar.menu.apply {
             findItem(R.id.select_all)?.isVisible =
@@ -278,7 +291,7 @@ class MainActivity : QkThemedActivity(), MainView {
                     binding.recyclerView.adapter = conversationsAdapter
                 conversationsAdapter.updateData(state.page.data)
                 itemTouchHelper.attachToRecyclerView(binding.recyclerView)
-                binding.empty.setText(R.string.inbox_empty_text)
+                binding.emptyMessage.setText(R.string.inbox_empty_text)
             }
 
             is Searching -> {
@@ -286,7 +299,7 @@ class MainActivity : QkThemedActivity(), MainView {
                 if (binding.recyclerView.adapter !== searchAdapter) binding.recyclerView.adapter = searchAdapter
                 searchAdapter.data = state.page.data ?: listOf()
                 itemTouchHelper.attachToRecyclerView(null)
-                binding.empty.setText(R.string.inbox_search_empty_text)
+                binding.emptyMessage.setText(R.string.inbox_search_empty_text)
             }
 
             is Archived -> {
@@ -299,7 +312,7 @@ class MainActivity : QkThemedActivity(), MainView {
                     binding.recyclerView.adapter = conversationsAdapter
                 conversationsAdapter.updateData(state.page.data)
                 itemTouchHelper.attachToRecyclerView(null)
-                binding.empty.setText(R.string.archived_empty_text)
+                binding.emptyMessage.setText(R.string.archived_empty_text)
             }
 
             else -> {}
@@ -479,7 +492,6 @@ class MainActivity : QkThemedActivity(), MainView {
             dismissKeyboard()
             if (!binding.drawer.inbox.isInTouchMode)
                 binding.drawer.inbox.requestFocus()
-        } else
-            binding.toolbarSearch.requestFocus()
+        }
     }
 }

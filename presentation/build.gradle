@@ -94,6 +94,10 @@ android {
     lint {
         abortOnError false
     }
+
+    androidResources {
+        noCompress 'ttf'
+    }
     namespace 'dev.octoshrimpy.quik'
     buildFeatures {
         buildConfig true

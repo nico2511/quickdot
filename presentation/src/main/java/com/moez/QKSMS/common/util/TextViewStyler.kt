@@ -54,6 +54,11 @@ class TextViewStyler @Inject constructor(
         const val SIZE_TOOLBAR = 3
         const val SIZE_DIALOG = 4
         const val SIZE_EMOJI = 5
+        const val SIZE_DISPLAY = 6
+
+        const val FONT_BODY = 0
+        const val FONT_DISPLAY = 1
+        const val FONT_LABEL = 2
 
         fun applyEditModeAttributes(textView: TextView, attrs: AttributeSet?) {
             textView.run {
@@ -90,6 +95,7 @@ class TextViewStyler @Inject constructor(
                     SIZE_TOOLBAR -> 20f
                     SIZE_DIALOG -> 18f
                     SIZE_EMOJI -> 32f
+                    SIZE_DISPLAY -> 34f
                     else -> textSize / paint.density
                 }
             }
@@ -99,27 +105,33 @@ class TextViewStyler @Inject constructor(
     fun applyAttributes(textView: TextView, attrs: AttributeSet?) {
         var colorAttr = 0
         var textSizeAttr = 0
-
-        if (!prefs.systemFont.get()) {
-            fontProvider.getLato { lato ->
-                textView.setTypeface(lato, textView.typeface?.style ?: Typeface.NORMAL)
-            }
-        }
+        var fontAttr = FONT_BODY
 
         when (textView) {
             is QkTextView -> textView.context.obtainStyledAttributes(attrs, R.styleable.QkTextView).run {
                 colorAttr = getInt(R.styleable.QkTextView_textColor, -1)
                 textSizeAttr = getInt(R.styleable.QkTextView_textSize, -1)
+                fontAttr = getInt(R.styleable.QkTextView_textFont, FONT_BODY)
                 recycle()
             }
 
             is QkEditText -> textView.context.obtainStyledAttributes(attrs, R.styleable.QkEditText).run {
                 colorAttr = getInt(R.styleable.QkEditText_textColor, -1)
                 textSizeAttr = getInt(R.styleable.QkEditText_textSize, -1)
+                fontAttr = getInt(R.styleable.QkEditText_textFont, FONT_BODY)
                 recycle()
             }
 
             else -> return
+        }
+
+        if (!prefs.systemFont.get()) {
+            val family = when (fontAttr) {
+                FONT_DISPLAY -> fontProvider.display
+                FONT_LABEL -> fontProvider.label
+                else -> fontProvider.body
+            }
+            textView.setTypeface(family, textView.typeface?.style ?: Typeface.NORMAL)
         }
 
         when (colorAttr) {
@@ -200,6 +212,15 @@ class TextViewStyler @Inject constructor(
                 Preferences.TEXT_SIZE_LARGER -> 40f
                 Preferences.TEXT_SIZE_SUPER -> 80f
                 else -> 32f
+            }
+
+            SIZE_DISPLAY -> textView.textSize = when (textSizePref) {
+                Preferences.TEXT_SIZE_SMALL -> 28f
+                Preferences.TEXT_SIZE_NORMAL -> 34f
+                Preferences.TEXT_SIZE_LARGE -> 38f
+                Preferences.TEXT_SIZE_LARGER -> 42f
+                Preferences.TEXT_SIZE_SUPER -> 64f
+                else -> 34f
             }
         }
     }

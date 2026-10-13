@@ -10,8 +10,8 @@ Categories:
   - Communication
   - Internet
 AntiFeatures: NonFreeNet
-CurrentVersion: "0.1.0"
-CurrentVersionCode: 1
+CurrentVersion: "0.1.1"
+CurrentVersionCode: 2
 Description: |
   Quickdot is an SMS messenger for Android. It is a fork of Quik, which
   continues QKSMS. Quik and QKSMS are free software under the GNU General

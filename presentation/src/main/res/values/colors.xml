@@ -55,6 +55,12 @@
     <color name="avatarNeutralLight">#111111</color>
     <color name="avatarNeutralDark">#E8E8E8</color>
 
+    <!-- Outgoing bubbles are solid ink. Incoming bubbles use the stroke only. -->
+    <color name="bubbleOutgoing">#111111</color>
+    <color name="bubbleOutgoingText">#FFFFFF</color>
+    <color name="bubbleIncomingStroke">#111111</color>
+    <color name="selectionWash">#1AE10600</color>
+
     <color name="separatorLight">#14000000</color>
     <color name="separatorDark">#1AFFFFFF</color>
 

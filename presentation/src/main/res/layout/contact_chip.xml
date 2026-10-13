@@ -46,7 +46,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="12dp"
             android:textColor="?android:attr/textColorPrimary"
-            android:textStyle="bold"
+            app:textFont="label"
             app:textSize="secondary"
             tools:text="Moez Bhatti"
             android:textDirection="ltr" />

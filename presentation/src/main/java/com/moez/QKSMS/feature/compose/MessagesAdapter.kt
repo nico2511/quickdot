@@ -48,6 +48,8 @@ import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.DateFormatter
 import dev.octoshrimpy.quik.common.util.TextViewStyler
 import dev.octoshrimpy.quik.common.util.extensions.dpToPx
+import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
+import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setPadding
 import dev.octoshrimpy.quik.common.util.extensions.setTint
@@ -151,10 +153,11 @@ class MessagesAdapter @Inject constructor(
             body = binding.body
             parts = binding.parts
             status = binding.status
-            binding.cancelIcon.setTint(theme.theme)
-            binding.cancel.setTint(theme.theme)
-            binding.sendNowIcon.setTint(theme.theme)
-            binding.resendIcon.setTint(theme.theme)
+            val accent = context.getColorCompat(R.color.accent)
+            binding.cancelIcon.setTint(accent)
+            binding.cancel.setTint(accent)
+            binding.sendNowIcon.setTint(accent)
+            binding.resendIcon.setTint(accent)
         } else {
             val binding = MessageListItemInBinding.inflate(inflater, parent, false)
             view = binding.root
@@ -194,11 +197,6 @@ class MessagesAdapter @Inject constructor(
         val message = getItem(position) ?: return
         val previous = if (position == 0) null else getItem(position - 1)
         val next = if (position == itemCount - 1) null else getItem(position + 1)
-
-        val theme = when (message.isOutgoingMessage()) {
-            true -> colors.theme()
-            false -> colors.theme(contactCache[message.address])
-        }
 
         // Update the selected state
         holder.itemView.isActivated = isSelected(message.id) || highlight == message.id
@@ -268,12 +266,13 @@ class MessagesAdapter @Inject constructor(
                 binding.resendIcon.visibility = View.GONE
             }
 
+            val accent = context.getColorCompat(R.color.accent)
             body.apply {
-                highlightColor = theme.theme.withAlpha(0x5d)
+                highlightColor = accent.withAlpha(0x33)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    textSelectHandle?.setTint(theme.theme.withAlpha(0xad))
-                    textSelectHandleLeft?.setTint(theme.theme.withAlpha(0xad))
-                    textSelectHandleRight?.setTint(theme.theme.withAlpha(0xad))
+                    textSelectHandle?.setTint(accent)
+                    textSelectHandleLeft?.setTint(accent)
+                    textSelectHandleRight?.setTint(accent)
                 }
             }
         } else {
@@ -289,18 +288,18 @@ class MessagesAdapter @Inject constructor(
 
             // Bind the avatar and bubble colour
             binding.avatar.apply {
+                monochrome = true
                 setRecipient(contactCache[message.address])
                 setVisible(!canGroup(message, next), View.INVISIBLE)
             }
 
+            val accent = context.getColorCompat(R.color.accent)
             body.apply {
-                setTextColor(theme.textPrimary)
-                setBackgroundTint(theme.theme)
-                highlightColor = R.attr.bubbleColor.withAlpha(0x5d)
+                highlightColor = accent.withAlpha(0x33)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    textSelectHandle?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
-                    textSelectHandleLeft?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
-                    textSelectHandleRight?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
+                    textSelectHandle?.setTint(accent)
+                    textSelectHandleLeft?.setTint(accent)
+                    textSelectHandleRight?.setTint(accent)
                 }
             }
         }
@@ -414,11 +413,21 @@ class MessagesAdapter @Inject constructor(
                     isMe = message.isMe()
                 )
             )
+            if (!emojiOnly) {
+                if (isOutgoing) {
+                    setTextColor(context.getColorCompat(R.color.bubbleOutgoingText))
+                    setBackgroundTint(context.getColorCompat(R.color.bubbleOutgoing))
+                } else {
+                    // Stroke colour lives on the drawable. A view tint would fill the bubble.
+                    setTextColor(context.resolveThemeColor(android.R.attr.textColorPrimary))
+                    backgroundTintList = null
+                }
+            }
         }
 
         // Bind the parts
         parts.adapter = partsAdapterProvider.get().apply {
-            this.theme = theme
+            this.theme = if (message.isMe()) colors.theme() else colors.neutral()
             setData(message, previous, next, holder, audioState)
             contextMenuValue = message.id
             clicks.subscribe(partClicks)    // part clicks gets passed back to compose view model
@@ -459,6 +468,11 @@ class MessagesAdapter @Inject constructor(
         next: Message?
     ) {
         statusView.apply {
+            setTextColor(
+                if (message.isFailedMessage()) context.getColorCompat(R.color.accent)
+                else context.resolveThemeColor(android.R.attr.textColorTertiary)
+            )
+
             text = when {
                 message.isSending() -> context.getString(R.string.message_status_sending)
                 message.isDelivered() -> context.getString(

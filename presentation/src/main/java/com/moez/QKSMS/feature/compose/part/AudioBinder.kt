@@ -30,6 +30,7 @@ import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkViewHolder
 import dev.octoshrimpy.quik.common.util.Colors
+import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setTint
@@ -194,24 +195,23 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
             audioState.viewHolder = null
 
         // tint colours
-        val secondaryColor =
-            if (!message.isMe())
-                theme.theme
-            else
-                holder.itemView.context.resolveThemeColor(R.attr.bubbleColor)
-        val primaryColor =
-            if (!message.isMe())
-                theme.textPrimary
-            else
-                holder.itemView.context.resolveThemeColor(android.R.attr.textColorPrimary)
+        val ctx = holder.itemView.context
+        val secondaryColor = if (message.isMe())
+            ctx.getColorCompat(R.color.bubbleOutgoing)
+        else
+            ctx.resolveThemeColor(R.attr.bubbleColor)
+        val primaryColor = if (message.isMe())
+            ctx.getColorCompat(R.color.bubbleOutgoingText)
+        else
+            ctx.resolveThemeColor(android.R.attr.textColorPrimary)
 
         // sound wave
         binding.soundWave.setTint(primaryColor)
 
         // seek bar
         binding.seekBar.apply {
-            setTint(secondaryColor)
-            thumbTintList = ColorStateList.valueOf(secondaryColor)
+            setTint(ctx.getColorCompat(R.color.accent))
+            thumbTintList = ColorStateList.valueOf(primaryColor)
 
             setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(p0: SeekBar?, progress: Int, fromUser: Boolean) {

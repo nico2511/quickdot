@@ -23,23 +23,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.widget.RelativeLayout
-import dev.octoshrimpy.quik.common.util.Colors
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setTint
 import dev.octoshrimpy.quik.databinding.ContactChipDetailedBinding
-import dev.octoshrimpy.quik.injection.appComponent
 import dev.octoshrimpy.quik.model.Recipient
-import javax.inject.Inject
 
 class DetailedChipView(context: Context) : RelativeLayout(context) {
-
-    @Inject lateinit var colors: Colors
 
     private val binding: ContactChipDetailedBinding
 
     init {
         binding = ContactChipDetailedBinding.inflate(LayoutInflater.from(context), this, true)
-        appComponent.inject(this)
 
         setOnClickListener { hide() }
 
@@ -50,16 +46,15 @@ class DetailedChipView(context: Context) : RelativeLayout(context) {
     }
 
     fun setRecipient(recipient: Recipient) {
+        binding.avatar.monochrome = true
         binding.avatar.setRecipient(recipient)
         binding.name.text = recipient.contact?.name?.takeIf { it.isNotBlank() } ?: recipient.address
         binding.info.text = recipient.address
 
-        colors.theme(recipient).let { theme ->
-            binding.card.setBackgroundTint(theme.theme)
-            binding.name.setTextColor(theme.textPrimary)
-            binding.info.setTextColor(theme.textTertiary)
-            binding.delete.setTint(theme.textPrimary)
-        }
+        binding.card.setBackgroundTint(context.resolveThemeColor(R.attr.bubbleColor))
+        binding.name.setTextColor(context.resolveThemeColor(android.R.attr.textColorPrimary))
+        binding.info.setTextColor(context.resolveThemeColor(android.R.attr.textColorTertiary))
+        binding.delete.setTint(context.resolveThemeColor(android.R.attr.textColorSecondary))
     }
 
     fun show() {

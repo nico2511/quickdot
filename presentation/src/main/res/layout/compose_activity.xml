@@ -67,6 +67,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="12dp"
+        android:background="@drawable/thread_dots"
         android:paddingTop="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@id/messageBackground"
@@ -76,19 +77,37 @@
         app:stackFromEnd="true"
         tools:listitem="@layout/message_list_item_in" />
 
-    <dev.octoshrimpy.quik.common.widget.QkTextView
+    <LinearLayout
         android:id="@+id/messagesEmpty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="56dp"
         android:gravity="center"
-        android:text="@string/compose_messages_empty"
-        android:textColor="?android:attr/textColorTertiary"
+        android:orientation="vertical"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/sendAsGroupBackground"
-        app:textSize="secondary" />
+        app:layout_constraintTop_toBottomOf="@id/sendAsGroupBackground">
+
+        <dev.octoshrimpy.quik.common.widget.QkTextView
+            style="@style/TextDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:importantForAccessibility="no"
+            android:letterSpacing="0.4"
+            android:text="@string/main_empty_mark"
+            android:textColor="?android:attr/textColorTertiary" />
+
+        <dev.octoshrimpy.quik.common.widget.QkTextView
+            style="@style/TextSecondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="@string/compose_messages_empty"
+            app:textFont="label" />
+
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/loading"
@@ -210,7 +229,7 @@
         android:paddingBottom="2dp"
         android:text="@string/compose_scheduled_for"
         android:textColor="?android:attr/textColorPrimary"
-        android:textStyle="bold"
+        app:textFont="label"
         app:layout_constraintBottom_toTopOf="@id/scheduledTime"
         app:layout_constraintEnd_toStartOf="@id/scheduledCancel"
         app:layout_constraintStart_toStartOf="@id/messageBackground"
@@ -225,6 +244,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textColor="?android:attr/textColorTertiary"
+        app:textFont="display"
         app:layout_constraintBottom_toBottomOf="@id/scheduledCancel"
         app:layout_constraintEnd_toStartOf="@id/scheduledCancel"
         app:layout_constraintStart_toStartOf="@id/messageBackground"
@@ -326,7 +346,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:gravity="center"
+        android:letterSpacing="0.04"
         android:textColor="?android:attr/textColorSecondary"
+        app:textFont="display"
         app:layout_constraintBottom_toTopOf="@id/send"
         app:layout_constraintEnd_toEndOf="@id/send"
         app:layout_constraintStart_toStartOf="@id/send"
@@ -338,14 +360,15 @@
         android:layout_width="44dp"
         android:layout_height="44dp"
         android:layout_marginEnd="8dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/accent"
         android:contentDescription="@string/compose_send_cd"
         android:padding="10dp"
         android:src="@drawable/ic_send_black_24dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/messageBackground"
         app:layout_constraintEnd_toEndOf="parent"
-        app:tint="?android:textColorSecondary"
+        app:tint="@color/white"
         tools:visibility="visible" />
 
     <ImageView
@@ -353,14 +376,15 @@
         android:layout_width="44dp"
         android:layout_height="44dp"
         android:layout_marginEnd="8dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/accent"
         android:contentDescription="@string/scheduled_send_cd"
         android:src="@drawable/ic_schedule_send_black_24dp"
         android:padding="10dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/messageBackground"
         app:layout_constraintEnd_toEndOf="parent"
-        app:tint="?android:textColorSecondary"
+        app:tint="@color/white"
         tools:visibility="visible" />
 
     <androidx.appcompat.widget.Toolbar
@@ -377,7 +401,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+
+            <dev.octoshrimpy.quik.common.widget.AvatarView
+                android:id="@+id/toolbarAvatar"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="12dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/toolbarTitle"
@@ -391,6 +430,7 @@
                 style="@style/ToolbarText"
                 android:textColor="?android:attr/textColorTertiary"
                 android:visibility="gone"
+                app:textFont="label"
                 app:textSize="secondary"
                 tools:text="3 of 9 results" />
 
@@ -402,6 +442,8 @@
                 android:layout_marginBottom="4dp"
                 android:scrollbars="vertical"
                 tools:visibility="gone" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -644,7 +686,7 @@
         android:layout_width="44dp"
         android:layout_height="44dp"
         android:layout_marginStart="12dp"
-        android:background="@drawable/circle"
+        android:background="@drawable/circle_outline"
         android:contentDescription="@string/compose_attach_cd"
         android:elevation="4dp"
         android:padding="10dp"

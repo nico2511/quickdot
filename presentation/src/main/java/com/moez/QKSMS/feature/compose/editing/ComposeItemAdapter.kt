@@ -25,8 +25,8 @@ import androidx.recyclerview.widget.RecyclerView
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkAdapter
 import dev.octoshrimpy.quik.common.base.QkBindingViewHolder
-import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.extensions.forwardTouches
+import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
 import dev.octoshrimpy.quik.common.util.extensions.setTint
 import dev.octoshrimpy.quik.extensions.associateByNotNull
 import dev.octoshrimpy.quik.model.Contact
@@ -42,7 +42,6 @@ import io.reactivex.subjects.Subject
 import javax.inject.Inject
 
 class ComposeItemAdapter @Inject constructor(
-    private val colors: Colors,
     private val conversationRepo: ConversationRepository
 ) : QkAdapter<ComposeItem, QkBindingViewHolder<ContactListItemBinding>>() {
 
@@ -62,7 +61,7 @@ class ComposeItemAdapter @Inject constructor(
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ContactListItemBinding.inflate(layoutInflater, parent, false)
 
-        binding.icon.setTint(colors.theme().theme)
+        binding.icon.setTint(parent.context.resolveThemeColor(android.R.attr.textColorSecondary))
 
         binding.numbers.setRecycledViewPool(numbersViewPool)
         binding.numbers.adapter = PhoneNumberAdapter()

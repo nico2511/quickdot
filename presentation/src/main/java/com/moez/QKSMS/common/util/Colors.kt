@@ -91,6 +91,23 @@ class Colors @Inject constructor(
         return Theme(color, this)
     }
 
+    /**
+     * Stable print-ink for one address. Five slots, never the signal red.
+     * Light inks are at least 8.8:1 on white; dark inks are at least 10.5:1 on #1B1B1B.
+     * Initials (white on the light-theme ink, #111111 on the night ink) clear 4.5:1 as well.
+     */
+    fun speakerInk(address: String): Int {
+        val slots = intArrayOf(
+            R.color.speakerInk0,
+            R.color.speakerInk1,
+            R.color.speakerInk2,
+            R.color.speakerInk3,
+            R.color.speakerInk4
+        )
+        val index = if (address.isEmpty()) 0 else address.hashCode().absoluteValue % slots.size
+        return context.getColorCompat(slots[index])
+    }
+
     fun theme(recipient: Recipient? = null): Theme {
         val pref = prefs.theme(recipient?.id ?: 0)
         val color = when {

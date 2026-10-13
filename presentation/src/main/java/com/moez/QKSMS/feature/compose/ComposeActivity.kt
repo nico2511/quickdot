@@ -70,6 +70,7 @@ import dev.octoshrimpy.quik.common.util.extensions.autoScrollToStart
 import dev.octoshrimpy.quik.common.util.extensions.dpToPx
 import dev.octoshrimpy.quik.common.util.extensions.hideKeyboard
 import dev.octoshrimpy.quik.common.util.extensions.makeToast
+import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
 import dev.octoshrimpy.quik.common.util.extensions.scrapViews
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setTint
@@ -220,6 +221,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         binding = ComposeActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         showBackButton(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        binding.toolbarAvatar.speakerInk = true
         viewModel.bindView(this)
 
         binding.contentView.layoutTransition = LayoutTransition().apply {
@@ -244,24 +247,28 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 .doOnNext {
                     binding.loading.setTint(it.theme)
 
-                    // entire attach menu
-                    binding.attach.setBackgroundTint(it.theme); binding.attach.setTint(it.textPrimary)
-                    binding.contact.setBackgroundTint(it.theme); binding.contact.setTint(it.textPrimary)
-                    binding.contactLabel.setBackgroundTint(it.theme); binding.contactLabel.setTint(it.textPrimary)
-                    binding.schedule.setBackgroundTint(it.theme); binding.schedule.setTint(it.textPrimary)
-                    binding.scheduleLabel.setBackgroundTint(it.theme); binding.scheduleLabel.setTint(it.textPrimary)
-                    binding.attachAFileIcon.setBackgroundTint(it.theme); binding.attachAFileIcon.setTint(it.textPrimary)
-                    binding.attachAFileLabel.setBackgroundTint(it.theme); binding.attachAFileLabel.setTint(it.textPrimary)
-                    binding.attachAnAudioMessageIcon.setBackgroundTint(it.theme); binding.attachAnAudioMessageIcon.setTint(it.textPrimary)
-                    binding.attachAnAudioMessageLabel.setBackgroundTint(it.theme); binding.attachAnAudioMessageLabel.setTint(it.textPrimary)
-                    binding.gallery.setBackgroundTint(it.theme); binding.gallery.setTint(it.textPrimary)
-                    binding.galleryLabel.setBackgroundTint(it.theme); binding.galleryLabel.setTint(it.textPrimary)
-                    binding.camera.setBackgroundTint(it.theme); binding.camera.setTint(it.textPrimary)
-                    binding.cameraLabel.setBackgroundTint(it.theme); binding.cameraLabel.setTint(it.textPrimary)
+                    val surface = resolveThemeColor(R.attr.bubbleColor)
+                    val onSurface = resolveThemeColor(android.R.attr.textColorPrimary)
+                    // Attach stays an outline. The menu behind it is monochrome.
+                    // Red is reserved for send and failure.
+                    binding.attach.backgroundTintList = null
+                    binding.attach.setTint(onSurface)
+                    binding.contact.setBackgroundTint(surface); binding.contact.setTint(onSurface)
+                    binding.contactLabel.setBackgroundTint(surface); binding.contactLabel.setTextColor(onSurface)
+                    binding.schedule.setBackgroundTint(surface); binding.schedule.setTint(onSurface)
+                    binding.scheduleLabel.setBackgroundTint(surface); binding.scheduleLabel.setTextColor(onSurface)
+                    binding.attachAFileIcon.setBackgroundTint(surface); binding.attachAFileIcon.setTint(onSurface)
+                    binding.attachAFileLabel.setBackgroundTint(surface); binding.attachAFileLabel.setTextColor(onSurface)
+                    binding.attachAnAudioMessageIcon.setBackgroundTint(surface); binding.attachAnAudioMessageIcon.setTint(onSurface)
+                    binding.attachAnAudioMessageLabel.setBackgroundTint(surface); binding.attachAnAudioMessageLabel.setTextColor(onSurface)
+                    binding.gallery.setBackgroundTint(surface); binding.gallery.setTint(onSurface)
+                    binding.galleryLabel.setBackgroundTint(surface); binding.galleryLabel.setTextColor(onSurface)
+                    binding.camera.setBackgroundTint(surface); binding.camera.setTint(onSurface)
+                    binding.cameraLabel.setBackgroundTint(surface); binding.cameraLabel.setTextColor(onSurface)
 
-                    // speech to text floating button
-                    binding.speechToTextIconBorder.setBackgroundTint(it.theme)
-                    binding.speechToTextIcon.setBackgroundTint(it.textPrimary)
+                    // speech to text floating button: neutral disc, red glyph
+                    binding.speechToTextIconBorder.setBackgroundTint(resolveThemeColor(android.R.attr.textColorTertiary))
+                    binding.speechToTextIcon.setBackgroundTint(resolveThemeColor(android.R.attr.windowBackground))
                     binding.speechToTextIcon.setTint(it.theme)
 
                     // audio message recording
@@ -456,6 +463,12 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
         binding.toolbarTitle.setVisible(!state.editingMode)
         binding.chips.setVisible(state.editingMode)
+
+        val conversation = state.messages?.first?.takeIf { it.isValid }
+        val recipient = conversation?.recipients?.takeIf { it.isValid && it.size == 1 }?.firstOrNull()
+        val showAvatar = recipient != null && !state.editingMode && state.selectedMessages == 0 && state.query.isEmpty()
+        binding.toolbarAvatar.setVisible(showAvatar)
+        if (recipient != null && showAvatar) binding.toolbarAvatar.setRecipient(recipient)
         binding.composeBar.setVisible(!state.loading)
 
         // Don't set the adapters unless needed
@@ -532,7 +545,13 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         binding.simIndex.text = state.subscription?.simSlotIndex?.plus(1)?.toString()
 
         // show either send, audio msg record, or sendScheduled button
-        binding.send.visibility = if (state.canSend && !state.loading && state.scheduled == 0L) View.VISIBLE else View.INVISIBLE
+        val showSend = state.canSend && !state.loading && state.scheduled == 0L
+        if (showSend && binding.send.visibility != View.VISIBLE) {
+            binding.send.scaleX = 0.72f
+            binding.send.scaleY = 0.72f
+            binding.send.animate().scaleX(1f).scaleY(1f).setDuration(180L).start()
+        }
+        binding.send.visibility = if (showSend) View.VISIBLE else View.INVISIBLE
         binding.recordAudioMsg.visibility = if (state.canSend && !state.loading) View.INVISIBLE else View.VISIBLE
         binding.scheduledSend.visibility = if (state.canSend && (state.scheduled != 0L) && !state.loading) View.VISIBLE else View.INVISIBLE
 
@@ -768,10 +787,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         optionsItemIntent.onNext(item.itemId)
         return true
-    }
-
-    override fun getColoredMenuItems(): List<Int> {
-        return super.getColoredMenuItems() + R.id.call
     }
 
     override fun onCreateContextMenu(

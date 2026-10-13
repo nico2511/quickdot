@@ -44,12 +44,23 @@ class AvatarView @JvmOverloads constructor(
     private var fullName: String? = null
     private var photoUri: String? = null
     private var lastUpdated: Long? = null
+    private var address: String? = null
     private var theme: Colors.Theme
     private var layout: AvatarViewBinding
 
     private var inflated = false
 
     var monochrome: Boolean = false
+        set(value) {
+            field = value
+            if (inflated && this::colors.isInitialized) {
+                theme = avatarTheme(null)
+                updateView()
+            }
+        }
+
+    /** Thread avatars use the speaker ink for this address instead of a neutral fill. */
+    var speakerInk: Boolean = false
         set(value) {
             field = value
             if (inflated && this::colors.isInitialized) {
@@ -79,11 +90,16 @@ class AvatarView @JvmOverloads constructor(
         fullName = recipient?.contact?.name
         photoUri = recipient?.contact?.photoUri
         lastUpdated = recipient?.contact?.lastUpdate
+        address = recipient?.address ?: address
         theme = avatarTheme(recipient)
         updateView()
     }
 
     private fun avatarTheme(recipient: Recipient?): Colors.Theme {
+        val key = recipient?.address ?: address
+        if (speakerInk && !key.isNullOrBlank()) {
+            return Colors.Theme(colors.speakerInk(key), colors)
+        }
         return if (monochrome) colors.neutral() else colors.theme(recipient)
     }
 

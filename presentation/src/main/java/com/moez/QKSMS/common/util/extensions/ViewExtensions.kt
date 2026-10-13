@@ -21,6 +21,7 @@ package dev.octoshrimpy.quik.common.util.extensions
 import android.animation.LayoutTransition
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.drawable.GradientDrawable
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
@@ -89,6 +90,16 @@ fun View.setPadding(left: Int? = null, top: Int? = null, right: Int? = null, bot
 
 fun View.setVisible(visible: Boolean, invisible: Int = View.GONE) {
     visibility = if (visible) View.VISIBLE else invisible
+}
+
+/** Recolour an incoming bubble stroke without filling the transparent body. */
+fun View.applySpeakerStroke(color: Int) {
+    val drawable = background?.mutate()
+    if (drawable is GradientDrawable) {
+        val width = (1.5f * resources.displayMetrics.density).toInt().coerceAtLeast(1)
+        drawable.setStroke(width, color)
+    }
+    backgroundTintList = null
 }
 
 /**

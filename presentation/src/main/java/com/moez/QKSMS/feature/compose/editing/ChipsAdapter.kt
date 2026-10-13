@@ -49,6 +49,7 @@ class ChipsAdapter @Inject constructor() : QkAdapter<Recipient, QkBindingViewHol
     override fun onBindViewHolder(holder: QkBindingViewHolder<ContactChipBinding>, position: Int) {
         val recipient = getItem(position)
 
+        holder.binding.avatar.monochrome = true
         holder.binding.avatar.setRecipient(recipient)
         holder.binding.name.text = recipient.contact?.name?.takeIf { it.isNotBlank() } ?: recipient.address
     }

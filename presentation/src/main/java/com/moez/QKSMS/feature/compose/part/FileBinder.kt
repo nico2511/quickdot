@@ -24,6 +24,8 @@ import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkViewHolder
 import dev.octoshrimpy.quik.common.util.Colors
+import dev.octoshrimpy.quik.common.util.extensions.applySpeakerStroke
+import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setTint
@@ -82,16 +84,17 @@ class FileBinder @Inject constructor(colors: Colors, private val context: Contex
             binding.filename.text = part.getBestFilename()
         }
 
-        if (!message.isMe()) {
-            binding.fileBackground.setBackgroundTint(theme.theme)
-            binding.icon.setTint(theme.textPrimary)
-            binding.filename.setTextColor(theme.textPrimary)
-            binding.size.setTextColor(theme.textTertiary)
+        val ctx = holder.itemView.context
+        if (message.isMe()) {
+            binding.fileBackground.setBackgroundTint(ctx.getColorCompat(R.color.bubbleOutgoing))
+            binding.icon.setTint(ctx.getColorCompat(R.color.bubbleOutgoingText))
+            binding.filename.setTextColor(ctx.getColorCompat(R.color.bubbleOutgoingText))
+            binding.size.setTextColor(ctx.getColorCompat(R.color.bubbleOutgoingText))
         } else {
-            binding.fileBackground.setBackgroundTint(holder.itemView.context.resolveThemeColor(R.attr.bubbleColor))
-            binding.icon.setTint(holder.itemView.context.resolveThemeColor(android.R.attr.textColorSecondary))
-            binding.filename.setTextColor(holder.itemView.context.resolveThemeColor(android.R.attr.textColorPrimary))
-            binding.size.setTextColor(holder.itemView.context.resolveThemeColor(android.R.attr.textColorTertiary))
+            binding.fileBackground.applySpeakerStroke(theme.theme)
+            binding.icon.setTint(ctx.resolveThemeColor(android.R.attr.textColorSecondary))
+            binding.filename.setTextColor(ctx.resolveThemeColor(android.R.attr.textColorPrimary))
+            binding.size.setTextColor(ctx.resolveThemeColor(android.R.attr.textColorTertiary))
         }
     }
 

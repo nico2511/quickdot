@@ -23,6 +23,8 @@ import androidx.core.view.isVisible
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkViewHolder
 import dev.octoshrimpy.quik.common.util.Colors
+import dev.octoshrimpy.quik.common.util.extensions.applySpeakerStroke
+import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
 import dev.octoshrimpy.quik.common.util.extensions.getDisplayName
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
@@ -73,16 +75,17 @@ class VCardBinder @Inject constructor(colors: Colors, private val context: Conte
                 }
         }
 
-        if (!message.isMe()) {
-            binding.vCardBackground.setBackgroundTint(theme.theme)
-            binding.vCardAvatar.setTint(theme.textPrimary)
-            binding.name.setTextColor(theme.textPrimary)
-            binding.label.setTextColor(theme.textTertiary)
+        val ctx = holder.itemView.context
+        if (message.isMe()) {
+            binding.vCardBackground.setBackgroundTint(ctx.getColorCompat(R.color.bubbleOutgoing))
+            binding.vCardAvatar.setTint(ctx.getColorCompat(R.color.bubbleOutgoingText))
+            binding.name.setTextColor(ctx.getColorCompat(R.color.bubbleOutgoingText))
+            binding.label.setTextColor(ctx.getColorCompat(R.color.bubbleOutgoingText))
         } else {
-            binding.vCardBackground.setBackgroundTint(holder.itemView.context.resolveThemeColor(R.attr.bubbleColor))
-            binding.vCardAvatar.setTint(holder.itemView.context.resolveThemeColor(android.R.attr.textColorSecondary))
-            binding.name.setTextColor(holder.itemView.context.resolveThemeColor(android.R.attr.textColorPrimary))
-            binding.label.setTextColor(holder.itemView.context.resolveThemeColor(android.R.attr.textColorTertiary))
+            binding.vCardBackground.applySpeakerStroke(theme.theme)
+            binding.vCardAvatar.setTint(ctx.resolveThemeColor(android.R.attr.textColorSecondary))
+            binding.name.setTextColor(ctx.resolveThemeColor(android.R.attr.textColorPrimary))
+            binding.label.setTextColor(ctx.resolveThemeColor(android.R.attr.textColorTertiary))
         }
     }
 

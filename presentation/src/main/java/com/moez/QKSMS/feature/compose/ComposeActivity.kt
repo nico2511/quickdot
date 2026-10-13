@@ -222,6 +222,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         setContentView(binding.root)
         showBackButton(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+        binding.toolbarAvatar.square = true
         binding.toolbarAvatar.speakerInk = true
         viewModel.bindView(this)
 
@@ -245,10 +246,9 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
             theme
                 .doOnNext {
-                    binding.loading.setTint(it.theme)
-
                     val surface = resolveThemeColor(R.attr.bubbleColor)
                     val onSurface = resolveThemeColor(android.R.attr.textColorPrimary)
+                    binding.loading.setTint(onSurface)
                     // Attach stays an outline. The menu behind it is monochrome.
                     // Red is reserved for send and failure.
                     binding.attach.backgroundTintList = null
@@ -266,18 +266,16 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                     binding.camera.setBackgroundTint(surface); binding.camera.setTint(onSurface)
                     binding.cameraLabel.setBackgroundTint(surface); binding.cameraLabel.setTextColor(onSurface)
 
-                    // speech to text floating button: neutral disc, red glyph
-                    binding.speechToTextIconBorder.setBackgroundTint(resolveThemeColor(android.R.attr.textColorTertiary))
-                    binding.speechToTextIcon.setBackgroundTint(resolveThemeColor(android.R.attr.windowBackground))
-                    binding.speechToTextIcon.setTint(it.theme)
+                    // Speech-to-text stays a monochrome square. Red is reserved for send.
+                    binding.speechToTextIcon.setTint(onSurface)
 
-                    // audio message recording
-                    binding.audioMsgRecord.setColor(it.theme)
-                    binding.audioMsgPlayerPlayPause.setTint(it.theme)
+                    // Recording controls stay monochrome, same as the floating mic.
+                    binding.audioMsgRecord.setColor(onSurface)
+                    binding.audioMsgPlayerPlayPause.setTint(onSurface)
                     binding.audioMsgPlayerSeekBar.apply {
-                        thumbTintList = ColorStateList.valueOf(it.theme)
-                        progressBackgroundTintList = ColorStateList.valueOf(it.theme)
-                        progressTintList = ColorStateList.valueOf(it.theme)
+                        thumbTintList = ColorStateList.valueOf(onSurface)
+                        progressBackgroundTintList = ColorStateList.valueOf(onSurface)
+                        progressTintList = ColorStateList.valueOf(onSurface)
                     }
 
                     messageAdapter.theme = it

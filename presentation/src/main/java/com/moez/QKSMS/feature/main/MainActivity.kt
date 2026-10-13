@@ -49,6 +49,7 @@ import dev.octoshrimpy.quik.common.androidxcompat.drawerOpen
 import dev.octoshrimpy.quik.common.base.QkThemedActivity
 import dev.octoshrimpy.quik.common.util.extensions.autoScrollToStart
 import dev.octoshrimpy.quik.common.util.extensions.dismissKeyboard
+import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
 import dev.octoshrimpy.quik.common.util.extensions.scrapViews
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
@@ -156,8 +157,9 @@ class MainActivity : QkThemedActivity(), MainView {
         }
 
         syncingBinding = MainSyncingBinding.bind(binding.syncing.inflate()).also {
-            it.syncingProgress.progressTintList = ColorStateList.valueOf(theme.blockingFirst().theme)
-            it.syncingProgress.indeterminateTintList = ColorStateList.valueOf(theme.blockingFirst().theme)
+            val accent = getColorCompat(R.color.accent)
+            it.syncingProgress.progressTintList = ColorStateList.valueOf(accent)
+            it.syncingProgress.indeterminateTintList = ColorStateList.valueOf(accent)
         }
 
         toggle.syncState()
@@ -177,13 +179,14 @@ class MainActivity : QkThemedActivity(), MainView {
         // Set the theme color tint to the recyclerView, progressbar, and FAB
         theme
                 .autoDisposable(scope())
-                .subscribe { theme ->
-                    // Set the color for the drawer icons
+                .subscribe {
+                    val accent = getColorCompat(R.color.accent)
                     val states = arrayOf(
                             intArrayOf(android.R.attr.state_activated),
                             intArrayOf(-android.R.attr.state_activated))
 
-                    ColorStateList(states, intArrayOf(theme.theme,
+                    ColorStateList(states, intArrayOf(
+                        resolveThemeColor(android.R.attr.textColorPrimary),
                         resolveThemeColor(android.R.attr.textColorSecondary)
                     ))
                         .let { tintList ->
@@ -191,24 +194,15 @@ class MainActivity : QkThemedActivity(), MainView {
                             binding.drawer.archivedIcon.imageTintList = tintList
                         }
 
-                    ColorStateList(states, intArrayOf(theme.theme,
-                        resolveThemeColor(android.R.attr.textColorPrimary)
-                    ))
-                        .let { textColors ->
-                            binding.drawer.inboxLabel.setTextColor(textColors)
-                            binding.drawer.archivedLabel.setTextColor(textColors)
-                        }
-
-                // Miscellaneous views
-                syncingBinding.syncingProgress.progressTintList =
-                    ColorStateList.valueOf(theme.theme)
-                syncingBinding.syncingProgress.indeterminateTintList =
-                    ColorStateList.valueOf(theme.theme)
-                binding.drawer.rateIcon.setTint(theme.theme)
-                binding.compose.setBackgroundTint(theme.theme)
-
-                    // Set the FAB compose icon color
-                    binding.compose.setTint(theme.textPrimary)
+                    // The + button and sync chrome stay signal red. The theme
+                    // picker no longer recolors them.
+                    syncingBinding.syncingProgress.progressTintList =
+                        ColorStateList.valueOf(accent)
+                    syncingBinding.syncingProgress.indeterminateTintList =
+                        ColorStateList.valueOf(accent)
+                    binding.drawer.rateIcon.setTint(accent)
+                    binding.compose.setBackgroundTint(accent)
+                    binding.compose.setTint(getColorCompat(android.R.color.white))
                 }
     }
 

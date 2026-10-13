@@ -29,8 +29,8 @@ import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkBindingViewHolder
 import dev.octoshrimpy.quik.common.base.QkRealmAdapter
-import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.DateFormatter
+import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
 import dev.octoshrimpy.quik.common.util.extensions.setTint
 import dev.octoshrimpy.quik.databinding.ConversationListItemBinding
@@ -39,7 +39,6 @@ import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 class ConversationsAdapter @Inject constructor(
-    private val colors: Colors,
     private val context: Context,
     private val dateFormatter: DateFormatter,
     private val navigator: Navigator
@@ -123,7 +122,7 @@ class ConversationsAdapter @Inject constructor(
         binding.scheduled.isVisible = conversation.id in hasScheduledConversation
 
         binding.pinned.isVisible = conversation.pinned
-        binding.unread.setTint(colors.theme().theme)
+        binding.unread.setTint(context.getColorCompat(R.color.accent))
     }
 
     override fun getItemId(position: Int): Long {

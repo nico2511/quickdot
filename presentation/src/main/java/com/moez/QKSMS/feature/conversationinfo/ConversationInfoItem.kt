@@ -17,4 +17,6 @@ sealed class ConversationInfoItem {
 
     data class ConversationInfoMedia(val value: MmsPart) : ConversationInfoItem()
 
+    object ConversationInfoAttachments : ConversationInfoItem()
+
 }

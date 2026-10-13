@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingStart="12dp"
+    android:paddingTop="18dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="8dp">
+
+    <dev.octoshrimpy.quik.common.widget.QkTextView
+        android:id="@+id/section"
+        style="@style/TextTertiary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/matrix_band"
+        android:drawableEnd="@drawable/matrix_band"
+        android:drawablePadding="8dp"
+        android:drawableTint="?android:attr/textColorTertiary"
+        android:gravity="center"
+        android:letterSpacing="0.14"
+        android:text="@string/info_section_attachments"
+        android:textAllCaps="true"
+        app:textFont="label" />
+
+</LinearLayout>

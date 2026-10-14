@@ -20,17 +20,23 @@ package dev.octoshrimpy.quik.common.widget
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.core.widget.TextViewCompat
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.util.Colors
+import dev.octoshrimpy.quik.common.util.FontProvider
+import dev.octoshrimpy.quik.common.util.extensions.dpToPx
+import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setTint
 import dev.octoshrimpy.quik.databinding.AvatarViewBinding
 import dev.octoshrimpy.quik.injection.appComponent
 import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.util.GlideApp
+import dev.octoshrimpy.quik.util.Preferences
 import javax.inject.Inject
 
 class AvatarView @JvmOverloads constructor(
@@ -39,6 +45,8 @@ class AvatarView @JvmOverloads constructor(
 
     @Inject lateinit var colors: Colors
     @Inject lateinit var navigator: Navigator
+    @Inject lateinit var fontProvider: FontProvider
+    @Inject lateinit var prefs: Preferences
 
     private var lookupKey: String? = null
     private var fullName: String? = null
@@ -61,6 +69,19 @@ class AvatarView @JvmOverloads constructor(
 
     /** Thread avatars use the speaker ink for this address instead of a neutral fill. */
     var speakerInk: Boolean = false
+        set(value) {
+            field = value
+            if (inflated && this::colors.isInitialized) {
+                theme = avatarTheme(null)
+                updateView()
+            }
+        }
+
+    /**
+     * Toolbar chip only. A smaller dark fill and one Space Mono initial,
+     * so the title stays first. Thread rows keep speaker ink.
+     */
+    var calmHeader: Boolean = false
         set(value) {
             field = value
             if (inflated && this::colors.isInitialized) {
@@ -107,6 +128,9 @@ class AvatarView @JvmOverloads constructor(
     }
 
     private fun avatarTheme(recipient: Recipient?): Colors.Theme {
+        if (calmHeader) {
+            return Colors.Theme(context.getColorCompat(R.color.headerAvatar), colors)
+        }
         val key = recipient?.address ?: address
         if (speakerInk && !key.isNullOrBlank()) {
             return Colors.Theme(colors.speakerInk(key), colors)
@@ -123,6 +147,23 @@ class AvatarView @JvmOverloads constructor(
     }
 
     private fun updateView() {
+        if (calmHeader) {
+            TextViewCompat.setAutoSizeTextTypeWithDefaults(
+                layout.initial,
+                TextViewCompat.AUTO_SIZE_TEXT_TYPE_NONE
+            )
+            layout.initial.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+            layout.initial.setPadding(0, 0, 0, 0)
+            if (this::prefs.isInitialized && !prefs.systemFont.get()) {
+                layout.initial.typeface = fontProvider.label
+            }
+            val icon = 18.dpToPx(context)
+            layout.icon.layoutParams = layout.icon.layoutParams.apply {
+                width = icon
+                height = icon
+            }
+        }
+
         // Apply theme
         setBackgroundTint(theme.theme)
         layout.initial.setTextColor(theme.textPrimary)
@@ -137,7 +178,12 @@ class AvatarView @JvmOverloads constructor(
                 .map { initial -> initial.toString() }
 
         if (initials.isNotEmpty()) {
-            layout.initial.text = if (initials.size > 1) initials.first() + initials.last() else initials.first()
+            // The 24dp header fits one letter. Two letters collide.
+            layout.initial.text = if (!calmHeader && initials.size > 1) {
+                initials.first() + initials.last()
+            } else {
+                initials.first()
+            }
             layout.icon.visibility = GONE
         } else {
             layout.initial.text = null

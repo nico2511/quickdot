@@ -69,6 +69,9 @@
     <color name="speakerInk3">#555555</color>
     <color name="speakerInk4">#636363</color>
 
+    <!-- Toolbar avatar only. One dark chip in both themes so the title stays first. -->
+    <color name="headerAvatar">#444444</color>
+
     <color name="separatorLight">#14000000</color>
     <color name="separatorDark">#1AFFFFFF</color>
 

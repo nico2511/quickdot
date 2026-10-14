@@ -90,8 +90,9 @@ class Preferences @Inject constructor(
     }
 
     /**
-     * Quickdot Pro, 1 EUR one-time. Play Billing is not wired up.
-     * Only [dev.octoshrimpy.quik.util.ProBillingHook.grant] should set this.
+     * Offline cache of the Quickdot Pro entitlement. Only
+     * [dev.octoshrimpy.quik.util.ProBillingHook.grant] and [revoke][dev.octoshrimpy.quik.util.ProBillingHook.revoke]
+     * should write it. A Play query that cannot reach the store leaves this as-is.
      */
     val quickdotPro = rxPrefs.getBoolean("quickdotPro", false)
 

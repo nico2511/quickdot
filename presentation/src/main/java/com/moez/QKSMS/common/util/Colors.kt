@@ -28,6 +28,7 @@ import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.util.Preferences
 import dev.octoshrimpy.quik.util.ProBillingHook
 import io.reactivex.Observable
+import io.reactivex.functions.Function3
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.absoluteValue
@@ -74,12 +75,18 @@ class Colors @Inject constructor(
     }
 
     /**
-     * Accent for one conversation. App-wide until [ProBillingHook.enforcementEnabled]
-     * is turned on with Play Billing.
+     * Accent for one conversation. On the Play flavor a free account keeps
+     * [accentColor] on the conversation it chose and signal red on the rest.
+     * Pro, and the FOSS flavor, keep [accentColor] everywhere.
      */
     fun accentForThread(threadId: Long): Int {
         return if (proBillingHook.accentAppliesTo(threadId)) accentColor()
         else Preferences.DEFAULT_THEME_COLOR
+    }
+
+    /** True when the chosen accent is not limited to one conversation. */
+    fun styleIsAppWide(): Boolean {
+        return !proBillingHook.enforcementEnabled || proBillingHook.isUnlocked()
     }
 
     data class Theme(val theme: Int, private val colors: Colors) {
@@ -156,8 +163,14 @@ class Colors @Inject constructor(
 
     @Suppress("UNUSED_PARAMETER")
     fun themeObservable(recipient: Recipient? = null): Observable<Theme> {
-        return prefs.theme().asObservable()
-                .map { color -> Theme(snapAccent(color), this) }
+        return Observable.combineLatest(
+                prefs.theme().asObservable(),
+                prefs.quickdotPro.asObservable(),
+                prefs.styledThreadId.asObservable(),
+                Function3<Int, Boolean, Long, Theme> { color, _, _ ->
+                    Theme(snapAccent(color), this@Colors)
+                }
+        )
     }
 
     fun highlightColorForTheme(theme: Int): Int = FloatArray(3)

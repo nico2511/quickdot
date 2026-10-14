@@ -282,6 +282,7 @@
 
     <string name="settings_theme_title">Accent</string>
     <string name="settings_theme_summary_applied">%1$s · applies across the app</string>
+    <string name="settings_theme_summary_one">%1$s · full style on one conversation</string>
     <string name="accent_signal">Signal</string>
     <string name="accent_cobalt">Cobalt</string>
     <string name="accent_pine">Pine</string>
@@ -294,12 +295,21 @@
     <string name="theme_preview_out">Thanks</string>
     <string name="theme_style_conversation">Use full style on this conversation</string>
     <string name="theme_style_conversation_done">This conversation keeps full style</string>
-    <string name="theme_pro_note">Free accounts will keep full style on one conversation. Quickdot Pro (1 EUR, one-time) keeps it everywhere. Billing is not connected yet, so the accent applies across the app.</string>
+    <string name="theme_pro_note">Free keeps full style on one conversation. Quickdot Pro is 1 EUR, one-time, and keeps the accent everywhere.</string>
     <string name="settings_pro_title">Quickdot Pro</string>
     <string name="settings_pro_price">1 EUR · one-time</string>
-    <string name="settings_pro_summary">Full style on every conversation. Billing is not connected yet.</string>
-    <string name="settings_pro_message">Quickdot Pro will be a 1 EUR one-time unlock. Play Billing is not in this build, and this button does not start a purchase.\n\nFree: full style on one conversation you choose, from that conversation’s accent picker.\nPro: the same accent on every conversation.\n\nUntil billing is connected, the accent you pick applies across the app. The conversation you mark is stored for the free slot.</string>
-    <string name="settings_pro_dismiss">Close</string>
+    <string name="settings_pro_summary">Full style on one conversation you choose. Purchase unlocks it everywhere.</string>
+    <string name="settings_pro_summary_owned">Unlocked. The accent applies to every conversation.</string>
+    <string name="settings_pro_summary_pending">Payment is pending. Style stays on one conversation until Play finishes the purchase.</string>
+    <string name="settings_pro_summary_unavailable">Play Billing is not available on this device. Style stays on one conversation.</string>
+    <string name="settings_pro_purchase">Purchase</string>
+    <string name="settings_pro_restore">Restore</string>
+    <string name="settings_pro_owned">Unlocked</string>
+    <string name="settings_pro_pending">Pending</string>
+    <string name="settings_pro_restored">Purchase restored.</string>
+    <string name="settings_pro_nothing_to_restore">No purchase to restore.</string>
+    <string name="settings_pro_restore_offline">Could not reach Play. The saved unlock is unchanged.</string>
+    <string name="settings_pro_product_missing">Quickdot Pro is not available from Play yet.</string>
     <string name="settings_night_title">Night mode</string>
     <string name="settings_black_title">Pure black night mode</string>
     <string name="settings_night_start_title">Start time</string>

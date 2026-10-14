@@ -50,7 +50,6 @@ class ThemePickerController(
             swatch.root.setOnClickListener { themeSelected.onNext(accent.color) }
             binding.swatches.addView(swatch.root)
         }
-        binding.styleConversation.isVisible = threadId != 0L
     }
 
     override fun onAttach(view: View) {
@@ -83,6 +82,11 @@ class ThemePickerController(
             if (styled) R.string.theme_style_conversation_done
             else R.string.theme_style_conversation
         )
+    }
+
+    override fun showFreeStyleChoice(show: Boolean) {
+        binding.styleConversation.isVisible = show && threadId != 0L
+        binding.proNote.isVisible = show
     }
 
     override fun render(state: ThemePickerState) = Unit

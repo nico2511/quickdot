@@ -6,21 +6,26 @@ import javax.inject.Singleton
 /**
  * PLAY BILLING HOOK — Quickdot Pro, 1 EUR, one-time unlock.
  *
- * Do not call [grant] or [revoke] from UI. The future billing client calls
- * [grant] after a successful purchase and [revoke] if that purchase is refunded.
- * There is no BillingClient in this build.
+ * Do not call [grant] or [revoke] from UI. The Play billing client calls
+ * [grant] after a purchased `quickdot_pro` is acknowledged and [revoke] when
+ * Play reports that the product is not owned (refund, or a fresh install with
+ * no purchase). [Preferences.quickdotPro] is the offline cache: a failed or
+ * disconnected Play query must not clear it.
  *
- * [enforcementEnabled] stays false until that client lands. While it is false,
- * [accentAppliesTo] is true for every thread, so the accent chosen in Settings
- * applies app-wide. When billing ships, set this to true: free users keep the
- * accent on [Preferences.styledThreadId] only, and Pro keeps it everywhere.
+ * SMS, MMS, notifications, and sending are never gated. This only decides
+ * whether the chosen accent applies to every conversation or to
+ * [Preferences.styledThreadId] alone.
+ *
+ * The `play` flavor enforces the gate. The `foss` flavor leaves it off, so
+ * the accent applies everywhere and no Play Billing classes are on the classpath.
  */
 @Singleton
 class ProBillingHook @Inject constructor(
-    private val prefs: Preferences
+    private val prefs: Preferences,
+    private val enforcement: StyleEnforcement
 ) {
 
-    val enforcementEnabled: Boolean = false
+    val enforcementEnabled: Boolean get() = enforcement.enabled
 
     fun isUnlocked(): Boolean = prefs.quickdotPro.get()
 

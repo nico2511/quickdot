@@ -22,6 +22,7 @@ import android.content.Context
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.billing.ProBillingClient
 import dev.octoshrimpy.quik.common.ExternalNavigator
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkPresenter
@@ -32,6 +33,7 @@ import dev.octoshrimpy.quik.interactor.SyncMessages
 import dev.octoshrimpy.quik.repository.SyncRepository
 import dev.octoshrimpy.quik.util.NightModeManager
 import dev.octoshrimpy.quik.util.Preferences
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import timber.log.Timber
 import java.util.Calendar
@@ -47,7 +49,8 @@ class SettingsPresenter @Inject constructor(
     private val externalNavigator: ExternalNavigator,
     private val nightModeManager: NightModeManager,
     private val prefs: Preferences,
-    private val syncMessages: SyncMessages
+    private val syncMessages: SyncMessages,
+    private val proBillingClient: ProBillingClient
 ) : QkPresenter<SettingsView, SettingsState>(SettingsState(
         nightModeId = prefs.nightMode.get()
 )) {
@@ -55,6 +58,20 @@ class SettingsPresenter @Inject constructor(
     init {
         disposables += colors.themeObservable()
                 .subscribe { theme -> newState { copy(theme = theme.theme) } }
+
+        disposables += proBillingClient.states
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { offer ->
+                    newState {
+                        copy(
+                            proPrice = offer.price,
+                            proSummary = offer.summary,
+                            proPurchaseLabel = offer.purchaseLabel,
+                            proPurchaseEnabled = offer.purchaseEnabled,
+                            proActionsVisible = offer.actionsVisible
+                        )
+                    }
+                }
 
         val nightModeLabels = context.resources.getStringArray(R.array.night_modes)
         disposables += prefs.nightMode.asObservable()
@@ -153,6 +170,14 @@ class SettingsPresenter @Inject constructor(
 
     override fun bindIntents(view: SettingsView) {
         super.bindIntents(view)
+
+        view.proPurchaseClicks()
+                .autoDisposable(view.scope())
+                .subscribe { activity -> proBillingClient.purchase(activity) }
+
+        view.proRestoreClicks()
+                .autoDisposable(view.scope())
+                .subscribe { proBillingClient.restore() }
 
         view.preferenceClicks()
                 .autoDisposable(view.scope())

@@ -46,8 +46,6 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="4dp"
             android:background="@drawable/square_outline"
-            android:clickable="true"
-            android:focusable="true"
             android:orientation="vertical"
             android:padding="16dp">
 
@@ -71,11 +69,53 @@
                 app:textSize="secondary" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
+                android:id="@+id/proSummary"
                 style="@style/TextSecondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:text="@string/settings_pro_summary" />
+
+            <LinearLayout
+                android:id="@+id/proActions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <dev.octoshrimpy.quik.common.widget.QkTextView
+                    android:id="@+id/proPurchase"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/square_key"
+                    android:backgroundTint="@color/accent"
+                    android:gravity="center"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:text="@string/settings_pro_purchase"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    app:textFont="label"
+                    app:textSize="secondary" />
+
+                <dev.octoshrimpy.quik.common.widget.QkTextView
+                    android:id="@+id/proRestore"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/square_outline"
+                    android:gravity="center"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:text="@string/settings_pro_restore"
+                    android:textAllCaps="false"
+                    app:textFont="label"
+                    app:textSize="secondary" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

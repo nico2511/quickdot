@@ -55,7 +55,8 @@ import javax.inject.Singleton
     AppModule::class,
     ActivityBuilderModule::class,
     BroadcastReceiverBuilderModule::class,
-    ServiceBuilderModule::class])
+    ServiceBuilderModule::class,
+    FlavorModule::class])
 interface AppComponent {
 
     fun conversationInfoBuilder(): ConversationInfoComponent.Builder

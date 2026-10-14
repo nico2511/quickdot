@@ -25,6 +25,12 @@ import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.Recipient
 import io.realm.RealmResults
 
+/** Plain fields only. The quoted message itself is not kept in state. */
+data class ReplyTarget(
+    val name: String,
+    val excerpt: String,
+)
+
 data class ComposeState(
     val hasError: Boolean = false,
     val editingMode: Boolean = false,
@@ -52,4 +58,5 @@ data class ComposeState(
     val recipientCount: Int = 1,
     val audioMsgRecording: Boolean = false,
     val saveDraft: Boolean = true,
+    val reply: ReplyTarget? = null,
 )

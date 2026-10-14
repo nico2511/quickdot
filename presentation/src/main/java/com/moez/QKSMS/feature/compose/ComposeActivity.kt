@@ -35,6 +35,8 @@ import android.provider.MediaStore
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.text.format.DateFormat
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.view.ContextMenu
 import android.view.DragEvent.ACTION_DRAG_ENDED
 import android.view.DragEvent.ACTION_DRAG_EXITED
@@ -50,9 +52,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
@@ -68,6 +73,7 @@ import dev.octoshrimpy.quik.common.base.QkThemedActivity
 import dev.octoshrimpy.quik.common.util.DateFormatter
 import dev.octoshrimpy.quik.common.util.extensions.autoScrollToStart
 import dev.octoshrimpy.quik.common.util.extensions.dpToPx
+import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
 import dev.octoshrimpy.quik.common.util.extensions.hideKeyboard
 import dev.octoshrimpy.quik.common.util.extensions.makeToast
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
@@ -142,6 +148,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             binding.scheduledSend.clicks()
         )
     }
+    override val replyDismissIntent by lazy { binding.quoteClose.clicks() }
+    override val replySwipeIntent: Subject<Long> = PublishSubject.create()
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
     override val confirmDeleteIntent: Subject<List<Long>> = PublishSubject.create()
     override val clearCurrentMessageIntent: Subject<Boolean> = PublishSubject.create()
@@ -165,6 +173,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val recordAudioRecord: Subject<MicInputCloudView.ViewState> = PublishSubject.create()
 
     private var seekBarUpdater: Disposable? = null
+    private var selectionActive = false
 
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[ComposeViewModel::class.java] }
 
@@ -215,6 +224,57 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         return SpeechRecognizer.isRecognitionAvailable(this)
     }
 
+    private val replySwipeCallback by lazy { object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+        private val iconLength = 24.dpToPx(this@ComposeActivity)
+        private val iconLeft = 16.dpToPx(this@ComposeActivity)
+        private val replyIcon: Bitmap by lazy {
+            ContextCompat.getDrawable(this@ComposeActivity, R.drawable.qd_reply)!!
+                .apply { setTint(getColorCompat(R.color.accent)) }
+                .toBitmap(iconLength, iconLength)
+        }
+
+        override fun isLongPressDragEnabled(): Boolean = false
+
+        override fun getSwipeDirs(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder
+        ): Int = if (selectionActive) 0 else ItemTouchHelper.RIGHT
+
+        override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float = 0.35f
+
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean = false
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            val position = viewHolder.adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                messageAdapter.getItem(position)?.id?.let(replySwipeIntent::onNext)
+                messageAdapter.notifyItemChanged(position)
+            }
+        }
+
+        override fun onChildDraw(
+            c: Canvas,
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            dX: Float,
+            dY: Float,
+            actionState: Int,
+            isCurrentlyActive: Boolean
+        ) {
+            if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE && dX > 0f) {
+                val item = viewHolder.itemView
+                val top = item.top + (item.height - replyIcon.height) / 2f
+                c.drawBitmap(replyIcon, item.left + iconLeft.toFloat(), top, null)
+            }
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+        }
+    }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -240,6 +300,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
             binding.messageList.setHasFixedSize(true)
             binding.messageList.adapter = messageAdapter
+            ItemTouchHelper(replySwipeCallback).attachToRecyclerView(binding.messageList)
 
             binding.messageAttachments.adapter = composeAttachmentAdapter
 
@@ -492,7 +553,9 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         binding.toolbar.menu.findItem(R.id.details)?.isVisible = !state.editingMode && state.selectedMessages == 1
         binding.toolbar.menu.findItem(R.id.delete)?.isVisible = !state.editingMode && ((state.selectedMessages > 0) || state.canSend)
         binding.toolbar.menu.findItem(R.id.forward)?.isVisible = !state.editingMode && state.selectedMessages == 1
+        binding.toolbar.menu.findItem(R.id.reply)?.isVisible = !state.editingMode && state.selectedMessages == 1
         binding.toolbar.menu.findItem(R.id.show_status)?.isVisible = !state.editingMode && state.selectedMessages > 0
+        selectionActive = state.selectedMessages > 0
         binding.toolbar.menu.findItem(R.id.previous)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
         binding.toolbar.menu.findItem(R.id.next)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
         binding.toolbar.menu.findItem(R.id.clear)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
@@ -557,6 +620,13 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         binding.send.visibility = if (showSend) View.VISIBLE else View.INVISIBLE
         binding.recordAudioMsg.visibility = if (state.canSend && !state.loading) View.INVISIBLE else View.VISIBLE
         binding.scheduledSend.visibility = if (state.canSend && (state.scheduled != 0L) && !state.loading) View.VISIBLE else View.INVISIBLE
+
+        val reply = state.reply
+        binding.quoteBar.setVisible(reply != null && !state.loading && state.validRecipientNumbers != 0)
+        if (reply != null) {
+            binding.quoteName.text = reply.name
+            binding.quoteExcerpt.text = reply.excerpt
+        }
 
         // if not in editing mode, and there are no non-me participants that can be sent to,
         // hide controls that allow constructing a reply and inform user no valid recipients

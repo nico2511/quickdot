@@ -68,6 +68,13 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/reply"
+        android:icon="@drawable/qd_reply"
+        android:title="@string/compose_menu_reply"
+        android:visible="false"
+        app:showAsAction="always|withText" />
+
+    <item
         android:id="@+id/copy"
         android:icon="@drawable/qd_copy"
         android:title="@string/compose_menu_copy"

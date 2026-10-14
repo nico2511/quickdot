@@ -637,7 +637,7 @@ class ComposeViewModel @Inject constructor(
 
         // Theme changes
         prefs.keyChanges
-                .filter { key -> key.contains("theme") }
+                .filter { key -> key.contains("theme") || key == "quickdotPro" || key == "styledThreadId" }
                 .doOnNext { view.themeChanged() }
                 .autoDisposable(view.scope())
                 .subscribe()

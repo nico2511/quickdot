@@ -12,5 +12,6 @@ interface ThemePickerView : QkViewContract<ThemePickerState> {
     fun setCurrentTheme(color: Int)
 
     fun showStyled(styled: Boolean)
+    fun showFreeStyleChoice(show: Boolean)
 
 }

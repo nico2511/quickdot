@@ -22,7 +22,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId 'com.nico2511.quickdot'
@@ -32,6 +32,21 @@ android {
         versionName '0.1.3'
         setProperty("archivesBaseName", "Quickdot-v${versionName}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    flavorDimensions "distribution"
+    productFlavors {
+        play {
+            dimension "distribution"
+            // Play Console listing. One-time product quickdot_pro.
+            applicationId "com.nico2511.quickdot"
+        }
+        foss {
+            dimension "distribution"
+            // GitHub and F-Droid. Same id so it replaces the Play build.
+            // No Play Billing dependency is added for this flavor.
+            applicationId "com.nico2511.quickdot"
+        }
     }
 
     signingConfigs {
@@ -115,6 +130,15 @@ configurations {
     debug
     release
     fdroid
+}
+
+// Play Billing 9 pulls kotlin-stdlib 1.8, which already contains the JDK7/JDK8
+// classes this project still depends on at 1.7. Pin the stdlib so those classes
+// are not packaged twice. The compiler stays 1.7.21.
+configurations.configureEach {
+    resolutionStrategy.force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    resolutionStrategy.force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    resolutionStrategy.force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
 dependencies {
@@ -217,11 +241,21 @@ dependencies {
     implementation project(':data')
     implementation project(':domain')
 
+    // Play flavor only. FOSS must not package Play Billing or other Google Play libraries.
+    playImplementation "com.android.billingclient:billing:$billing_version"
+
 }
 // Check to make sure that the keystore file is present when building a release
 gradle.taskGraph.whenReady { taskGraph ->
-    if ((taskGraph.hasTask(':assembleRelease') ||
-            taskGraph.allTasks.any { it.name == 'assembleRelease' }) &&
+    def releaseNames = [
+            'assembleRelease',
+            'assemblePlayRelease',
+            'assembleFossRelease',
+            'bundleRelease',
+            'bundlePlayRelease'
+    ] as Set
+    def needsKey = taskGraph.allTasks.any { releaseNames.contains(it.name) }
+    if (needsKey &&
             !file('./.gradle/.gradlerc').exists() &&
             System.getenv("CI") != "true") {
         throw new GradleException("Keystore properties file not found")

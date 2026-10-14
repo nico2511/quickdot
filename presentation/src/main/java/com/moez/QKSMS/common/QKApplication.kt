@@ -35,6 +35,7 @@ import dagger.android.HasActivityInjector
 import dagger.android.HasBroadcastReceiverInjector
 import dagger.android.HasServiceInjector
 import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.billing.ProBillingClient
 import dev.octoshrimpy.quik.common.util.FileLoggingTree
 import dev.octoshrimpy.quik.injection.AppComponentManager
 import dev.octoshrimpy.quik.injection.appComponent
@@ -77,6 +78,8 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
     lateinit var referralManager: ReferralManager
     @Inject
     lateinit var workerFactory: WorkerFactory
+    @Inject
+    lateinit var proBillingClient: ProBillingClient
 
     override fun onCreate() {
         super.onCreate()
@@ -86,6 +89,7 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
 
         AppComponentManager.init(this)
         appComponent.inject(this)
+        proBillingClient.start()
 
         Realm.init(this)
         Realm.setDefaultConfiguration(RealmConfiguration.Builder()

@@ -129,9 +129,12 @@ abstract class QkThemedActivity : QkActivity() {
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
 
-        // Set the color for the overflow and navigation icon
+        // Set the color for the overflow and navigation icon.
+        // The back arrow is many small rects; the toolbar's automatic tint
+        // leaves that drawable black, so tint it here with the other icons.
         val textSecondary = resolveThemeColor(android.R.attr.textColorSecondary)
         toolbar?.overflowIcon = toolbar?.overflowIcon?.apply { setTint(textSecondary) }
+        toolbar?.navigationIcon = toolbar?.navigationIcon?.mutate()?.apply { setTint(textSecondary) }
 
         // Update the colours of the menu items
         Observables.combineLatest(menu, theme) { menu, theme ->

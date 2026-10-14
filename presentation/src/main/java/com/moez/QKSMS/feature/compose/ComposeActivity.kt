@@ -223,7 +223,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         showBackButton(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         binding.toolbarAvatar.square = true
-        binding.toolbarAvatar.speakerInk = true
+        binding.toolbarAvatar.calmHeader = true
         applyThreadSprocket()
         viewModel.bindView(this)
 

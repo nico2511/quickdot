@@ -210,6 +210,10 @@ class MessagesAdapter @Inject constructor(
         val simIndex: TextView
         val sim: ImageView
         val body: TextView
+        val bubble: View
+        val quote: View
+        val quoteName: TextView
+        val quoteExcerpt: TextView
         val parts: androidx.recyclerview.widget.RecyclerView
         val reactions: View
         val reactionText: TextView
@@ -224,6 +228,10 @@ class MessagesAdapter @Inject constructor(
             simIndex = binding.simIndex
             sim = binding.sim
             body = binding.body
+            bubble = binding.bubble
+            quote = binding.quote
+            quoteName = binding.quoteName
+            quoteExcerpt = binding.quoteExcerpt
             parts = binding.parts
             reactions = binding.reactions
             reactionText = binding.reactionText
@@ -291,6 +299,10 @@ class MessagesAdapter @Inject constructor(
             simIndex = binding.simIndex
             sim = binding.sim
             body = binding.body
+            bubble = binding.bubble
+            quote = binding.quote
+            quoteName = binding.quoteName
+            quoteExcerpt = binding.quoteExcerpt
             parts = binding.parts
             reactions = binding.reactions
             reactionText = binding.reactionText
@@ -319,15 +331,18 @@ class MessagesAdapter @Inject constructor(
         }
 
         val subject = message.getCleansedSubject()
+        val rawBody = message.getText(false)
+        val quoted = QuoteText.parse(rawBody)
 
         var isMsgTextTruncated = false
 
-        // get message text to display, which may need to be truncated
-        val displayText = subject.joinTo(message.getText(false), "\n").let {
+        // A quote's first line is chrome. The bubble shows that line as a block
+        // and only the reply goes through the normal body path.
+        val displayText = (if (quoted != null) quoted.reply else subject.joinTo(rawBody, "\n")).let {
             isMsgTextTruncated = (it.length > MAX_MESSAGE_DISPLAY_LENGTH)
 
             // make subject sub-string bold, if subject is not blank
-            if (subject.isNotBlank())
+            if (quoted == null && subject.isNotBlank())
                 SpannableString(it.truncateWithEllipses(MAX_MESSAGE_DISPLAY_LENGTH)).apply {
                     setSpan(
                         StyleSpan(Typeface.BOLD),
@@ -370,7 +385,8 @@ class MessagesAdapter @Inject constructor(
         )
 
         // Bind the body text
-        val emojiOnly = displayText.isEmojiOnly()
+        // A quote needs the normal bubble so the rail and excerpt stay inside it.
+        val emojiOnly = quoted == null && displayText.isEmojiOnly()
         textViewStyler.setTextSize(
             body,
             when (emojiOnly) {
@@ -417,8 +433,34 @@ class MessagesAdapter @Inject constructor(
 
         body.apply {
             text = spanString
-            setVisible(message.isSms() || spanString.isNotBlank())
+            setVisible(if (quoted != null) spanString.isNotBlank() else message.isSms() || spanString.isNotBlank())
+            minHeight = if (quoted != null) 0 else 36.dpToPx(context)
+            if (!emojiOnly) {
+                setTextColor(when {
+                    isOutgoing -> context.getColorCompat(R.color.bubbleOutgoingText)
+                    // Body text stays the theme primary so it clears AA on the page.
+                    else -> context.resolveThemeColor(android.R.attr.textColorPrimary)
+                })
+            }
+        }
 
+        if (quoted != null) {
+            quote.setVisible(true)
+            quoteName.text = quoted.name
+            quoteExcerpt.text = quoted.excerpt
+            val ink = if (isOutgoing) {
+                context.getColorCompat(R.color.bubbleOutgoingText)
+            } else {
+                context.resolveThemeColor(android.R.attr.textColorSecondary)
+            }
+            quoteName.setTextColor(ink)
+            quoteExcerpt.setTextColor(ink.withAlpha(0xB3))
+        } else {
+            quote.setVisible(false)
+        }
+
+        bubble.apply {
+            setVisible(body.visibility == View.VISIBLE || quoted != null)
             setBackgroundResource(
                 getBubble(
                     emojiOnly = emojiOnly,
@@ -430,12 +472,9 @@ class MessagesAdapter @Inject constructor(
             )
             if (!emojiOnly) {
                 if (isOutgoing) {
-                    setTextColor(context.getColorCompat(R.color.bubbleOutgoingText))
                     setBackgroundTint(context.getColorCompat(R.color.bubbleOutgoing))
                 } else {
-                    // Body text stays the theme primary so it clears AA on the page.
                     // The speaker ink is the stroke only; a view tint would fill the bubble.
-                    setTextColor(context.resolveThemeColor(android.R.attr.textColorPrimary))
                     applySpeakerStroke(speaker)
                 }
             }

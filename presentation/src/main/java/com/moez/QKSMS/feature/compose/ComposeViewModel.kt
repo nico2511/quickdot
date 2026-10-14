@@ -48,6 +48,7 @@ import dev.octoshrimpy.quik.common.util.extensions.makeToast
 import dev.octoshrimpy.quik.common.widget.MicInputCloudView
 import dev.octoshrimpy.quik.common.widget.QkContextMenuRecyclerView
 import dev.octoshrimpy.quik.compat.SubscriptionManagerCompat
+import dev.octoshrimpy.quik.extensions.Optional
 import dev.octoshrimpy.quik.extensions.asObservable
 import dev.octoshrimpy.quik.extensions.isImage
 import dev.octoshrimpy.quik.extensions.isSmil
@@ -510,6 +511,32 @@ class ComposeViewModel @Inject constructor(
             .autoDisposable(view.scope())
             .subscribe { view.showClearCurrentMessageDialog() }
 
+        // Reply to the selected message, or to one swiped right.
+        Observable.merge(
+            view.optionsItemIntent
+                .filter { it == R.id.reply }
+                .withLatestFrom(view.messagesSelectedIntent) { _, ids -> ids }
+                .mapNotNull { it.singleOrNull() },
+            view.replySwipeIntent
+        )
+            .observeOn(AndroidSchedulers.mainThread())
+            .withLatestFrom(conversation) { messageId, conversation -> messageId to conversation }
+            .mapNotNull { (messageId, conversation) ->
+                messageRepo.getMessage(messageId)?.let { message ->
+                    replyTarget(message, conversation)
+                }
+            }
+            .autoDisposable(view.scope())
+            .subscribe { target ->
+                newState { copy(reply = target) }
+                view.clearSelection()
+                view.focusMessage()
+            }
+
+        view.replyDismissIntent
+            .autoDisposable(view.scope())
+            .subscribe { newState { copy(reply = null) } }
+
         // Forward the message
         view.optionsItemIntent
             .filter { it == R.id.forward }
@@ -938,8 +965,16 @@ class ComposeViewModel @Inject constructor(
                 }
             }
 
-        // Show the remaining character counter when necessary
-        view.textChangedIntent
+        // Show the remaining character counter when necessary.
+        // A pending quote is part of the SMS body, so it counts toward the segment.
+        Observables.combineLatest(
+            view.textChangedIntent,
+            state.map { Optional(it.reply) }.distinctUntilChanged()
+        ) { draft, replyOpt ->
+            val reply = replyOpt.value
+            if (reply == null) draft.toString()
+            else QuoteText.composeBody(reply.name, reply.excerpt, draft.toString())
+        }
                 .observeOn(Schedulers.computation())
                 .mapNotNull { draft -> tryOrNull { SmsMessage.calculateLength(draft, prefs.unicode.get()) } }
                 .map { array ->
@@ -1197,6 +1232,9 @@ class ComposeViewModel @Inject constructor(
                 }
 
                 val subId = state.subscription?.subscriptionId ?: -1
+                val reply = state.reply
+                val outgoing = if (reply == null) body.toString()
+                    else QuoteText.composeBody(reply.name, reply.excerpt, body.toString())
                 val conversationId = (conversation.id)
                 val addresses = when (conversation.recipients.isNotEmpty()) {
                     true -> conversation.recipients.map { it.address }
@@ -1215,7 +1253,7 @@ class ComposeViewModel @Inject constructor(
                                 subId,
                                 addresses,
                                 sendAsGroup,
-                                body.toString(),
+                                outgoing,
                                 state.attachments.map { it.uri },
                                 conversationId
                         )
@@ -1230,7 +1268,7 @@ class ComposeViewModel @Inject constructor(
                     // send message
                     else -> {
                         sendNewMessage.execute(
-                            SendNewMessage.Params(subId, 0, addresses, body.toString(),
+                            SendNewMessage.Params(subId, 0, addresses, outgoing,
                                 sendAsGroup, state.attachments.toList(), delay)
                         )
                     }
@@ -1261,6 +1299,7 @@ class ComposeViewModel @Inject constructor(
                 .withLatestFrom(state) { _, state ->
                     when {
                         state.selectedMessages > 0 -> view.clearSelection()
+                        state.reply != null -> newState { copy(reply = null) }
                         else -> newState { copy(hasError = true) }
                     }
                 }
@@ -1289,11 +1328,32 @@ class ComposeViewModel @Inject constructor(
                         editingMode = false,
                         attachments = listOf(),
                         scheduled = 0,
+                        reply = null,
                     )
                 }
             }
             .autoDisposable(view.scope())
             .subscribe()
+    }
+
+    private fun replyTarget(message: Message, conversation: Conversation): ReplyTarget {
+        val rawName = if (message.isMe()) {
+            context.getString(R.string.compose_reply_you)
+        } else {
+            conversation.recipients.firstOrNull {
+                phoneNumberUtils.compare(it.address, message.address)
+            }?.getDisplayName() ?: message.address
+        }
+        val text = message.getText(false)
+        // Quoting a reply quotes the reply itself, not the previous quote block.
+        val source = QuoteText.parse(text)?.reply?.takeIf { it.isNotBlank() } ?: text
+        val media = message.parts.any { part -> !part.isSmil() && !part.isText() }
+        val excerpt = when {
+            source.isNotBlank() -> QuoteText.excerpt(source)
+            media -> context.getString(R.string.compose_reply_photo)
+            else -> "..."
+        }
+        return ReplyTarget(QuoteText.sanitizeName(rawName), excerpt)
     }
 
 }

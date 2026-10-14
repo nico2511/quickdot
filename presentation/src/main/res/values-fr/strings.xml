@@ -123,6 +123,10 @@
     <string name="compose_scheduled_toast">Ajouté aux messages programmés</string>
     <string name="compose_hint">Écrire un message…</string>
     <string name="compose_no_valid_recipients">Impossible d’envoyer aux autres participants</string>
+    <string name="compose_menu_reply">Répondre</string>
+    <string name="compose_reply_you">Vous</string>
+    <string name="compose_reply_photo">[Photo]</string>
+    <string name="compose_reply_close">Retirer la réponse</string>
     <string name="compose_menu_copy">Copier le texte</string>
     <string name="compose_menu_share">Partager le texte</string>
     <string name="compose_menu_forward">Transférer</string>

@@ -166,6 +166,9 @@
         <dev.octoshrimpy.quik.common.widget.QkTextView
             android:id="@+id/toolbarTitle"
             style="@style/ToolbarText"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textStyle="bold"
             tools:text="Conversations" />
 
     </androidx.appcompat.widget.Toolbar>

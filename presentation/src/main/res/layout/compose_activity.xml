@@ -422,7 +422,10 @@
                 android:id="@+id/toolbarTitle"
                 style="@style/ToolbarText"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textDirection="ltr"
+                android:textStyle="bold"
                 tools:text="Moez Bhatti" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView

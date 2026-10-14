@@ -565,7 +565,7 @@ class MessagesAdapter @Inject constructor(
         notifyDataSetChanged()
     }
 
-    /** Date rule A is a fine dotted rule. Date rule B is the label alone, with spacing. */
+    /** Date rule A is three quiet dots. Date rule B is the label alone, with spacing. */
     private fun applyDateBand(timestamp: TextView) {
         if (ThreadChrome.DATE_RULE_FINE) {
             val tint = context.resolveThemeColor(android.R.attr.textColorTertiary)
@@ -575,19 +575,20 @@ class MessagesAdapter @Inject constructor(
                 dateRule(tint),
                 null
             )
-            timestamp.compoundDrawablePadding = 8.dpToPx(context)
-            timestamp.setPadding(left = 0, top = 12.dpToPx(context), right = 0, bottom = 8.dpToPx(context))
+            timestamp.compoundDrawablePadding = 6.dpToPx(context)
+            timestamp.setPadding(left = 0, top = 10.dpToPx(context), right = 0, bottom = 6.dpToPx(context))
         } else {
             timestamp.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
             timestamp.compoundDrawablePadding = 0
-            val side = 24.dpToPx(context)
-            timestamp.setPadding(left = side, top = 16.dpToPx(context), right = side, bottom = 12.dpToPx(context))
+            val side = 16.dpToPx(context)
+            timestamp.setPadding(left = side, top = 12.dpToPx(context), right = side, bottom = 8.dpToPx(context))
         }
     }
 
     private fun dateRule(tint: Int): Drawable? {
         return ContextCompat.getDrawable(context, R.drawable.dotted_rule_fine)?.mutate()?.also {
             it.setTint(tint)
+            it.alpha = 140
         }
     }
 

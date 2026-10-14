@@ -22,10 +22,13 @@ package dev.octoshrimpy.quik.feature.compose
  * Thread marks still open for a choice. Flip one constant and rebuild.
  * Checked-in values are variant A for the date rule and variant A for the rail.
  *
- * [DATE_RULE_FINE] true draws a thin rule of small dots beside the date.
- * false leaves the date centered, with spacing and no rule.
+ * Dots can mark the thread, and they stay small, short, and low-contrast so the
+ * messages keep the space and the attention. The date itself stays at reading size.
  *
- * [SPROCKET_SUBTLE] true draws a small, dim, sparse rail on the thread only.
+ * [DATE_RULE_FINE] true draws three tiny dots on each side of the date.
+ * false leaves the date centered, with spacing and no dots.
+ *
+ * [SPROCKET_SUBTLE] true draws a dim, sparse rail on this thread only.
  * false removes that rail. Rails on other screens stay as they are.
  */
 object ThreadChrome {

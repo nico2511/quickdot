@@ -148,9 +148,12 @@ class AvatarView @JvmOverloads constructor(
 
     private fun updateView() {
         // Bold Doto keeps the dots readable inside the circle. Regular weight
-        // anti-aliases into a plain sans at these sizes.
+        // anti-aliases into a plain sans at these sizes. Pin it so a later
+        // setTypeface from bold text or an OEM font hook cannot swap the sans back in.
         if (this::prefs.isInitialized && this::fontProvider.isInitialized && !prefs.systemFont.get()) {
-            layout.initial.typeface = fontProvider.displayBold
+            layout.initial.pinTypeface(fontProvider.displayBold)
+        } else if (this::prefs.isInitialized && prefs.systemFont.get()) {
+            layout.initial.unpinTypeface()
         }
 
         if (calmHeader) {

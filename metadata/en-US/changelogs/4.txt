@@ -1,1 +1,2 @@
 0.1.3 finishes the shared leftovers. Compose and the composers are square, remaining Material icons are the pixel set, and dialogs, the default-SMS hint, the gallery, and both widgets use the Quickdot marks.
+Thread dates are Space Mono and easier to read, with three small dots and a quieter left rail, and speaker avatars are grey.

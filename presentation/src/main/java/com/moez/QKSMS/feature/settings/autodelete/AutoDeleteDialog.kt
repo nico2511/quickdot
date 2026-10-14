@@ -25,7 +25,8 @@ import androidx.appcompat.app.AlertDialog
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.databinding.SettingsAutoDeleteDialogBinding
 
-class AutoDeleteDialog(context: Activity, listener: (Int) -> Unit) : AlertDialog(context) {
+class AutoDeleteDialog(context: Activity, listener: (Int) -> Unit) :
+    AlertDialog(context, R.style.QuickdotAlertDialog) {
 
     private val layout = SettingsAutoDeleteDialogBinding.inflate(LayoutInflater.from(context))
 

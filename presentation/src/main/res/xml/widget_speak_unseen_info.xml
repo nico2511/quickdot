@@ -22,6 +22,7 @@
     android:targetCellWidth="1"
     android:targetCellHeight="1"
     android:previewImage="@drawable/ic_speak_unseen_widget"
+    android:previewLayout="@layout/widget_speak_unseen"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="0"
     android:widgetCategory="home_screen|keyguard" />

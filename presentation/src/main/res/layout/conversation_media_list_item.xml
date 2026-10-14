@@ -18,6 +18,7 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -38,6 +39,7 @@
         android:layout_height="24dp"
         android:layout_gravity="top|end"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_play_circle_filled_white_24dp" />
+        android:src="@drawable/qd_play"
+        app:tint="@color/white" />
 
 </FrameLayout>

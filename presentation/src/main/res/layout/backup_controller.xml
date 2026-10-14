@@ -53,7 +53,7 @@
                     app:layout_constraintBottom_toBottomOf="@id/progressSummary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/progressTitle"
-                    tools:src="@drawable/ic_file_download_black_24dp" />
+                    tools:src="@drawable/qd_download" />
 
                 <dev.octoshrimpy.quik.common.widget.QkTextView
                     android:id="@+id/progressTitle"
@@ -87,7 +87,7 @@
                     android:layout_height="56dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:padding="16dp"
-                    android:src="@drawable/ic_close_black_24dp"
+                    android:src="@drawable/qd_clear"
                     app:tint="?android:attr/textColorSecondary"
                     app:layout_constraintBottom_toBottomOf="@id/progressSummary"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -123,7 +123,7 @@
                 android:id="@+id/location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:icon="@drawable/ic_baseline_folder_24"
+                app:icon="@drawable/qd_folder"
                 app:summary="@string/backup_location_summary"
                 app:title="@string/backup_location_title" />
 
@@ -131,7 +131,7 @@
                 android:id="@+id/restore"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:icon="@drawable/ic_file_download_black_24dp"
+                app:icon="@drawable/qd_download"
                 app:summary="@string/backup_restore_summary"
                 app:title="@string/backup_restore_title" />
 
@@ -170,7 +170,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="12dp"
-            android:src="@drawable/ic_file_upload_black_24dp"
+            android:src="@drawable/qd_upload"
             tools:tint="@color/textPrimaryDark" />
 
         <dev.octoshrimpy.quik.common.widget.QkTextView

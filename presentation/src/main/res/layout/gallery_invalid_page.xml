@@ -17,11 +17,29 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<dev.octoshrimpy.quik.common.widget.QkTextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:text="@string/gallery_error"
-    android:textColor="?android:attr/textColorSecondary"
-    app:textSize="primary" />
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/qd_missing"
+        app:tint="@color/textSecondaryDark" />
+
+    <dev.octoshrimpy.quik.common.widget.QkTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:letterSpacing="0.06"
+        android:text="@string/gallery_error"
+        android:textColor="@color/textSecondaryDark"
+        app:textFont="label"
+        app:textSize="secondary" />
+
+</LinearLayout>

@@ -45,6 +45,8 @@
         <item name="switchTrackEnabled">@color/switchTrackEnabledDark</item>
         <item name="switchTrackDisabled">@color/switchTrackDisabledDark</item>
         <item name="windowActionBar">false</item>
+        <item name="alertDialogTheme">@style/QuickdotAlertDialog</item>
+        <item name="android:alertDialogTheme">@style/QuickdotAlertDialog</item>
     </style>
 
     <style name="AppThemeDialog" parent="Theme.AppCompat.Dialog">
@@ -59,6 +61,8 @@
         <item name="colorPrimaryDark">@color/backgroundDark</item>
         <item name="selectableItemBackground">@drawable/ripple_dark</item>
         <item name="windowActionBar">false</item>
+        <item name="alertDialogTheme">@style/QuickdotAlertDialog</item>
+        <item name="android:alertDialogTheme">@style/QuickdotAlertDialog</item>
     </style>
 
     <style name="PopupTheme" parent="ThemeOverlay.AppCompat">
@@ -86,6 +90,38 @@
     <style name="PopupTheme.Black">
         <item name="android:colorBackground">@color/black</item>
         <item name="bubbleColor">@color/bubbleBlack</item>
+    </style>
+
+    <style name="QuickdotAlertDialog" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/quickdot_dialog_bg</item>
+        <item name="android:colorBackground">@color/dialogSurface</item>
+        <item name="android:textColorPrimary">@color/textPrimaryDark</item>
+        <item name="android:textColorSecondary">@color/textSecondaryDark</item>
+        <item name="android:textColor">@color/textPrimaryDark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="colorPrimary">@color/dialogSurface</item>
+        <item name="android:fontFamily">@font/inter</item>
+        <item name="fontFamily">@font/inter</item>
+        <item name="buttonBarPositiveButtonStyle">@style/QuickdotDialogButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/QuickdotDialogButton</item>
+        <item name="buttonBarNeutralButtonStyle">@style/QuickdotDialogButton</item>
+        <item name="android:windowTitleStyle">@style/QuickdotDialogTitle</item>
+    </style>
+
+    <style name="QuickdotDialogTitleText" parent="TextAppearance.AppCompat.Title">
+        <item name="android:fontFamily">@font/doto</item>
+        <item name="fontFamily">@font/doto</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/textPrimaryDark</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="QuickdotDialogButton" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:fontFamily">@font/space_mono</item>
+        <item name="fontFamily">@font/space_mono</item>
+        <item name="android:letterSpacing">0.06</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/textPrimaryDark</item>
     </style>
 
 </resources>

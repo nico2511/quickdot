@@ -47,7 +47,7 @@
             android:importantForAccessibility="no"
             android:visibility="gone"
             app:tint="?android:attr/textColorSecondary"
-            tools:src="@drawable/ic_history_black_24dp"
+            tools:src="@drawable/qd_history"
             tools:visibility="visible" />
 
         <dev.octoshrimpy.quik.common.widget.QkTextView

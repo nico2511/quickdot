@@ -32,18 +32,19 @@
         android:layout_marginEnd="24dp"
         android:text="@string/message_content_filters_dialog_title"
         android:textColor="?android:attr/textColorPrimary"
+        app:textFont="display"
         app:textSize="dialog" />
 
     <dev.octoshrimpy.quik.common.widget.QkEditText
         android:id="@+id/input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@null"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/square_outline"
         android:hint="@string/message_content_filters_dialog_hint"
-        android:paddingStart="24dp"
-        android:paddingTop="16dp"
-        android:paddingEnd="24dp"
-        android:paddingBottom="16dp"
+        android:padding="12dp"
         android:textColorHint="?android:attr/textColorTertiary"
         app:textSize="primary" />
 
@@ -52,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title="@string/message_content_filters_dialog_case_switch"
-        app:icon="@drawable/ic_format_size_black_24dp"
+        app:icon="@drawable/qd_size"
         app:widget="@layout/settings_switch_widget" />
 
     <dev.octoshrimpy.quik.common.widget.PreferenceView
@@ -60,7 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title="@string/message_content_filters_dialog_regex_switch"
-        app:icon="@drawable/ic_settings_black_24dp"
+        app:icon="@drawable/qd_settings"
         app:widget="@layout/settings_switch_widget" />
 
     <dev.octoshrimpy.quik.common.widget.PreferenceView
@@ -68,7 +69,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title="@string/message_content_filters_dialog_contacts_switch"
-        app:icon="@drawable/ic_person_black_24dp"
+        app:icon="@drawable/qd_person"
         app:widget="@layout/settings_switch_widget" />
 
 </LinearLayout>

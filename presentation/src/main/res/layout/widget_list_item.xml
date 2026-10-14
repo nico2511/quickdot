@@ -37,8 +37,16 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginEnd="16dp"
-        android:clickable="false"
-        tools:background="@color/tools_theme">
+        android:clickable="false">
+
+        <ImageView
+            android:id="@+id/avatarPlate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="false"
+            android:importantForAccessibility="no"
+            android:src="@drawable/rounded_rectangle_4dp"
+            tools:tint="@color/tools_theme" />
 
         <TextView
             android:id="@+id/initial"
@@ -57,7 +65,7 @@
             android:layout_height="24dp"
             android:layout_gravity="center"
             android:clickable="false"
-            android:src="@drawable/ic_person_black_24dp"
+            android:src="@drawable/qd_person"
             tools:tint="@color/textPrimaryDark" />
 
         <ImageView
@@ -65,14 +73,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="false"
+            android:scaleType="centerCrop"
             tools:src="@tools:sample/avatars" />
-
-        <ImageView
-            android:id="@+id/avatarMask"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="false"
-            android:src="@drawable/circle_mask" />
 
     </FrameLayout>
 

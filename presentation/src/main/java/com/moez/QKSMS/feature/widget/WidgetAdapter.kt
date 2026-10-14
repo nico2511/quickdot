@@ -63,14 +63,7 @@ class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
     private val appWidgetManager by lazy { AppWidgetManager.getInstance(context) }
 
     private val night get() = prefs.night.get()
-    private val black get() = prefs.black.get()
     private val theme get() = colors.theme()
-    private val background
-        get() = context.getColorCompat(when {
-            night && black -> R.color.black
-            night && !black -> R.color.backgroundDark
-            else -> R.color.white
-        })
     private val textPrimary
         get() = context.getColorCompat(if (night) R.color.textPrimaryDark else R.color.textPrimary)
     private val textSecondary
@@ -113,10 +106,9 @@ class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
 
         // Avatar
         remoteViews.setViewVisibility(R.id.avatar, if (smallWidget) View.GONE else View.VISIBLE)
-        remoteViews.setInt(R.id.avatar, "setBackgroundColor", theme.theme)
+        remoteViews.setInt(R.id.avatarPlate, "setColorFilter", theme.theme)
         remoteViews.setTextColor(R.id.initial, theme.textPrimary)
         remoteViews.setInt(R.id.icon, "setColorFilter", theme.textPrimary)
-        remoteViews.setInt(R.id.avatarMask, "setColorFilter", background)
 
         val contact = conversation.recipients.map { recipient ->
             recipient.contact ?: Contact().apply { numbers.add(PhoneNumber().apply { address = recipient.address }) }

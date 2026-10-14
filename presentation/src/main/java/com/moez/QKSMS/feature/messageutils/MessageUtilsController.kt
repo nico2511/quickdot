@@ -1,7 +1,7 @@
 package dev.octoshrimpy.quik.feature.messageutils
 
 import android.animation.ObjectAnimator
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -99,7 +99,7 @@ class MessageUtilsController : QkController<MessageUtilsControllerBinding, Messa
     }
 
     override fun showDeduplicationConfirmationDialog(): Single<Boolean> = Single.create { emitter ->
-        AlertDialog.Builder(activity)
+        AlertDialog.Builder(activity!!)
             .setTitle(R.string.deduplicate_messages_title)
             .setMessage(R.string.deduplicate_message_confirmation_dialog_message)
             .setPositiveButton(R.string.button_continue) { _, _ -> emitter.onSuccess(true) }

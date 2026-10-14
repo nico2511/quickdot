@@ -112,7 +112,7 @@
                 app:layout_constraintStart_toStartOf="@id/rightBackground"
                 app:layout_constraintTop_toTopOf="@id/rightBackground"
                 tools:backgroundTint="@color/tools_theme"
-                tools:src="@drawable/ic_archive_white_24dp"
+                tools:src="@drawable/qd_archive"
                 tools:tint="@color/textPrimaryDark" />
 
             <ImageView
@@ -123,7 +123,7 @@
                 android:background="@drawable/circle"
                 android:backgroundTint="?android:attr/divider"
                 android:padding="8dp"
-                android:src="@drawable/ic_person_black_24dp"
+                android:src="@drawable/qd_person"
                 app:tint="?android:attr/textColorTertiary"
                 app:layout_constraintBottom_toBottomOf="@id/rightBackground"
                 app:layout_constraintStart_toEndOf="@id/rightIcon"
@@ -233,7 +233,7 @@
                 app:layout_constraintEnd_toEndOf="@id/leftBackground"
                 app:layout_constraintTop_toTopOf="@id/leftBackground"
                 tools:backgroundTint="@color/tools_theme"
-                tools:src="@drawable/ic_archive_white_24dp"
+                tools:src="@drawable/qd_archive"
                 tools:tint="@color/textPrimaryDark" />
 
             <ImageView
@@ -244,7 +244,7 @@
                 android:background="@drawable/circle"
                 android:backgroundTint="?android:attr/divider"
                 android:padding="8dp"
-                android:src="@drawable/ic_person_black_24dp"
+                android:src="@drawable/qd_person"
                 app:tint="?android:attr/textColorTertiary"
                 app:layout_constraintBottom_toBottomOf="@id/leftBackground"
                 app:layout_constraintStart_toStartOf="@id/leftBackground"

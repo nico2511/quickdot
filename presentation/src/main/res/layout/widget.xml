@@ -61,7 +61,7 @@
         android:layout_alignParentEnd="true"
         android:background="@drawable/ripple"
         android:padding="12dp"
-        android:src="@drawable/ic_add_black_24dp"
+        android:src="@drawable/qd_add"
         tools:tint="@color/tools_theme" />
 
     <ListView

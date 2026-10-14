@@ -46,7 +46,7 @@
             android:layout_height="match_parent"
             android:padding="12dp"
             android:contentDescription="@string/settings_system_show_stt_title"
-            app:srcCompat="@drawable/ic_mic"
+            app:srcCompat="@drawable/qd_mic"
             app:tint="?android:attr/textColorPrimary" />
 
     </FrameLayout>
@@ -258,7 +258,7 @@
         android:layout_height="56dp"
         android:contentDescription="@string/compose_schedule_cancel_cd"
         android:padding="10dp"
-        android:src="@drawable/ic_cancel_black_24dp"
+        android:src="@drawable/qd_clear"
         app:layout_constraintBottom_toTopOf="@id/scheduledSeparator"
         app:layout_constraintEnd_toEndOf="@id/messageBackground"
         app:tint="?android:attr/textColorSecondary" />
@@ -319,7 +319,7 @@
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/compose_sim_cd"
         android:padding="8dp"
-        android:src="@drawable/ic_sim_card_black_24dp"
+        android:src="@drawable/qd_sim"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/messageBackground"
         app:layout_constraintEnd_toEndOf="@id/messageBackground"
@@ -364,7 +364,7 @@
         android:backgroundTint="@color/accent"
         android:contentDescription="@string/compose_send_cd"
         android:padding="10dp"
-        android:src="@drawable/ic_send_black_24dp"
+        android:src="@drawable/qd_send"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/messageBackground"
         app:layout_constraintEnd_toEndOf="parent"
@@ -379,7 +379,7 @@
         android:background="@drawable/square_key"
         android:backgroundTint="@color/accent"
         android:contentDescription="@string/scheduled_send_cd"
-        android:src="@drawable/ic_schedule_send_black_24dp"
+        android:src="@drawable/qd_schedule"
         android:padding="10dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/messageBackground"
@@ -486,7 +486,7 @@
         android:contentDescription="@string/compose_contact_cd"
         android:elevation="4dp"
         android:padding="10dp"
-        android:src="@drawable/ic_person_black_24dp"
+        android:src="@drawable/qd_person"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/schedule"
         app:layout_constraintEnd_toEndOf="@id/attach"
@@ -520,7 +520,7 @@
         android:contentDescription="@string/compose_schedule_cd"
         android:elevation="4dp"
         android:padding="10dp"
-        android:src="@drawable/ic_event_black_24dp"
+        android:src="@drawable/qd_event"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/attachAFileIcon"
         app:layout_constraintEnd_toEndOf="@id/attach"
@@ -555,7 +555,7 @@
         android:elevation="4dp"
         android:padding="10dp"
         android:rotation="-45"
-        android:src="@drawable/ic_attachment_black_24dp"
+        android:src="@drawable/qd_attach"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/attachAnAudioMessageIcon"
         app:layout_constraintEnd_toEndOf="@id/attach"
@@ -589,7 +589,7 @@
         android:contentDescription="@string/compose_audio_message_cd"
         android:elevation="4dp"
         android:padding="10dp"
-        android:src="@drawable/ic_mic"
+        android:src="@drawable/qd_mic"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/gallery"
         app:layout_constraintEnd_toEndOf="@id/attach"
@@ -623,7 +623,7 @@
         android:contentDescription="@string/compose_gallery_cd"
         android:elevation="4dp"
         android:padding="10dp"
-        android:src="@drawable/ic_insert_photo_black_24dp"
+        android:src="@drawable/qd_photo"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/camera"
         app:layout_constraintEnd_toEndOf="@id/attach"
@@ -657,7 +657,7 @@
         android:contentDescription="@string/compose_camera_cd"
         android:elevation="4dp"
         android:padding="10dp"
-        android:src="@drawable/ic_camera_alt_black_24dp"
+        android:src="@drawable/qd_camera"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/attach"
         app:layout_constraintEnd_toEndOf="@id/attach"
@@ -690,7 +690,7 @@
         android:contentDescription="@string/compose_attach_cd"
         android:elevation="4dp"
         android:padding="10dp"
-        android:src="@drawable/ic_add_black_24dp"
+        android:src="@drawable/qd_add"
         app:layout_constraintBottom_toBottomOf="@id/messageBackground"
         app:layout_constraintStart_toStartOf="parent"
         tools:backgroundTint="@color/tools_theme"
@@ -718,7 +718,7 @@
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/compose_record_audio_msg_cd"
         android:padding="8dp"
-        android:src="@drawable/ic_mic"
+        android:src="@drawable/qd_mic"
         app:layout_constraintBottom_toBottomOf="@id/messageBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="?android:textColorSecondary" />
@@ -750,7 +750,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
-            android:background="@drawable/rounded_rectangle_22dp"
+            android:background="@drawable/rounded_rectangle_4dp"
             android:backgroundTint="#1f000000"
             android:orientation="horizontal"
             android:padding="2dp"
@@ -768,7 +768,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_weight="0"
                 android:contentDescription="@string/compose_record_audio_msg_play_pause_cd"
-                app:srcCompat="@drawable/exo_controls_play"
+                app:srcCompat="@drawable/qd_play"
                 app:tint="@color/tools_theme" />
 
             <SeekBar
@@ -826,7 +826,7 @@
                     android:layout_width="76dp"
                     android:layout_height="76dp"
                     android:layout_gravity="center"
-                    app:srcCompat="@drawable/ic_bluetooth" />
+                    app:srcCompat="@drawable/qd_bluetooth" />
 
                 <dev.octoshrimpy.quik.common.widget.MicInputCloudView
                     android:id="@+id/audioMsgRecord"
@@ -834,8 +834,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="?android:attr/selectableItemBackgroundBorderless"
-                    app:pauseIcon="@drawable/exo_icon_stop"
-                    app:playIcon="@drawable/ic_mic"
+                    app:pauseIcon="@drawable/qd_stop"
+                    app:playIcon="@drawable/qd_mic"
                     app:primaryColor="@color/textPrimaryDark" />
             </FrameLayout>
 
@@ -848,7 +848,7 @@
                 android:contentDescription="@string/compose_record_audio_msg_attach_cd"
                 android:rotation="135"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@drawable/ic_attachment_black_24dp"
+                app:srcCompat="@drawable/qd_attach"
                 app:tint="?android:attr/textColorPrimary" />
 
         </LinearLayout>

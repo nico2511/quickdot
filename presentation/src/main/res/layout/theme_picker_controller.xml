@@ -98,7 +98,7 @@
                         android:background="@drawable/square_key"
                         android:contentDescription="@string/compose_send_cd"
                         android:padding="8dp"
-                        android:src="@drawable/ic_send_black_24dp"
+                        android:src="@drawable/qd_send"
                         app:tint="@color/white" />
 
                 </LinearLayout>

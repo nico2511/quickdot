@@ -30,7 +30,7 @@ fun Uri.loadBestIconIntoImageView(context: Context, imageView: ImageView)
     if (!resourceExists(context)) {
         Glide
             .with(context)
-            .load(R.drawable.ic_missing)
+            .load(R.drawable.qd_missing)
             .into(imageView)
         return LoadBestIconIntoImageView.Missing
     }
@@ -63,7 +63,7 @@ fun Uri.loadBestIconIntoImageView(context: Context, imageView: ImageView)
         }
 
         // else, use applications built-in audio icon
-        appIcon = AppCompatResources.getDrawable(context, R.drawable.ic_round_volume_up_24)
+        appIcon = AppCompatResources.getDrawable(context, R.drawable.qd_volume)
         retVal = LoadBestIconIntoImageView.DefaultAudioIcon
     }
 
@@ -75,7 +75,7 @@ fun Uri.loadBestIconIntoImageView(context: Context, imageView: ImageView)
 
     // else, use default local generic attachment icon
     if (appIcon == null) {
-        appIcon = AppCompatResources.getDrawable(context, R.drawable.ic_attachment_black_24dp)
+        appIcon = AppCompatResources.getDrawable(context, R.drawable.qd_attach)
         retVal = LoadBestIconIntoImageView.GenericIcon
     }
 

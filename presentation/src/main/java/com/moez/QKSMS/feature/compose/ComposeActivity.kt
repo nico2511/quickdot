@@ -374,7 +374,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                         QkMediaPlayer.PlayingState.Playing -> {
                             binding.audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Playing
                             QkMediaPlayer.start()
-                            binding.audioMsgPlayerPlayPause.setImageResource(R.drawable.exo_icon_pause)
+                            binding.audioMsgPlayerPlayPause.setImageResource(R.drawable.qd_pause)
                             seekBarUpdater = getSeekBarUpdater().subscribe {
                                 binding.audioMsgPlayerSeekBar.progress = QkMediaPlayer.currentPosition
                                 binding.audioMsgPlayerSeekBar.max = QkMediaPlayer.duration
@@ -385,14 +385,14 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                         QkMediaPlayer.PlayingState.Paused -> {
                             binding.audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Paused
                             QkMediaPlayer.pause()
-                            binding.audioMsgPlayerPlayPause.setImageResource(R.drawable.exo_icon_play)
+                            binding.audioMsgPlayerPlayPause.setImageResource(R.drawable.qd_play)
                             seekBarUpdater?.dispose()
                         }
 
                         else -> {
                             binding.audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Stopped
                             QkMediaPlayer.reset()
-                            binding.audioMsgPlayerPlayPause.setImageResource(R.drawable.exo_icon_play)
+                            binding.audioMsgPlayerPlayPause.setImageResource(R.drawable.qd_play)
                             seekBarUpdater?.dispose()
                             binding.audioMsgPlayerSeekBar.progress = 0
                             binding.audioMsgPlayerSeekBar.isEnabled = false

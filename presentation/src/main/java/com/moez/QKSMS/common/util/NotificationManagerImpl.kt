@@ -301,7 +301,7 @@ class NotificationManagerImpl @Inject constructor(
                                 MessageMarkReceiver.MarkType.Archived.getRequestCode(threadId),
                                 intent,
                                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-                            NotificationCompat.Action.Builder(R.drawable.ic_archive_white_24dp, actionLabels[action], pi)
+                            NotificationCompat.Action.Builder(R.drawable.qd_notif_archive, actionLabels[action], pi)
                                     .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_ARCHIVE).build()
                         }
 
@@ -312,7 +312,7 @@ class NotificationManagerImpl @Inject constructor(
                                     .putExtra("messageIds", messageIds)
                             val pi = PendingIntent.getBroadcast(context, threadId.toInt(), intent,
                                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-                            NotificationCompat.Action.Builder(R.drawable.ic_delete_white_24dp, actionLabels[action], pi)
+                            NotificationCompat.Action.Builder(R.drawable.qd_notif_delete, actionLabels[action], pi)
                                     .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_DELETE).build()
                         }
 
@@ -320,7 +320,7 @@ class NotificationManagerImpl @Inject constructor(
                             val intent = Intent(context, BlockThreadReceiver::class.java).putExtra("threadId", threadId)
                             val pi = PendingIntent.getBroadcast(context, threadId.toInt(), intent,
                                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-                            NotificationCompat.Action.Builder(R.drawable.ic_block_white_24dp, actionLabels[action], pi)
+                            NotificationCompat.Action.Builder(R.drawable.qd_notif_block, actionLabels[action], pi)
                                     .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_MUTE).build()
                         }
 
@@ -333,7 +333,7 @@ class NotificationManagerImpl @Inject constructor(
                                 MessageMarkReceiver.MarkType.Read.getRequestCode(threadId),
                                 intent,
                                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-                            NotificationCompat.Action.Builder(R.drawable.ic_check_white_24dp, actionLabels[action], pi)
+                            NotificationCompat.Action.Builder(R.drawable.qd_notif_check, actionLabels[action], pi)
                                     .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ).build()
                         }
 
@@ -345,7 +345,7 @@ class NotificationManagerImpl @Inject constructor(
                                 val pi = PendingIntent.getActivity(context, threadId.toInt(), intent,
                                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                                 NotificationCompat.Action
-                                        .Builder(R.drawable.ic_reply_white_24dp, actionLabels[action], pi)
+                                        .Builder(R.drawable.qd_notif_reply, actionLabels[action], pi)
                                         .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_REPLY).build()
                             }
                         }
@@ -356,7 +356,7 @@ class NotificationManagerImpl @Inject constructor(
                             val intent = Intent(intentAction, "tel:$address".toUri())
                             val pi = PendingIntent.getActivity(context, threadId.toInt(), intent,
                                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-                            NotificationCompat.Action.Builder(R.drawable.ic_call_white_24dp, actionLabels[action], pi)
+                            NotificationCompat.Action.Builder(R.drawable.qd_notif_call, actionLabels[action], pi)
                                     .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_CALL).build()
                         }
 
@@ -364,7 +364,7 @@ class NotificationManagerImpl @Inject constructor(
                             val intent = Intent(context, SpeakThreadsReceiver::class.java).putExtra("threadId", threadId)
                             val pi = PendingIntent.getBroadcast(context, 0, intent,
                                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-                            NotificationCompat.Action.Builder(R.drawable.ic_speaker_black_24dp, actionLabels[action], pi)
+                            NotificationCompat.Action.Builder(R.drawable.qd_notif_speaker, actionLabels[action], pi)
                                 .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_NONE).build()
                         }
 
@@ -432,7 +432,7 @@ class NotificationManagerImpl @Inject constructor(
         )
 
         val resendAction = NotificationCompat.Action.Builder(
-            R.drawable.ic_send_black_24dp,
+            R.drawable.qd_notif_send,
             context.getString(R.string.notification_message_failed_action),
             resendPendingIntent
         )
@@ -445,7 +445,7 @@ class NotificationManagerImpl @Inject constructor(
                 .addAction(resendAction)
                 .setColor(colors.theme(lastRecipient).theme)
                 .setPriority(NotificationManagerCompat.IMPORTANCE_MAX)
-                .setSmallIcon(R.drawable.ic_notification_failed)
+                .setSmallIcon(R.drawable.qd_notif_failed)
                 .setAutoCancel(true)
                 .setContentIntent(contentPI)
                 .setSound(Uri.parse(prefs.ringtone(threadId).get()))
@@ -470,7 +470,7 @@ class NotificationManagerImpl @Inject constructor(
             remoteInput.setChoices(responseSet)
         }
 
-        return NotificationCompat.Action.Builder(R.drawable.ic_reply_white_24dp, title, replyPI)
+        return NotificationCompat.Action.Builder(R.drawable.qd_notif_reply, title, replyPI)
                 .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_REPLY)
                 .addRemoteInput(remoteInput.build())
                 .build()
@@ -584,7 +584,7 @@ class NotificationManagerImpl @Inject constructor(
                 .setContentTitle(context.getString(R.string.backup_restoring))
                 .setShowWhen(false)
                 .setWhen(System.currentTimeMillis()) // Set this anyway in case it's shown
-                .setSmallIcon(R.drawable.ic_file_download_black_24dp)
+                .setSmallIcon(R.drawable.qd_notif_download)
                 .setColor(colors.theme().theme)
                 .setCategory(NotificationCompat.CATEGORY_PROGRESS)
                 .setPriority(NotificationCompat.PRIORITY_MIN)

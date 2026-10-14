@@ -107,7 +107,7 @@
         android:layout_height="56dp"
         android:background="?attr/selectableItemBackground"
         android:padding="16dp"
-        android:src="@drawable/ic_cancel_black_24dp"
+        android:src="@drawable/qd_clear"
         app:tint="?android:attr/textColorSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

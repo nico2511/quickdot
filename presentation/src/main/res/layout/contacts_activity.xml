@@ -74,7 +74,7 @@
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/contacts_clear"
             android:padding="8dp"
-            android:src="@drawable/ic_cancel_black_24dp"
+            android:src="@drawable/qd_clear"
             android:visibility="gone"
             app:tint="?android:attr/textColorSecondary"
             tools:visibility="visible" />

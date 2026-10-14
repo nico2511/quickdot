@@ -31,7 +31,7 @@
     android:layout_height="24dp"
     android:layout_gravity="center_vertical"
     android:layout_marginStart="6dp"
-    android:src="@drawable/ic_person_black_24dp"
+    android:src="@drawable/qd_person"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"

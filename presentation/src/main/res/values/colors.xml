@@ -30,6 +30,7 @@
 
     <color name="backgroundLight">#FFFFFF</color>
     <color name="backgroundDark">#1B1B1B</color>
+    <color name="dialogSurface">@color/backgroundLight</color>
     <color name="surfaceLight">#F3F3F3</color>
     <color name="surfaceDark">#2A2A2A</color>
 

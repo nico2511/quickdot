@@ -25,7 +25,8 @@ import androidx.appcompat.app.AlertDialog
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.databinding.TextInputDialogBinding
 
-class TextInputDialog(context: Activity, hint: String, listener: (String) -> Unit) : AlertDialog(context) {
+class TextInputDialog(context: Activity, hint: String, listener: (String) -> Unit) :
+    AlertDialog(context, R.style.QuickdotAlertDialog) {
 
     private val layout = TextInputDialogBinding.inflate(LayoutInflater.from(context))
 

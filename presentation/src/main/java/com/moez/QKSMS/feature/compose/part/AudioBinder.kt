@@ -85,13 +85,13 @@ class AudioBinder @Inject constructor(
         binding.seekBar.max = QkMediaPlayer.duration
         binding.seekBar.isEnabled = true
         binding.seekBar.progress = QkMediaPlayer.currentPosition
-        binding.playPause.setImageResource(R.drawable.exo_icon_pause)
+        binding.playPause.setImageResource(R.drawable.qd_pause)
         binding.playPause.tag = QkMediaPlayer.PlayingState.Playing
         binding.metadataTitle.isSelected = true     // start marquee
     }
 
     private fun uiToPaused(binding: MmsAudioPreviewListItemBinding) {
-        binding.playPause.setImageResource(R.drawable.exo_icon_play)
+        binding.playPause.setImageResource(R.drawable.qd_play)
         binding.playPause.tag = QkMediaPlayer.PlayingState.Paused
     }
 
@@ -99,7 +99,7 @@ class AudioBinder @Inject constructor(
         binding.seekBar.progress = 0
         binding.seekBar.max = 0
         binding.seekBar.isEnabled = false
-        binding.playPause.setImageResource(R.drawable.exo_icon_play)
+        binding.playPause.setImageResource(R.drawable.qd_play)
         binding.playPause.tag = QkMediaPlayer.PlayingState.Stopped
         binding.metadataTitle.isSelected = false   // stop marquee
     }

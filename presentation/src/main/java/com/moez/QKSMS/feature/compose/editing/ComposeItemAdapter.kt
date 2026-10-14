@@ -95,7 +95,7 @@ class ComposeItemAdapter @Inject constructor(
     }
 
     private fun bindNew(binding: ContactListItemBinding, contact: Contact) {
-        showSection(binding, binding.root.context.getString(R.string.contacts_section_new), R.drawable.ic_add_black_24dp)
+        showSection(binding, binding.root.context.getString(R.string.contacts_section_new), R.drawable.qd_add)
 
         binding.avatar.recipients = listOf(createRecipient(contact))
 
@@ -108,7 +108,7 @@ class ComposeItemAdapter @Inject constructor(
 
     private fun bindRecent(binding: ContactListItemBinding, conversation: Conversation, prev: ComposeItem?) {
         if (prev !is ComposeItem.Recent) {
-            showSection(binding, binding.root.context.getString(R.string.contacts_section_recent), R.drawable.ic_history_black_24dp)
+            showSection(binding, binding.root.context.getString(R.string.contacts_section_recent), R.drawable.qd_history)
         } else {
             hideSection(binding)
         }
@@ -131,7 +131,7 @@ class ComposeItemAdapter @Inject constructor(
 
     private fun bindStarred(binding: ContactListItemBinding, contact: Contact, prev: ComposeItem?) {
         if (prev !is ComposeItem.Starred) {
-            showSection(binding, binding.root.context.getString(R.string.contacts_section_starred), R.drawable.ic_star_black_24dp)
+            showSection(binding, binding.root.context.getString(R.string.contacts_section_starred), R.drawable.qd_star)
         } else {
             hideSection(binding)
         }
@@ -148,7 +148,7 @@ class ComposeItemAdapter @Inject constructor(
 
     private fun bindGroup(binding: ContactListItemBinding, group: ContactGroup, prev: ComposeItem?) {
         if (prev !is ComposeItem.Group) {
-            showSection(binding, binding.root.context.getString(R.string.contacts_section_groups), R.drawable.ic_people_black_24dp)
+            showSection(binding, binding.root.context.getString(R.string.contacts_section_groups), R.drawable.qd_people)
         } else {
             hideSection(binding)
         }

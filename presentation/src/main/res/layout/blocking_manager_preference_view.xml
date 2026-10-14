@@ -36,7 +36,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?android:attr/textColorSecondary"
-        tools:src="@drawable/ic_block_white_24dp" />
+        tools:src="@drawable/qd_block" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/titleView"

@@ -21,20 +21,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="?android:attr/windowBackground">
+
+    <View
+        android:id="@+id/sprocket"
+        android:layout_width="12dp"
+        android:layout_height="0dp"
+        android:background="@drawable/sprocket_rail"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toBottomOf="@id/snackbarMessage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rule"
+        android:layout_width="84dp"
+        android:layout_height="12dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/dotted_rule"
+        app:layout_constraintStart_toEndOf="@id/sprocket"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/snackbarTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:paddingTop="16dp"
+        android:layout_marginTop="4dp"
         android:textColor="?android:attr/textColorPrimary"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/snackbarMessage"
         app:layout_constraintEnd_toStartOf="@id/snackbarButton"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/sprocket"
+        app:layout_constraintTop_toBottomOf="@id/rule"
+        app:textFont="display"
         app:textSize="primary"
         tools:text="Love texting again" />
 
@@ -43,29 +64,33 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:paddingBottom="16dp"
+        android:paddingBottom="12dp"
         android:textColor="?android:attr/textColorSecondary"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/snackbarButton"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/sprocket"
+        app:layout_constraintTop_toBottomOf="@id/snackbarTitle"
+        app:textFont="body"
         app:textSize="secondary"
-        tools:text="Make QUIK your default SMS app" />
+        tools:text="Make Quickdot your default SMS app" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/snackbarButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:background="?attr/selectableItemBackground"
-        android:padding="16dp"
-        android:textAllCaps="true"
-        android:textColor="@color/tools_theme"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/snackbarMessage"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/square_outline"
+        android:letterSpacing="0.08"
+        android:paddingStart="12dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="8dp"
+        android:textAllCaps="false"
+        android:textColor="@color/accent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/snackbarTitle"
+        app:layout_constraintTop_toTopOf="parent"
         app:textColor="theme"
+        app:textFont="label"
         app:textSize="secondary"
         tools:text="Change" />
 

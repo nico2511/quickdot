@@ -69,7 +69,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/rounded_rectangle_22dp"
+        android:background="@drawable/rounded_rectangle_4dp"
         android:backgroundTint="?attr/bubbleColor"
         app:layout_constraintBottom_toBottomOf="@id/message"
         app:layout_constraintEnd_toStartOf="@id/send"
@@ -106,7 +106,7 @@
         android:background="?attr/selectableItemBackground"
         android:contentDescription="@string/compose_sim_cd"
         android:padding="10dp"
-        android:src="@drawable/ic_sim_card_black_24dp"
+        android:src="@drawable/qd_sim"
         app:tint="?android:attr/textColorSecondary"
         app:layout_constraintBottom_toBottomOf="@id/message"
         app:layout_constraintEnd_toEndOf="@id/messageBackground" />
@@ -144,13 +144,14 @@
         android:layout_width="44dp"
         android:layout_height="44dp"
         android:layout_marginEnd="8dp"
+        android:background="@drawable/square_key"
+        android:backgroundTint="@color/accent"
         android:contentDescription="@string/compose_send_cd"
         android:padding="10dp"
-        android:src="@drawable/ic_send_black_24dp"
-        app:tint="?android:textColorSecondary"
+        android:src="@drawable/qd_send"
         app:layout_constraintBottom_toBottomOf="@id/message"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:backgroundTint="@color/tools_theme" />
+        app:tint="@color/white" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"

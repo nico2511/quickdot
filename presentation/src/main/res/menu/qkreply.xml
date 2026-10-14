@@ -22,19 +22,19 @@
 
     <item
         android:id="@+id/read"
-        android:icon="@drawable/ic_check_white_24dp"
+        android:icon="@drawable/qd_check"
         android:title="@string/qkreply_menu_read"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/expand"
-        android:icon="@drawable/ic_unfold_more_black_24dp"
+        android:icon="@drawable/qd_unfold_more"
         android:title="@string/qkreply_menu_expand"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/collapse"
-        android:icon="@drawable/ic_unfold_less_black_24dp"
+        android:icon="@drawable/qd_unfold_less"
         android:title="@string/qkreply_menu_collapse"
         android:visible="false"
         app:showAsAction="ifRoom" />

@@ -156,7 +156,7 @@ class BackupController : QkController<BackupControllerBinding, BackupView, Backu
     override fun render(state: BackupState) {
         when {
             state.backupProgress.running -> {
-                binding.progressIcon.setImageResource(R.drawable.ic_file_upload_black_24dp)
+                binding.progressIcon.setImageResource(R.drawable.qd_upload)
                 binding.progressTitle.setText(R.string.backup_backing_up)
                 binding.progressSummary.text = state.backupProgress.getLabel(activity!!)
                 binding.progressSummary.isVisible = binding.progressSummary.text.isNotEmpty()
@@ -172,7 +172,7 @@ class BackupController : QkController<BackupControllerBinding, BackupView, Backu
             }
 
             state.restoreProgress.running -> {
-                binding.progressIcon.setImageResource(R.drawable.ic_file_download_black_24dp)
+                binding.progressIcon.setImageResource(R.drawable.qd_download)
                 binding.progressTitle.setText(R.string.backup_restoring)
                 binding.progressSummary.text = state.restoreProgress.getLabel(activity!!)
                 binding.progressSummary.isVisible = binding.progressSummary.text.isNotEmpty()

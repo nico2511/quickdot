@@ -24,8 +24,10 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.widget.RemoteViews
 import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
 import dev.octoshrimpy.quik.receiver.SpeakThreadsReceiver
 
 class WidgetSpeakUnseenProvider : AppWidgetProvider() {
@@ -49,6 +51,16 @@ class WidgetSpeakUnseenProvider : AppWidgetProvider() {
 
         val remoteViews = RemoteViews(context.packageName, R.layout.widget_speak_unseen)
 
+        val night = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK ==
+                Configuration.UI_MODE_NIGHT_YES
+        remoteViews.setInt(R.id.speakUnseenBackground, "setColorFilter", context.getColorCompat(when (night) {
+            true -> R.color.backgroundDark
+            false -> R.color.white
+        }))
+        remoteViews.setInt(R.id.speakUnseenImage, "setColorFilter", context.getColorCompat(when (night) {
+            true -> R.color.textPrimaryDark
+            false -> R.color.textPrimary
+        }))
         remoteViews.setImageViewResource(R.id.speakUnseenImage, R.drawable.ic_speak_unseen_widget)
 
         // speak unseen intent
@@ -59,7 +71,7 @@ class WidgetSpeakUnseenProvider : AppWidgetProvider() {
                 .putExtra("threadId", -1L),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        remoteViews.setOnClickPendingIntent(R.id.speakUnseenImage, speakUnseenPendingIntent)
+        remoteViews.setOnClickPendingIntent(R.id.speakUnseenRoot, speakUnseenPendingIntent)
 
         AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, remoteViews)
     }

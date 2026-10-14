@@ -18,17 +18,21 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/frameLayout"
+    android:id="@+id/speakUnseenRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/speakUnseenBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:src="@drawable/rounded_rectangle_4dp" />
 
     <ImageView
         android:id="@+id/speakUnseenImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="2dp"
-        android:paddingTop="2dp"
-        android:paddingRight="2dp"
-        android:paddingBottom="2dp"
+        android:padding="16dp"
         android:visibility="visible" />
 </FrameLayout>

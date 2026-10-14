@@ -30,10 +30,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <View
+        android:id="@+id/sprocket"
+        android:layout_width="12dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@drawable/sprocket_rail_on_dark"
+        android:importantForAccessibility="no" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:layout_marginStart="12dp"
         android:background="@color/toolbarTranslucent"
         android:gravity="center_vertical"
         android:minHeight="56dp">
@@ -53,6 +62,7 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/textPrimaryDark"
+                app:textFont="display"
                 app:textSize="toolbar"
                 tools:text="Conversations" />
 

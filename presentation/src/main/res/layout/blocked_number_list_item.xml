@@ -56,7 +56,7 @@
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/blocking_unblock_title"
         android:padding="12dp"
-        android:src="@drawable/ic_close_black_24dp"
+        android:src="@drawable/qd_clear"
         app:tint="?android:attr/textColorSecondary" />
 
 </LinearLayout>

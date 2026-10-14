@@ -135,10 +135,10 @@
                 android:layout_width="52dp"
                 android:layout_height="52dp"
                 android:layout_marginStart="12dp"
-                android:background="@drawable/circle_ripple"
+                android:background="@drawable/square_ripple"
                 android:contentDescription="@string/main_fab_cd"
                 android:padding="14dp"
-                android:src="@drawable/ic_add_black_24dp"
+                android:src="@drawable/qd_add"
                 app:tint="@color/white"
                 tools:backgroundTint="@color/accent" />
 

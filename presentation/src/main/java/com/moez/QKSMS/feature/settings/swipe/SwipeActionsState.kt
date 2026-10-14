@@ -22,9 +22,9 @@ import androidx.annotation.DrawableRes
 import dev.octoshrimpy.quik.R
 
 data class SwipeActionsState(
-    @DrawableRes val rightIcon: Int = R.drawable.ic_archive_white_24dp,
+    @DrawableRes val rightIcon: Int = R.drawable.qd_archive,
     val rightLabel: String = "",
 
-    @DrawableRes val leftIcon: Int = R.drawable.ic_archive_white_24dp,
+    @DrawableRes val leftIcon: Int = R.drawable.qd_archive,
     val leftLabel: String = ""
 )

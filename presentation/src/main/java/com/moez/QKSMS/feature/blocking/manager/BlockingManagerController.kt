@@ -1,7 +1,7 @@
 package dev.octoshrimpy.quik.feature.blocking.manager
 
 import android.app.Activity
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
@@ -81,8 +81,8 @@ class BlockingManagerController : QkController<BlockingManagerControllerBinding,
     }
 
     private fun getActionIcon(installed: Boolean): Int = when {
-        !installed -> R.drawable.ic_chevron_right_black_24dp
-        else -> R.drawable.ic_check_white_24dp
+        !installed -> R.drawable.qd_chevron
+        else -> R.drawable.qd_check
     }
 
     override fun activityResumed(): Observable<*> = activityResumedSubject
@@ -92,7 +92,7 @@ class BlockingManagerController : QkController<BlockingManagerControllerBinding,
     override fun siaClicked(): Observable<*> = binding.shouldIAnswer.clicks()
 
     override fun showCopyDialog(manager: String): Single<Boolean> = Single.create { emitter ->
-        AlertDialog.Builder(activity)
+        AlertDialog.Builder(activity!!)
                 .setTitle(R.string.blocking_manager_copy_title)
                 .setMessage(resources?.getString(R.string.blocking_manager_copy_summary, manager))
                 .setPositiveButton(R.string.button_continue) { _, _ -> emitter.onSuccess(true) }

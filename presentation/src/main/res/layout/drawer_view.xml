@@ -67,7 +67,7 @@
             <ImageView
                 android:id="@+id/inboxIcon"
                 style="@style/DrawerIcon"
-                android:src="@drawable/ic_inbox_black_24dp"
+                android:src="@drawable/qd_inbox"
                 tools:tint="?android:attr/textColorPrimary" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
@@ -86,7 +86,7 @@
             <ImageView
                 android:id="@+id/archivedIcon"
                 style="@style/DrawerIcon"
-                android:src="@drawable/ic_archive_white_24dp"
+                android:src="@drawable/qd_archive"
                 tools:tint="?android:attr/textColorSecondary" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
@@ -121,7 +121,7 @@
 
             <ImageView
                 style="@style/DrawerIcon"
-                android:src="@drawable/ic_import_export_black_24dp"
+                android:src="@drawable/qd_swap"
                 app:tint="?android:attr/textColorSecondary" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
@@ -138,7 +138,7 @@
 
             <ImageView
                 style="@style/DrawerIcon"
-                android:src="@drawable/ic_event_black_24dp"
+                android:src="@drawable/qd_event"
                 app:tint="?android:attr/textColorSecondary" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
@@ -155,7 +155,7 @@
 
             <ImageView
                 style="@style/DrawerIcon"
-                android:src="@drawable/ic_block_white_24dp"
+                android:src="@drawable/qd_block"
                 app:tint="?android:attr/textColorSecondary" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
@@ -206,7 +206,7 @@
 
             <ImageView
                 style="@style/DrawerIcon"
-                android:src="@drawable/ic_settings_black_24dp"
+                android:src="@drawable/qd_settings"
                 app:tint="?android:attr/textColorSecondary" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
@@ -223,7 +223,7 @@
 
             <ImageView
                 style="@style/DrawerIcon"
-                android:src="@drawable/ic_info_black_24dp"
+                android:src="@drawable/qd_info"
                 app:tint="?android:attr/textColorSecondary" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
@@ -240,7 +240,7 @@
 
             <ImageView
                 style="@style/DrawerIcon"
-                android:src="@drawable/ic_person_add_black_24dp"
+                android:src="@drawable/qd_person_add"
                 app:tint="?android:attr/textColorSecondary" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
@@ -264,7 +264,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
-                android:src="@drawable/ic_favorite_black_24dp"
+                android:src="@drawable/qd_heart"
                 app:layout_constraintBottom_toBottomOf="@id/rateSummary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/rateTitle"

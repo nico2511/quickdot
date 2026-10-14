@@ -39,7 +39,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
-            android:src="@drawable/ic_person_black_24dp"
+            android:src="@drawable/qd_person"
             app:tint="?android:attr/textColorSecondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -87,7 +87,7 @@
         android:layout_marginEnd="2dp"
         android:background="@drawable/circle"
         android:backgroundTint="?attr/bubbleColor"
-        android:src="@drawable/ic_cancel_black_24dp"
+        android:src="@drawable/qd_clear"
         app:tint="?android:attr/textColorSecondary" />
 
 </FrameLayout>

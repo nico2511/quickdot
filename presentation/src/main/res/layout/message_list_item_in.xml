@@ -65,7 +65,7 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_marginEnd="2dp"
-                android:src="@drawable/ic_sim_card_black_24dp"
+                android:src="@drawable/qd_sim"
                 app:layout_constraintBottom_toBottomOf="@id/timestamp"
                 app:layout_constraintEnd_toStartOf="@id/simIndex"
                 app:layout_constraintStart_toEndOf="@id/timestamp"

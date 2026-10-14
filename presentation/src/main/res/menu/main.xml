@@ -29,70 +29,70 @@
 
     <item
         android:id="@+id/archive"
-        android:icon="@drawable/ic_archive_white_24dp"
+        android:icon="@drawable/qd_archive"
         android:title="@string/main_menu_archive"
         android:visible="false"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/unarchive"
-        android:icon="@drawable/ic_inbox_black_24dp"
+        android:icon="@drawable/qd_inbox"
         android:title="@string/main_menu_unarchive"
         android:visible="false"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/delete"
-        android:icon="@drawable/ic_delete_white_24dp"
+        android:icon="@drawable/qd_delete"
         android:title="@string/main_menu_delete"
         android:visible="false"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/add"
-        android:icon="@drawable/ic_person_add_black_24dp"
+        android:icon="@drawable/qd_person_add"
         android:title="@string/main_menu_add_contact"
         android:visible="false"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/pin"
-        android:icon="@drawable/ic_baseline_push_pin_24"
+        android:icon="@drawable/qd_pin"
         android:title="@string/main_menu_pin"
         android:visible="false"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/unpin"
-        android:icon="@drawable/ic_baseline_push_pin_24"
+        android:icon="@drawable/qd_pin"
         android:title="@string/main_menu_unpin"
         android:visible="false"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/read"
-        android:icon="@drawable/ic_drafts_black_24dp"
+        android:icon="@drawable/qd_drafts"
         android:title="@string/main_menu_read"
         android:visible="false"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/unread"
-        android:icon="@drawable/ic_markunread_black_24dp"
+        android:icon="@drawable/qd_unread"
         android:title="@string/main_menu_unread"
         android:visible="false"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/block"
-        android:icon="@drawable/ic_block_white_24dp"
+        android:icon="@drawable/qd_block"
         android:title="@string/main_menu_block"
         android:visible="false"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/rename"
-        android:icon="@drawable/ic_pencil_black_24dp"
+        android:icon="@drawable/qd_pencil"
         android:title="@string/main_menu_rename_conversation"
         android:visible="false"
         app:showAsAction="ifRoom" />

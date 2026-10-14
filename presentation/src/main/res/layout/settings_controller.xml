@@ -87,7 +87,7 @@
             android:id="@+id/theme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icon="@drawable/ic_color_lens_black_24dp"
+            app:icon="@drawable/qd_swatch"
             app:title="@string/settings_theme_title"
             app:widget="@layout/settings_theme_widget" />
 
@@ -95,7 +95,7 @@
             android:id="@+id/night"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icon="@drawable/ic_invert_colors_black_24dp"
+            app:icon="@drawable/qd_invert"
             app:title="@string/settings_night_title"
             tools:summary="Automatic" />
 
@@ -127,7 +127,7 @@
             android:id="@+id/textSize"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icon="@drawable/ic_format_size_black_24dp"
+            app:icon="@drawable/qd_size"
             app:title="@string/settings_text_size_title" />
 
         <dev.octoshrimpy.quik.common.widget.PreferenceView
@@ -135,7 +135,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:icon="@drawable/ic_person_black_24dp"
+            app:icon="@drawable/qd_person"
             app:title="@string/settings_automatic_colors_title"
             app:widget="@layout/settings_switch_widget" />
 
@@ -143,7 +143,7 @@
             android:id="@+id/systemFont"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icon="@drawable/ic_title_black_24dp"
+            app:icon="@drawable/qd_title"
             app:title="@string/settings_system_font_title"
             app:widget="@layout/settings_switch_widget" />
 
@@ -151,7 +151,7 @@
             android:id="@+id/showStt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icon="@drawable/ic_speech_to_text_black"
+            app:icon="@drawable/qd_speech"
             app:title="@string/settings_system_show_stt_title"
             app:widget="@layout/settings_switch_widget" />
 
@@ -163,7 +163,7 @@
             android:id="@+id/notifications"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icon="@drawable/ic_notifications_black_24dp"
+            app:icon="@drawable/qd_bell"
             app:title="@string/settings_notifications_title" />
 
         <dev.octoshrimpy.quik.common.widget.PreferenceView
@@ -178,7 +178,7 @@
             android:id="@+id/delayed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icon="@drawable/ic_av_timer_black_24dp"
+            app:icon="@drawable/qd_timer"
             app:title="@string/settings_delayed_title"
             tools:summary="No delay" />
 
@@ -187,7 +187,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
-            app:icon="@drawable/ic_clear_all_black_24dp"
+            app:icon="@drawable/qd_clear_all"
             app:summary="@string/settings_swipe_actions_summary"
             app:title="@string/settings_swipe_actions" />
 
@@ -195,7 +195,7 @@
             android:id="@+id/delivery"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icon="@drawable/ic_check_white_24dp"
+            app:icon="@drawable/qd_check"
             app:summary="@string/settings_delivery_summary"
             app:title="@string/settings_delivery_title"
             app:widget="@layout/settings_switch_widget" />
@@ -204,7 +204,7 @@
             android:id="@+id/unreadAtTop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icon="@drawable/ic_unreadattop_all_black_24dp"
+            app:icon="@drawable/qd_unread_top"
             app:summary="@string/settings_unread_at_top_summary"
             app:title="@string/settings_unread_at_top_title"
             app:widget="@layout/settings_switch_widget" />
@@ -213,14 +213,14 @@
             android:id="@+id/signature"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icon="@drawable/ic_short_text_black_24dp"
+            app:icon="@drawable/qd_text"
             app:title="@string/settings_signature_title" />
 
         <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/unicode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icon="@drawable/ic_translate_black_24dp"
+            app:icon="@drawable/qd_translate"
             app:summary="@string/settings_unicode_summary"
             app:title="@string/settings_unicode_title"
             app:widget="@layout/settings_switch_widget" />
@@ -229,7 +229,7 @@
             android:id="@+id/mobileOnly"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icon="@drawable/ic_smartphone_black_24dp"
+            app:icon="@drawable/qd_phone"
             app:summary="@string/settings_mobile_summary"
             app:title="@string/settings_mobile_title"
             app:widget="@layout/settings_switch_widget" />
@@ -238,7 +238,7 @@
             android:id="@+id/longAsMms"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icon="@drawable/ic_message_black_24dp"
+            app:icon="@drawable/qd_message"
             app:summary="@string/settings_long_as_mms_summary"
             app:title="@string/settings_long_as_mms_title"
             app:widget="@layout/settings_switch_widget" />
@@ -248,7 +248,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
-            app:icon="@drawable/ic_photo_size_select_actual_black_24dp"
+            app:icon="@drawable/qd_photo_size"
             app:title="@string/settings_mms_size_title"
             tools:summary="100KB" />
 
@@ -257,7 +257,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
-            app:icon="@drawable/ic_warning"
+            app:icon="@drawable/qd_warning"
             app:title="@string/settings_mms_weblink_title"
             tools:summary="100KB" />
 
@@ -265,7 +265,7 @@
             android:id="@+id/disableScreenshots"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icon="@drawable/ic_screenshot"
+            app:icon="@drawable/qd_screenshot"
             app:summary="@string/settings_diable_screenshots_summary"
             app:title="@string/settings_disable_screenshots_title"
             app:widget="@layout/settings_switch_widget" />
@@ -278,7 +278,7 @@
             android:id="@+id/sync"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icon="@drawable/ic_sync_black_24dp"
+            app:icon="@drawable/qd_sync"
             app:summary="@string/settings_sync_summary"
             app:title="@string/settings_sync_title" />
 
@@ -297,7 +297,7 @@
             android:id="@+id/about"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icon="@drawable/ic_info_black_24dp"
+            app:icon="@drawable/qd_info"
             app:title="@string/settings_about_title"
             tools:summary="@string/settings_version" />
 

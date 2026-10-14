@@ -6,5 +6,5 @@
     android:viewportHeight="24">
     <path
         android:fillColor="#FF000000"
-        android:pathData="M4,2h2v2h-2zM6,2h2v2h-2zM2,4h2v2h-2zM4,4h2v2h-2zM6,4h2v2h-2zM8,4h2v2h-2zM18,4h2v2h-2zM20,4h2v2h-2zM4,6h2v2h-2zM6,6h2v2h-2zM18,6h2v2h-2zM20,6h2v2h-2zM2,8h2v2h-2zM4,8h2v2h-2zM6,8h2v2h-2zM8,8h2v2h-2zM10,8h2v2h-2zM16,8h2v2h-2zM18,8h2v2h-2zM20,8h2v2h-2zM22,8h2v2h-2zM0,10h2v2h-2zM10,10h2v2h-2zM16,10h2v2h-2zM18,10h2v2h-2zM20,10h2v2h-2zM22,10h2v2h-2zM0,12h2v2h-2zM10,12h2v2h-2zM18,12h2v2h-2zM20,12h2v2h-2zM18,14h2v2h-2zM20,14h2v2h-2z" />
+        android:pathData="M4,5h2v2h-2zM6,5h2v2h-2zM2,7h2v2h-2zM4,7h2v2h-2zM6,7h2v2h-2zM8,7h2v2h-2zM18,7h2v2h-2zM20,7h2v2h-2zM4,9h2v2h-2zM6,9h2v2h-2zM18,9h2v2h-2zM20,9h2v2h-2zM2,11h2v2h-2zM4,11h2v2h-2zM6,11h2v2h-2zM8,11h2v2h-2zM10,11h2v2h-2zM16,11h2v2h-2zM18,11h2v2h-2zM20,11h2v2h-2zM22,11h2v2h-2zM0,13h2v2h-2zM10,13h2v2h-2zM16,13h2v2h-2zM18,13h2v2h-2zM20,13h2v2h-2zM22,13h2v2h-2zM0,15h2v2h-2zM10,15h2v2h-2zM18,15h2v2h-2zM20,15h2v2h-2zM18,17h2v2h-2zM20,17h2v2h-2z" />
 </vector>

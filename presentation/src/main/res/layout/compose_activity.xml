@@ -69,9 +69,9 @@
 
     <View
         android:id="@+id/sprocket"
-        android:layout_width="12dp"
+        android:layout_width="8dp"
         android:layout_height="0dp"
-        android:background="@drawable/sprocket_rail"
+        android:background="@drawable/sprocket_rail_subtle"
         android:importantForAccessibility="no"
         app:layout_constraintBottom_toBottomOf="@id/messageList"
         app:layout_constraintStart_toStartOf="parent"

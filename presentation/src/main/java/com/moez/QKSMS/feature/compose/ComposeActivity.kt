@@ -224,6 +224,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         binding.toolbarAvatar.square = true
         binding.toolbarAvatar.speakerInk = true
+        applyThreadSprocket()
         viewModel.bindView(this)
 
         binding.contentView.layoutTransition = LayoutTransition().apply {
@@ -844,6 +845,18 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         cameraDestination = savedInstanceState.getParcelable(ComposeView.CAMERA_DESTINATION_KEY)
         super.onRestoreInstanceState(savedInstanceState)
+    }
+
+    /** Rail A is the subtle sprocket. Rail B removes it from this thread only. */
+    private fun applyThreadSprocket() {
+        val rail = binding.sprocket
+        if (ThreadChrome.SPROCKET_SUBTLE) {
+            rail.setBackgroundResource(R.drawable.sprocket_rail_subtle)
+            rail.layoutParams.width = 8.dpToPx(this)
+            rail.setVisible(true)
+        } else {
+            rail.setVisible(false)
+        }
     }
 
     override fun onBackPressed() = backPressedIntent.onNext(Unit)

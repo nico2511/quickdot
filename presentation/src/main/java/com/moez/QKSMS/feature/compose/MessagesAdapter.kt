@@ -21,6 +21,7 @@ package dev.octoshrimpy.quik.feature.compose
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.text.Layout
@@ -38,6 +39,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.jakewharton.rxbinding2.view.clicks
 import com.moez.QKSMS.common.QkMediaPlayer
@@ -352,6 +354,7 @@ class MessagesAdapter @Inject constructor(
                             (message.subId != previous?.subId) &&
                             (subscription != null)
             )
+            applyDateBand(this)
         }
 
         simIndex.text = subscription?.simSlotIndex?.plus(1)?.toString()
@@ -560,6 +563,33 @@ class MessagesAdapter @Inject constructor(
     fun expandMessages(messageIds: List<Long>, expand: Boolean) {
         messageIds.forEach { expanded[it] = expand }
         notifyDataSetChanged()
+    }
+
+    /** Date rule A is three quiet dots. Date rule B is the label alone, with spacing. */
+    private fun applyDateBand(timestamp: TextView) {
+        if (ThreadChrome.DATE_RULE_FINE) {
+            val tint = context.resolveThemeColor(android.R.attr.textColorTertiary)
+            timestamp.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                dateRule(tint),
+                null,
+                dateRule(tint),
+                null
+            )
+            timestamp.compoundDrawablePadding = 6.dpToPx(context)
+            timestamp.setPadding(left = 0, top = 10.dpToPx(context), right = 0, bottom = 6.dpToPx(context))
+        } else {
+            timestamp.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
+            timestamp.compoundDrawablePadding = 0
+            val side = 16.dpToPx(context)
+            timestamp.setPadding(left = side, top = 12.dpToPx(context), right = side, bottom = 8.dpToPx(context))
+        }
+    }
+
+    private fun dateRule(tint: Int): Drawable? {
+        return ContextCompat.getDrawable(context, R.drawable.dotted_rule_fine)?.mutate()?.also {
+            it.setTint(tint)
+            it.alpha = 140
+        }
     }
 
     /**

@@ -126,12 +126,22 @@ class TextViewStyler @Inject constructor(
         }
 
         if (!prefs.systemFont.get()) {
+            val style = textStyle(textView, attrs)
             val family = when (fontAttr) {
-                FONT_DISPLAY -> fontProvider.display
+                FONT_DISPLAY -> if (style and Typeface.BOLD != 0) {
+                    fontProvider.displayBold
+                } else {
+                    fontProvider.display
+                }
                 FONT_LABEL -> fontProvider.label
                 else -> fontProvider.body
             }
-            textView.setTypeface(family, textView.typeface?.style ?: Typeface.NORMAL)
+            // The bold file is already the weight. Asking for BOLD again faux-bolds the dots.
+            if (fontAttr == FONT_DISPLAY && style and Typeface.BOLD != 0) {
+                textView.typeface = family
+            } else {
+                textView.setTypeface(family, style)
+            }
         }
 
         when (colorAttr) {
@@ -148,6 +158,21 @@ class TextViewStyler @Inject constructor(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 textView.textCursorDrawable = drawable
             }
+        }
+    }
+
+    /**
+     * android:textStyle is applied by the framework before this runs, but a style
+     * item can still be the only place it is declared. Read the attribute directly.
+     */
+    private fun textStyle(textView: TextView, attrs: AttributeSet?): Int {
+        val fallback = textView.typeface?.style ?: Typeface.NORMAL
+        if (attrs == null) return fallback
+        val typed = textView.context.obtainStyledAttributes(attrs, intArrayOf(android.R.attr.textStyle))
+        return try {
+            if (typed.hasValue(0)) typed.getInt(0, fallback) else fallback
+        } finally {
+            typed.recycle()
         }
     }
 

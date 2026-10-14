@@ -78,7 +78,7 @@ class AvatarView @JvmOverloads constructor(
         }
 
     /**
-     * Toolbar chip only. A smaller dark fill and one Space Mono initial,
+     * Toolbar chip only. A smaller dark fill and one Doto initial,
      * so the title stays first. Thread rows keep speaker ink.
      */
     var calmHeader: Boolean = false
@@ -147,17 +147,35 @@ class AvatarView @JvmOverloads constructor(
     }
 
     private fun updateView() {
+        // Bold Doto keeps the dots readable inside the circle. Regular weight
+        // anti-aliases into a plain sans at these sizes.
+        if (this::prefs.isInitialized && this::fontProvider.isInitialized && !prefs.systemFont.get()) {
+            layout.initial.typeface = fontProvider.displayBold
+        }
+
         if (calmHeader) {
             TextViewCompat.setAutoSizeTextTypeWithDefaults(
                 layout.initial,
                 TextViewCompat.AUTO_SIZE_TEXT_TYPE_NONE
             )
-            layout.initial.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+            // One letter in the 24dp chip. 16sp keeps the dots inside the square.
+            layout.initial.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             layout.initial.setPadding(0, 0, 0, 0)
-            if (this::prefs.isInitialized && !prefs.systemFont.get()) {
-                layout.initial.typeface = fontProvider.label
-            }
             val icon = 18.dpToPx(context)
+            layout.icon.layoutParams = layout.icon.layoutParams.apply {
+                width = icon
+                height = icon
+            }
+        } else {
+            layout.initial.setPadding(0, 0, 0, 0)
+            TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(
+                layout.initial,
+                12,
+                24,
+                1,
+                TypedValue.COMPLEX_UNIT_SP
+            )
+            val icon = 24.dpToPx(context)
             layout.icon.layoutParams = layout.icon.layoutParams.apply {
                 width = icon
                 height = icon

@@ -30,12 +30,16 @@ import javax.inject.Singleton
 /**
  * Bundled OFL faces. Doto is for headings and numbers, Space Mono for labels,
  * Inter for body and message text. Nothing is downloaded at runtime.
+ *
+ * [displayBold] is the weight avatar initials and the thread title use.
+ * Regular Doto's dots vanish at those sizes and the letters read as Inter.
  */
 @Singleton
 class FontProvider @Inject constructor(context: Context) {
 
     val body: Typeface = load(context, R.font.inter, Typeface.SANS_SERIF)
     val display: Typeface = load(context, R.font.doto, Typeface.SANS_SERIF)
+    val displayBold: Typeface = load(context, R.font.doto_bold, display)
     val label: Typeface = load(context, R.font.space_mono, Typeface.MONOSPACE)
 
     private fun load(context: Context, fontRes: Int, fallback: Typeface): Typeface {

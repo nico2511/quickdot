@@ -167,8 +167,11 @@
             android:id="@+id/toolbarTitle"
             style="@style/ToolbarText"
             android:ellipsize="end"
+            android:fontFamily="@font/doto_bold"
             android:maxLines="1"
+            android:textFontWeight="700"
             android:textStyle="bold"
+            app:fontFamily="@font/doto_bold"
             tools:text="Conversations" />
 
     </androidx.appcompat.widget.Toolbar>

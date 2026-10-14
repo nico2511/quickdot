@@ -29,13 +29,16 @@
         android:id="@+id/initial"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fontFamily="@font/doto_bold"
         android:gravity="center"
         android:includeFontPadding="false"
         android:padding="0dp"
         android:textAllCaps="true"
+        android:textFontWeight="700"
         app:autoSizeMaxTextSize="24sp"
         app:autoSizeMinTextSize="12sp"
         app:autoSizeTextType="uniform"
+        app:fontFamily="@font/doto_bold"
         app:textFont="display" />
 
     <ImageView

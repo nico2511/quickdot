@@ -21,6 +21,10 @@ package dev.octoshrimpy.quik.common.util
 
 import android.content.Context
 import android.graphics.Typeface
+import android.graphics.fonts.Font
+import android.graphics.fonts.FontFamily
+import android.graphics.fonts.FontStyle
+import android.os.Build
 import androidx.core.content.res.ResourcesCompat
 import dev.octoshrimpy.quik.R
 import timber.log.Timber
@@ -33,14 +37,32 @@ import javax.inject.Singleton
  *
  * [displayBold] is the weight avatar initials and the thread title use.
  * Regular Doto's dots vanish at those sizes and the letters read as Inter.
+ *
+ * The four static files used to share a family name, and the bold file carried
+ * a variable-font STAT table with no fvar. Android 14's font matcher (Nothing OS)
+ * then resolved "bold" back to the regular face or to the system sans. The
+ * family below sets each weight explicitly so a later weight adjustment stays
+ * inside Doto.
  */
 @Singleton
 class FontProvider @Inject constructor(context: Context) {
 
     val body: Typeface = load(context, R.font.inter, Typeface.SANS_SERIF)
-    val display: Typeface = load(context, R.font.doto, Typeface.SANS_SERIF)
-    val displayBold: Typeface = load(context, R.font.doto_bold, display)
     val label: Typeface = load(context, R.font.space_mono, Typeface.MONOSPACE)
+    val display: Typeface
+    val displayBold: Typeface
+
+    init {
+        val regular = load(context, R.font.doto_regular, Typeface.SANS_SERIF)
+        val boldFile = load(context, R.font.doto_bold, regular)
+        val family = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            familyOrNull(context)
+        } else {
+            null
+        }
+        display = family?.let { faceAt(it, 400) } ?: regular
+        displayBold = family?.let { faceAt(it, 700) } ?: boldFile
+    }
 
     private fun load(context: Context, fontRes: Int, fallback: Typeface): Typeface {
         return try {
@@ -48,6 +70,35 @@ class FontProvider @Inject constructor(context: Context) {
         } catch (e: Exception) {
             Timber.w(e, "Bundled font failed to load")
             fallback
+        }
+    }
+
+    private fun familyOrNull(context: Context): Typeface? {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return null
+        return try {
+            val resources = context.resources
+            fun font(id: Int, weight: Int): Font {
+                return Font.Builder(resources, id).setWeight(weight).build()
+            }
+            val family = FontFamily.Builder(font(R.font.doto_regular, 400))
+                .addFont(font(R.font.doto_medium, 500))
+                .addFont(font(R.font.doto_bold, 700))
+                .addFont(font(R.font.doto_black, 900))
+                .build()
+            Typeface.CustomFallbackBuilder(family)
+                .setStyle(FontStyle(400, FontStyle.FONT_SLANT_UPRIGHT))
+                .build()
+        } catch (e: Exception) {
+            Timber.w(e, "Doto family failed to build")
+            null
+        }
+    }
+
+    private fun faceAt(family: Typeface, weight: Int): Typeface {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Typeface.create(family, weight, false)
+        } else {
+            family
         }
     }
 

@@ -127,17 +127,20 @@ class TextViewStyler @Inject constructor(
 
         if (!prefs.systemFont.get()) {
             val style = textStyle(textView, attrs)
+            val displayBold = fontAttr == FONT_DISPLAY && style and Typeface.BOLD != 0
             val family = when (fontAttr) {
-                FONT_DISPLAY -> if (style and Typeface.BOLD != 0) {
-                    fontProvider.displayBold
-                } else {
-                    fontProvider.display
-                }
+                FONT_DISPLAY -> if (displayBold) fontProvider.displayBold else fontProvider.display
                 FONT_LABEL -> fontProvider.label
                 else -> fontProvider.body
             }
-            // The bold file is already the weight. Asking for BOLD again faux-bolds the dots.
-            if (fontAttr == FONT_DISPLAY && style and Typeface.BOLD != 0) {
+            // The bold file is already the weight. Asking for BOLD again faux-bolds the dots,
+            // and on Android 14 Typeface.create swaps that face for the system sans.
+            if (displayBold && textView is QkTextView) {
+                textView.pinTypeface(family)
+            } else if (textView is QkTextView) {
+                textView.unpinTypeface()
+                textView.setTypeface(family, style)
+            } else if (displayBold) {
                 textView.typeface = family
             } else {
                 textView.setTypeface(family, style)

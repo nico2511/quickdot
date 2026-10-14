@@ -133,9 +133,9 @@ class Colors @Inject constructor(
     }
 
     /**
-     * Stable print-ink for one address. Five slots, never the signal red.
-     * Light inks are at least 8.8:1 on white; dark inks are at least 10.5:1 on #1B1B1B.
-     * Initials (white on the light-theme ink, #111111 on the night ink) clear 4.5:1 as well.
+     * Stable grey for one address. Five slots, never a hue and never the signal red.
+     * Light greys keep white initials at 6:1 or better.
+     * Night greys keep #111111 initials at 10:1 or better, and stay above 9:1 on #1B1B1B.
      */
     fun speakerInk(address: String): Int {
         val slots = intArrayOf(

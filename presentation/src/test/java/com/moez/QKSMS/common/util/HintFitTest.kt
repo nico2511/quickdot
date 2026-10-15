@@ -24,7 +24,8 @@ class HintFitTest {
 
     @Test
     fun floorAboveTheRestingSizeDoesNotGrowTheHint() {
-        assertEquals(20f, fittedHintSizePx(20f, 800f, 400f, 31.5f), 0.01f)
+        // A floor larger than the resting size is ignored. The hint still scales down.
+        assertEquals(10f, fittedHintSizePx(20f, 800f, 400f, 31.5f), 0.01f)
     }
 
     @Test

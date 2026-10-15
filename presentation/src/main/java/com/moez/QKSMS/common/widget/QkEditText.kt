@@ -144,7 +144,11 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
         paint.textSize = resting
         val hintWidth = paint.measureText(hintText)
         paint.textSize = previous
-        val floor = 12f * resources.displayMetrics.scaledDensity
+        val floor = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_SP,
+            12f,
+            resources.displayMetrics
+        )
         val fitted = fittedHintSizePx(resting, hintWidth, available, floor)
         if (abs(textSize - fitted) > 0.5f) {
             setTextSize(TypedValue.COMPLEX_UNIT_PX, fitted)

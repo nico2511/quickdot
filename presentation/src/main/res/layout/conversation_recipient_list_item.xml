@@ -63,7 +63,7 @@
 
         <dev.octoshrimpy.quik.common.widget.QkTextView
             android:id="@+id/name"
-            style="@style/TextPrimary"
+            style="@style/TextName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

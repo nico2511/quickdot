@@ -44,12 +44,12 @@
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/recipients"
-        style="@style/TextPrimary"
+        style="@style/TextName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/avatars"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"

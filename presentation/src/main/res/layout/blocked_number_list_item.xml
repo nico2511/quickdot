@@ -39,7 +39,7 @@
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/number"
-        style="@style/TextPrimary"
+        style="@style/TextName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"

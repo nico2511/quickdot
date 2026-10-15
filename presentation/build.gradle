@@ -28,8 +28,8 @@ android {
         applicationId 'com.nico2511.quickdot'
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 11
-        versionName '0.1.10'
+        versionCode 12
+        versionName '0.1.11'
         setProperty("archivesBaseName", "Quickdot-v${versionName}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -139,15 +139,25 @@ class TextViewStyler @Inject constructor(
             }
             // The bold file is already the weight. Asking for BOLD again faux-bolds the dots,
             // and on Android 14 Typeface.create swaps that face for the system sans.
-            if (displayBold && textView is QkTextView) {
-                textView.pinTypeface(family)
-            } else if (textView is QkTextView) {
-                textView.unpinTypeface()
-                textView.setTypeface(family, style)
-            } else if (displayBold) {
-                textView.typeface = family
-            } else {
-                textView.setTypeface(family, style)
+            when {
+                textView is QkEditText -> {
+                    // One typeface paints both the hint and the typed text. Pin Doto bold
+                    // while the field is empty, then switch to the field's own face.
+                    val filledStyle = if (fontAttr == FONT_DISPLAY) Typeface.NORMAL else style
+                    textView.bindFaces(
+                        emptyFace = fontProvider.displayBold,
+                        filledFace = family,
+                        filledStyle = filledStyle,
+                        pinFilled = fontAttr == FONT_DISPLAY
+                    )
+                }
+                displayBold && textView is QkTextView -> textView.pinTypeface(family)
+                textView is QkTextView -> {
+                    textView.unpinTypeface()
+                    textView.setTypeface(family, style)
+                }
+                displayBold -> textView.typeface = family
+                else -> textView.setTypeface(family, style)
             }
         }
 
@@ -159,6 +169,9 @@ class TextViewStyler @Inject constructor(
         }
 
         setTextSize(textView, textSizeAttr)
+        if (textView is QkEditText && !prefs.systemFont.get()) {
+            textView.noteRestingTextSize()
+        }
 
         if (textView is EditText) {
             val drawable = textView.resources.getDrawable(R.drawable.cursor).apply { setTint(colors.theme().theme) }

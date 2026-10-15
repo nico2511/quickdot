@@ -19,23 +19,31 @@
 package dev.octoshrimpy.quik.common.widget
 
 import android.content.Context
+import android.graphics.Typeface
 import android.os.Build
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputConnectionWrapper
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.view.inputmethod.EditorInfoCompat
 import androidx.core.view.inputmethod.InputConnectionCompat
 import androidx.core.view.inputmethod.InputContentInfoCompat
 import com.google.android.mms.ContentType
 import dev.octoshrimpy.quik.common.util.TextViewStyler
+import dev.octoshrimpy.quik.common.util.fittedHintSizePx
 import dev.octoshrimpy.quik.injection.appComponent
 import dev.octoshrimpy.quik.util.tryOrNull
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
+import java.lang.reflect.Field
 import javax.inject.Inject
+import kotlin.math.abs
 
 
 /**
@@ -53,12 +61,198 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
     val inputContentSelected: Subject<InputContentInfoCompat> = PublishSubject.create()
     var supportsInputContent: Boolean = false
 
+    /**
+     * Same pin as [QkTextView]. The hint is Doto bold, and Android 14's
+     * Typeface.create drops that face back to the system sans unless it is
+     * put back after every setTypeface.
+     */
+    private var pinnedTypeface: Typeface? = null
+    private var emptyFace: Typeface? = null
+    private var filledFace: Typeface? = null
+    private var filledStyle: Int = Typeface.NORMAL
+    private var pinFilled: Boolean = false
+    private var restingTextSizePx: Float = 0f
+    private var facesBound = false
+
     init {
         if (!isInEditMode) {
             appComponent.inject(this)
             textViewStyler.applyAttributes(this, attrs)
         } else {
             TextViewStyler.applyEditModeAttributes(this, attrs)
+        }
+    }
+
+    /**
+     * Hint and typed text share one typeface. [emptyFace] is pinned Doto bold
+     * so the placeholder stays Doto on Android 14. [filledFace] is the face
+     * the field already used (Inter, unless the field is itself Doto).
+     */
+    fun bindFaces(emptyFace: Typeface, filledFace: Typeface, filledStyle: Int, pinFilled: Boolean) {
+        this.emptyFace = emptyFace
+        this.filledFace = filledFace
+        this.filledStyle = filledStyle
+        this.pinFilled = pinFilled
+        if (!facesBound) {
+            facesBound = true
+            addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+                override fun afterTextChanged(s: Editable?) {
+                    applyFace()
+                }
+            })
+        }
+        applyFace()
+    }
+
+    /** Preference size, captured after [TextViewStyler] sets it. Typed text uses this. */
+    fun noteRestingTextSize() {
+        restingTextSizePx = textSize
+        if (text.isNullOrEmpty() && width > 0) fitHint()
+    }
+
+    private fun applyFace() {
+        val empty = emptyFace ?: return
+        if (text.isNullOrEmpty()) {
+            pinTypeface(empty)
+            if (width > 0) fitHint()
+        } else if (pinFilled) {
+            pinTypeface(filledFace)
+            restoreRestingSize()
+        } else {
+            unpinTypeface()
+            setTypeface(filledFace, filledStyle)
+            restoreRestingSize()
+        }
+    }
+
+    /**
+     * Single-line hints ellipsize. Doto bold is wider than the Inter hint it
+     * replaces, so a long French placeholder is drawn smaller until it fits.
+     * The floor is 12sp, the app's small secondary size. Typed text is restored
+     * to the preference size.
+     */
+    private fun fitHint() {
+        if (maxLines != 1) return
+        val hintText = hint?.toString()?.takeIf { it.isNotEmpty() } ?: return
+        val safety = 2f * resources.displayMetrics.density
+        val available = hintAvailablePx() - safety
+        if (available <= 0f) return
+        val resting = if (restingTextSizePx > 0f) restingTextSizePx else textSize
+        val previous = paint.textSize
+        paint.textSize = resting
+        val hintWidth = paint.measureText(hintText)
+        paint.textSize = previous
+        val floor = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_SP,
+            12f,
+            resources.displayMetrics
+        )
+        val fitted = fittedHintSizePx(resting, hintWidth, available, floor)
+        if (abs(textSize - fitted) > 0.5f) {
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, fitted)
+        }
+    }
+
+    private fun restoreRestingSize() {
+        if (restingTextSizePx > 0f && abs(textSize - restingTextSizePx) > 0.5f) {
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, restingTextSizePx)
+        }
+    }
+
+    private fun hintAvailablePx(): Float {
+        val drawables = compoundDrawablesRelative
+        val start = drawables[0]
+        val end = drawables[2]
+        val startW = start?.let { drawable ->
+            drawable.bounds.width().takeIf { it > 0 } ?: drawable.intrinsicWidth
+        } ?: 0
+        val endW = end?.let { drawable ->
+            drawable.bounds.width().takeIf { it > 0 } ?: drawable.intrinsicWidth
+        } ?: 0
+        val startGap = if (startW > 0) compoundDrawablePadding else 0
+        val endGap = if (endW > 0) compoundDrawablePadding else 0
+        return (width - paddingLeft - paddingRight - startW - endW - startGap - endGap).toFloat()
+    }
+
+    fun pinTypeface(typeface: Typeface?) {
+        pinnedTypeface = typeface
+        if (typeface != null) applyPinned(typeface) else super.setTypeface(null)
+    }
+
+    fun unpinTypeface() {
+        pinnedTypeface = null
+    }
+
+    override fun setTypeface(tf: Typeface?) {
+        val pin = pinnedTypeface
+        if (pin != null) {
+            applyPinned(pin)
+            return
+        }
+        super.setTypeface(tf)
+    }
+
+    override fun setTypeface(tf: Typeface?, style: Int) {
+        val pin = pinnedTypeface
+        if (pin != null) {
+            applyPinned(pin)
+            return
+        }
+        super.setTypeface(tf, style)
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        if (emptyFace != null) applyFace() else pinnedTypeface?.let { applyPinned(it) }
+    }
+
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+        // Width is unknown when the face is first bound. Fit once the field has
+        // been measured. Re-pinning here would request layout on every pass.
+        if (emptyFace != null && text.isNullOrEmpty() && pinnedTypeface != null) {
+            fitHint()
+        }
+    }
+
+    private fun applyPinned(typeface: Typeface) {
+        val field = fontWeightAdjustmentField
+        val saved = field?.let {
+            try {
+                it.getInt(this)
+            } catch (e: Exception) {
+                null
+            }
+        }
+        if (field != null && saved != null && saved != 0) {
+            try {
+                field.setInt(this, 0)
+            } catch (e: Exception) {
+                // Hidden-API block: the family still has the bold file.
+            }
+        }
+        try {
+            super.setTypeface(typeface)
+        } finally {
+            if (field != null && saved != null && saved != 0) {
+                try {
+                    field.setInt(this, saved)
+                } catch (e: Exception) {
+                    // Restoring the adjustment is best-effort.
+                }
+            }
+        }
+    }
+
+    private companion object {
+        val fontWeightAdjustmentField: Field? = try {
+            TextView::class.java.getDeclaredField("mFontWeightAdjustment").apply {
+                isAccessible = true
+            }
+        } catch (e: Exception) {
+            null
         }
     }
 

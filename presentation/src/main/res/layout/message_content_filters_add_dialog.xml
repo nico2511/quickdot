@@ -25,6 +25,7 @@
     android:orientation="vertical">
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
+        style="@style/TextHeadline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"

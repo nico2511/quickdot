@@ -33,12 +33,38 @@
         <item name="textSize">tertiary</item>
     </style>
 
+    <!-- Screen titles. fontFamily is the same pin as the thread title: Android 14
+         otherwise resolves this bold display face back to the system sans. -->
     <style name="TextDisplay">
+        <item name="android:fontFamily">@font/doto_bold</item>
         <item name="android:includeFontPadding">false</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textFontWeight">700</item>
         <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/doto_bold</item>
         <item name="textFont">display</item>
         <item name="textSize">display</item>
+    </style>
+
+    <!-- Dialog and sheet titles. Same face as TextDisplay, size set by the view. -->
+    <style name="TextHeadline">
+        <item name="android:fontFamily">@font/doto_bold</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/doto_bold</item>
+        <item name="textFont">display</item>
+    </style>
+
+    <!-- Conversation and contact names. Primary size so the row stays the same height. -->
+    <style name="TextName" parent="TextPrimary">
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/doto_bold</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/doto_bold</item>
+        <item name="textFont">display</item>
     </style>
 
     <style name="TextLabel">
@@ -108,9 +134,13 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@null</item>
         <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/doto_bold</item>
         <item name="android:gravity">start|center_vertical</item>
         <item name="android:maxLines">1</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/doto_bold</item>
         <item name="textFont">display</item>
         <item name="textSize">toolbar</item>
     </style>
@@ -133,13 +163,19 @@
     </style>
 
     <style name="CollapsingToolbarCollapsedText">
-        <item name="textSize">toolbar</item>
+        <item name="android:fontFamily">@font/doto_bold</item>
+        <item name="android:textFontWeight">700</item>
         <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/doto_bold</item>
+        <item name="textSize">toolbar</item>
     </style>
 
     <style name="CollapsingToolbarExpandedText">
+        <item name="android:fontFamily">@font/doto_bold</item>
+        <item name="android:textFontWeight">700</item>
         <item name="android:textSize">44dp</item>
         <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/doto_bold</item>
     </style>
 
     <style name="ScheduledSampleTextStyle">

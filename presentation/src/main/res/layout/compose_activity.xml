@@ -499,6 +499,8 @@
                 android:id="@+id/toolbarSubtitle"
                 style="@style/ToolbarText"
                 android:textColor="?android:attr/textColorTertiary"
+                android:textFontWeight="400"
+                android:textStyle="normal"
                 android:visibility="gone"
                 app:textFont="label"
                 app:textSize="secondary"

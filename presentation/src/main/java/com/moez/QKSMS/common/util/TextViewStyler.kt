@@ -60,6 +60,10 @@ class TextViewStyler @Inject constructor(
         const val FONT_DISPLAY = 1
         const val FONT_LABEL = 2
 
+        private val TEXT_STYLE_ATTRS = intArrayOf(android.R.attr.textStyle)
+        private val FONT_WEIGHT_ATTRS = intArrayOf(android.R.attr.textFontWeight)
+        private const val ANDROID_NS = "http://schemas.android.com/apk/res/android"
+
         fun applyEditModeAttributes(textView: TextView, attrs: AttributeSet?) {
             textView.run {
                 var colorAttr = 0
@@ -165,15 +169,54 @@ class TextViewStyler @Inject constructor(
     }
 
     /**
-     * android:textStyle is applied by the framework before this runs, but a style
-     * item can still be the only place it is declared. Read the attribute directly.
+     * Bold has to be known before the typeface is set. On Android 14 a bold
+     * style is often only a font weight, so [Typeface.getStyle] stays normal,
+     * and [Typeface.create] then swaps the custom face for the system sans.
+     * An explicit value on the view wins. Otherwise the style resource is read
+     * on its own — that is where TextDisplay and ToolbarText declare bold.
      */
     private fun textStyle(textView: TextView, attrs: AttributeSet?): Int {
         val fallback = textView.typeface?.style ?: Typeface.NORMAL
         if (attrs == null) return fallback
-        val typed = textView.context.obtainStyledAttributes(attrs, intArrayOf(android.R.attr.textStyle))
+        if (attrs.getAttributeValue(ANDROID_NS, "textStyle") != null) {
+            readAttr(textView, attrs, TEXT_STYLE_ATTRS)?.let { return it }
+        }
+        val styleRes = attrs.styleAttribute
+        if (styleRes != 0) {
+            readStyleAttr(textView, styleRes, TEXT_STYLE_ATTRS)?.let { return it }
+        }
+        readAttr(textView, attrs, TEXT_STYLE_ATTRS)?.let { return it }
+        if (explicitFontWeight(textView, attrs) >= 700) return fallback or Typeface.BOLD
+        return fallback
+    }
+
+    /** Weight declared in XML. The resolved face's weight is not used — a system
+     *  bold-text adjustment would otherwise pin every display string. */
+    private fun explicitFontWeight(textView: TextView, attrs: AttributeSet): Int {
+        if (Build.VERSION.SDK_INT < 28) return -1
+        if (attrs.getAttributeValue(ANDROID_NS, "textFontWeight") != null) {
+            readAttr(textView, attrs, FONT_WEIGHT_ATTRS)?.let { return it }
+        }
+        val styleRes = attrs.styleAttribute
+        if (styleRes != 0) {
+            readStyleAttr(textView, styleRes, FONT_WEIGHT_ATTRS)?.let { return it }
+        }
+        return readAttr(textView, attrs, FONT_WEIGHT_ATTRS) ?: -1
+    }
+
+    private fun readAttr(textView: TextView, attrs: AttributeSet, styleable: IntArray): Int? {
+        val typed = textView.context.obtainStyledAttributes(attrs, styleable)
         return try {
-            if (typed.hasValue(0)) typed.getInt(0, fallback) else fallback
+            if (typed.hasValue(0)) typed.getInt(0, 0) else null
+        } finally {
+            typed.recycle()
+        }
+    }
+
+    private fun readStyleAttr(textView: TextView, styleRes: Int, styleable: IntArray): Int? {
+        val typed = textView.context.obtainStyledAttributes(styleRes, styleable)
+        return try {
+            if (typed.hasValue(0)) typed.getInt(0, 0) else null
         } finally {
             typed.recycle()
         }

@@ -22,6 +22,9 @@ import android.content.Context
 import android.graphics.Typeface
 import android.os.Build
 import android.text.Editable
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -62,17 +65,18 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
     var supportsInputContent: Boolean = false
 
     /**
-     * Same pin as [QkTextView]. The hint is Doto bold, and Android 14's
-     * Typeface.create drops that face back to the system sans unless it is
-     * put back after every setTypeface.
+     * Same pin as [QkTextView], used only when the typed text itself is Doto.
+     * The hint does not use this. Android 14's [Typeface.create] drops a custom
+     * face, and the hint is a separate layout built from the text paint.
      */
     private var pinnedTypeface: Typeface? = null
-    private var emptyFace: Typeface? = null
+    private var hintFace: Typeface? = null
     private var filledFace: Typeface? = null
     private var filledStyle: Int = Typeface.NORMAL
     private var pinFilled: Boolean = false
     private var restingTextSizePx: Float = 0f
     private var facesBound = false
+    private var ensuringHint = false
 
     init {
         if (!isInEditMode) {
@@ -84,12 +88,13 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
     }
 
     /**
-     * Hint and typed text share one typeface. [emptyFace] is pinned Doto bold
-     * so the placeholder stays Doto on Android 14. [filledFace] is the face
-     * the field already used (Inter, unless the field is itself Doto).
+     * [emptyFace] is drawn only on the placeholder, via [HintTypefaceSpan].
+     * [filledFace] stays on the view, so typed text keeps Inter (or Doto, when
+     * the field was already Doto). [TextView.setHint](android.widget.TextView)
+     * is final, so a later plain hint is wrapped again from [onMeasure].
      */
     fun bindFaces(emptyFace: Typeface, filledFace: Typeface, filledStyle: Int, pinFilled: Boolean) {
-        this.emptyFace = emptyFace
+        hintFace = emptyFace
         this.filledFace = filledFace
         this.filledStyle = filledStyle
         this.pinFilled = pinFilled
@@ -99,11 +104,16 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
                 override fun afterTextChanged(s: Editable?) {
-                    applyFace()
+                    if (text.isNullOrEmpty()) {
+                        if (width > 0) fitHint()
+                    } else {
+                        restoreRestingSize()
+                    }
                 }
             })
         }
-        applyFace()
+        ensureHintSpan()
+        applyTypedFace()
     }
 
     /** Preference size, captured after [TextViewStyler] sets it. Typed text uses this. */
@@ -112,18 +122,35 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
         if (text.isNullOrEmpty() && width > 0) fitHint()
     }
 
-    private fun applyFace() {
-        val empty = emptyFace ?: return
-        if (text.isNullOrEmpty()) {
-            pinTypeface(empty)
-            if (width > 0) fitHint()
-        } else if (pinFilled) {
+    private fun applyTypedFace() {
+        if (pinFilled) {
             pinTypeface(filledFace)
-            restoreRestingSize()
         } else {
             unpinTypeface()
             setTypeface(filledFace, filledStyle)
-            restoreRestingSize()
+        }
+    }
+
+    /**
+     * BoringLayout skips a hint that carries a [MetricAffectingSpan][android.text.style.MetricAffectingSpan]
+     * and the framework builds a StaticLayout instead, which applies the span
+     * while measuring and drawing. That is the layout the placeholder uses.
+     */
+    private fun ensureHintSpan() {
+        if (ensuringHint) return
+        val face = hintFace ?: return
+        val current = hint ?: return
+        val existing = (current as? Spanned)?.getSpans(0, current.length, HintTypefaceSpan::class.java)
+        if (existing != null && existing.any { it.typeface == face }) return
+        val raw = current.toString()
+        if (raw.isEmpty()) return
+        val spanned = SpannableString(raw)
+        spanned.setSpan(HintTypefaceSpan(face), 0, raw.length, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
+        ensuringHint = true
+        try {
+            setHint(spanned)
+        } finally {
+            ensuringHint = false
         }
     }
 
@@ -140,10 +167,13 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
         val available = hintAvailablePx() - safety
         if (available <= 0f) return
         val resting = if (restingTextSizePx > 0f) restingTextSizePx else textSize
-        val previous = paint.textSize
-        paint.textSize = resting
-        val hintWidth = paint.measureText(hintText)
-        paint.textSize = previous
+        // The view paint is the typed-text face. Measure the placeholder with Doto
+        // or a long French hint is treated as if it already fits.
+        val measure = TextPaint(paint)
+        measure.typeface = hintFace ?: paint.typeface
+        measure.isFakeBoldText = false
+        measure.textSize = resting
+        val hintWidth = measure.measureText(hintText)
         val floor = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_SP,
             12f,
@@ -203,16 +233,27 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
         super.setTypeface(tf, style)
     }
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        // XML and later setHint() calls store a plain string. Wrap it before the
+        // hint layout is built, or the first measure draws the system sans.
+        ensureHintSpan()
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    }
+
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        if (emptyFace != null) applyFace() else pinnedTypeface?.let { applyPinned(it) }
+        if (hintFace != null) {
+            ensureHintSpan()
+            applyTypedFace()
+        } else {
+            pinnedTypeface?.let { applyPinned(it) }
+        }
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
-        // Width is unknown when the face is first bound. Fit once the field has
-        // been measured. Re-pinning here would request layout on every pass.
-        if (emptyFace != null && text.isNullOrEmpty() && pinnedTypeface != null) {
+        if (hintFace != null && text.isNullOrEmpty()) {
+            ensureHintSpan()
             fitHint()
         }
     }

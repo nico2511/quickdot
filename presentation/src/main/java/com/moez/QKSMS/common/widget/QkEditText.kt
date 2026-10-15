@@ -19,20 +19,27 @@
 package dev.octoshrimpy.quik.common.widget
 
 import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
-import android.text.Editable
+import android.text.Layout
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.StaticLayout
 import android.text.TextPaint
-import android.text.TextWatcher
+import android.text.TextUtils
+import android.view.Gravity
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.view.KeyEvent
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputConnectionWrapper
 import android.widget.TextView
+import dev.octoshrimpy.quik.BuildConfig
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.view.inputmethod.EditorInfoCompat
 import androidx.core.view.inputmethod.InputConnectionCompat
@@ -46,7 +53,6 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import java.lang.reflect.Field
 import javax.inject.Inject
-import kotlin.math.abs
 
 
 /**
@@ -66,8 +72,7 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
     /**
      * Same pin as [QkTextView], used only when the typed text itself is Doto.
-     * The hint does not use this. Android 14's [Typeface.create] drops a custom
-     * face, and the hint is a separate layout built from the text paint.
+     * The placeholder is a separate [QkTextView], not this paint.
      */
     private var pinnedTypeface: Typeface? = null
     private var hintFace: Typeface? = null
@@ -75,8 +80,19 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
     private var filledStyle: Int = Typeface.NORMAL
     private var pinFilled: Boolean = false
     private var restingTextSizePx: Float = 0f
-    private var facesBound = false
     private var ensuringHint = false
+    private var frameworkHintHidden = false
+    private var loggedHint = false
+    private var loggedDraw = false
+    private var hintInk: Int = Color.GRAY
+
+    /**
+     * Drawn while the field is empty. Its paint is the pinned Doto face, the
+     * same path as screen titles. The EditText hint layout is not used for
+     * pixels: Nothing OS still paints that layout with [getPaint], which stays
+     * Inter so typed text stays readable.
+     */
+    private var hintOverlay: QkTextView? = null
 
     init {
         if (!isInEditMode) {
@@ -88,38 +104,33 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
     }
 
     /**
-     * [emptyFace] is drawn only on the placeholder, via [HintTypefaceSpan].
-     * [filledFace] stays on the view, so typed text keeps Inter (or Doto, when
-     * the field was already Doto). [TextView.setHint](android.widget.TextView)
-     * is final, so a later plain hint is wrapped again from [onMeasure].
+     * [emptyFace] is the placeholder. [filledFace] stays on this view, so typed
+     * text keeps Inter (or Doto, when the field was already Doto).
+     * [TextView.setHint](android.widget.TextView) is final, so a later plain
+     * hint is wrapped again from [onMeasure]. The wrap keeps [HintTypefaceSpan]
+     * on the CharSequence; the pixels come from [hintOverlay].
      */
     fun bindFaces(emptyFace: Typeface, filledFace: Typeface, filledStyle: Int, pinFilled: Boolean) {
         hintFace = emptyFace
         this.filledFace = filledFace
         this.filledStyle = filledStyle
         this.pinFilled = pinFilled
-        if (!facesBound) {
-            facesBound = true
-            addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
-                override fun afterTextChanged(s: Editable?) {
-                    if (text.isNullOrEmpty()) {
-                        if (width > 0) fitHint()
-                    } else {
-                        restoreRestingSize()
-                    }
-                }
-            })
-        }
+        hintOverlay?.pinTypeface(emptyFace)
         ensureHintSpan()
         applyTypedFace()
+        logHintSpan("bind")
+    }
+
+    /** True when the hint CharSequence still carries [HintTypefaceSpan] after bind. */
+    fun hintHasTypefaceSpan(): Boolean {
+        val current = hint ?: return false
+        if (current.isEmpty() || current !is Spanned) return false
+        return current.getSpans(0, current.length, HintTypefaceSpan::class.java).isNotEmpty()
     }
 
     /** Preference size, captured after [TextViewStyler] sets it. Typed text uses this. */
     fun noteRestingTextSize() {
         restingTextSizePx = textSize
-        if (text.isNullOrEmpty() && width > 0) fitHint()
     }
 
     private fun applyTypedFace() {
@@ -132,9 +143,12 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
     }
 
     /**
-     * BoringLayout skips a hint that carries a [MetricAffectingSpan][android.text.style.MetricAffectingSpan]
-     * and the framework builds a StaticLayout instead, which applies the span
-     * while measuring and drawing. That is the layout the placeholder uses.
+     * Stock Android skips [BoringLayout] when the hint has a
+     * [MetricAffectingSpan][android.text.style.MetricAffectingSpan] and builds a
+     * StaticLayout that applies the span. BoringLayout paints [getPaint] and
+     * ignores the span. The inbox field's paint is Inter. Nothing OS still
+     * takes that boring path for this hint, so the span stays on the
+     * CharSequence and a pinned [QkTextView] draws the placeholder.
      */
     private fun ensureHintSpan() {
         if (ensuringHint) return
@@ -155,55 +169,164 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
     }
 
     /**
-     * Single-line hints ellipsize. Doto bold is wider than the Inter hint it
-     * replaces, so a long French placeholder is drawn smaller until it fits.
-     * The floor is 12sp, the app's small secondary size. Typed text is restored
-     * to the preference size.
+     * Single-line placeholders ellipsize. Doto bold is wider than Inter, so a
+     * long French placeholder is drawn smaller until it fits. The floor is
+     * 12sp. Typed text keeps [restingTextSizePx] on this view.
      */
-    private fun fitHint() {
-        if (maxLines != 1) return
-        val hintText = hint?.toString()?.takeIf { it.isNotEmpty() } ?: return
-        val safety = 2f * resources.displayMetrics.density
-        val available = hintAvailablePx() - safety
-        if (available <= 0f) return
+    private fun overlayTextSizePx(label: String): Float {
         val resting = if (restingTextSizePx > 0f) restingTextSizePx else textSize
-        // The view paint is the typed-text face. Measure the placeholder with Doto
-        // or a long French hint is treated as if it already fits.
-        val measure = TextPaint(paint)
-        measure.typeface = hintFace ?: paint.typeface
+        if (maxLines != 1) return resting
+        val safety = 2f * resources.displayMetrics.density
+        val available = (width - compoundPaddingLeft - compoundPaddingRight).toFloat() - safety
+        if (available <= 0f) return resting
+        val measure = TextPaint()
+        measure.typeface = hintFace
         measure.isFakeBoldText = false
         measure.textSize = resting
-        val hintWidth = measure.measureText(hintText)
+        val hintWidth = measure.measureText(label)
         val floor = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_SP,
             12f,
             resources.displayMetrics
         )
-        val fitted = fittedHintSizePx(resting, hintWidth, available, floor)
-        if (abs(textSize - fitted) > 0.5f) {
-            setTextSize(TypedValue.COMPLEX_UNIT_PX, fitted)
+        return fittedHintSizePx(resting, hintWidth, available, floor)
+    }
+
+    private fun hideFrameworkHint() {
+        if (frameworkHintHidden) return
+        val ink = currentHintTextColor
+        if (Color.alpha(ink) != 0) hintInk = ink
+        frameworkHintHidden = true
+        setHintTextColor(Color.TRANSPARENT)
+    }
+
+    private fun ensureHintOverlay(): QkTextView? {
+        val face = hintFace ?: return null
+        hintOverlay?.let { return it }
+        if (isInEditMode) return null
+        val created = QkTextView(context).apply {
+            // Never attached. setText() still calls checkForRelayout(), which
+            // reads LayoutParams.width. A null params object crashes the draw.
+            // WRAP_CONTENT takes the dynamic-width branch (null the layout and
+            // return) instead of the fixed-width branch that needs a parent.
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            background = null
+            includeFontPadding = this@QkEditText.includeFontPadding
+            importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
+            isFocusable = false
+            isClickable = false
+            pinTypeface(face)
+        }
+        hintOverlay = created
+        return created
+    }
+
+    /**
+     * Pixels come from a [StaticLayout] whose paint holds [hintFace].
+     * [TextView.setTypeface] runs [Typeface.create] when font weight adjustment
+     * is non-zero and can swap that face for the system sans. Assigning the
+     * loaded instance skips that. The pinned [QkTextView] is still measured so
+     * the same face titles use is the one drawn here.
+     *
+     * BoringLayout, which this field's hint uses, paints [getPaint] and ignores
+     * [HintTypefaceSpan]. [getPaint] stays the typed-text face.
+     */
+    private fun drawPinnedHint(canvas: Canvas) {
+        val label = hint?.toString()?.takeIf { it.isNotEmpty() } ?: return
+        if (width <= 0 || height <= 0) return
+        val overlay = ensureHintOverlay() ?: return
+        val face = hintFace ?: return
+        if (overlay.typeface != face) overlay.pinTypeface(face)
+        val pinned = overlay.typeface ?: face
+        val drawFace = if (pinned == face) pinned else face
+        val sizePx = overlayTextSizePx(label)
+        val padLeft = compoundPaddingLeft
+        val padTop = compoundPaddingTop
+        val padRight = compoundPaddingRight
+        val padBottom = compoundPaddingBottom
+        val textWidth = (width - padLeft - padRight).coerceAtLeast(0)
+        val paint = TextPaint(TextPaint.ANTI_ALIAS_FLAG)
+        paint.typeface = drawFace
+        paint.isFakeBoldText = false
+        paint.color = hintInk
+        paint.textSize = sizePx
+        val lines = if (maxLines > 0) maxLines else Integer.MAX_VALUE
+        val layout = StaticLayout.Builder.obtain(label, 0, label.length, paint, textWidth)
+            .setAlignment(hintAlignment())
+            .setIncludePad(includeFontPadding)
+            .setMaxLines(lines)
+            .setEllipsize(if (maxLines == 1) TextUtils.TruncateAt.END else null)
+            .build()
+        val vspace = height - padTop - padBottom
+        var top = padTop.toFloat()
+        val vertical = gravity and Gravity.VERTICAL_GRAVITY_MASK
+        if (vertical == Gravity.CENTER_VERTICAL) {
+            top += ((vspace - layout.height) / 2f).coerceAtLeast(0f)
+        } else if (vertical == Gravity.BOTTOM) {
+            top += (vspace - layout.height).toFloat().coerceAtLeast(0f)
+        }
+        canvas.save()
+        canvas.translate(padLeft.toFloat(), top)
+        layout.draw(canvas)
+        canvas.restore()
+        if (!loggedDraw) {
+            loggedDraw = true
+            val name = try {
+                resources.getResourceEntryName(id)
+            } catch (e: Exception) {
+                id.toString()
+            }
+            Log.i(
+                HINT_LOG,
+                "stage=draw id=$name paintPinned=${drawFace == face} " +
+                    "viewPinned=${overlay.typeface == face} layoutW=${layout.width} " +
+                    "lineW=${layout.getLineWidth(0).toInt()} labelLen=${label.length}"
+            )
         }
     }
 
-    private fun restoreRestingSize() {
-        if (restingTextSizePx > 0f && abs(textSize - restingTextSizePx) > 0.5f) {
-            setTextSize(TypedValue.COMPLEX_UNIT_PX, restingTextSizePx)
+    private fun hintAlignment(): Layout.Alignment {
+        val horizontal = Gravity.getAbsoluteGravity(gravity, layoutDirection) and
+            Gravity.HORIZONTAL_GRAVITY_MASK
+        return when (horizontal) {
+            Gravity.CENTER_HORIZONTAL -> Layout.Alignment.ALIGN_CENTER
+            Gravity.RIGHT -> Layout.Alignment.ALIGN_OPPOSITE
+            else -> Layout.Alignment.ALIGN_NORMAL
         }
     }
 
-    private fun hintAvailablePx(): Float {
-        val drawables = compoundDrawablesRelative
-        val start = drawables[0]
-        val end = drawables[2]
-        val startW = start?.let { drawable ->
-            drawable.bounds.width().takeIf { it > 0 } ?: drawable.intrinsicWidth
-        } ?: 0
-        val endW = end?.let { drawable ->
-            drawable.bounds.width().takeIf { it > 0 } ?: drawable.intrinsicWidth
-        } ?: 0
-        val startGap = if (startW > 0) compoundDrawablePadding else 0
-        val endGap = if (endW > 0) compoundDrawablePadding else 0
-        return (width - paddingLeft - paddingRight - startW - endW - startGap - endGap).toFloat()
+    private fun logHintSpan(stage: String) {
+        if (loggedHint && stage != "bind") return
+        if (stage != "bind") loggedHint = true
+        val current = hint
+        val count = if (current is Spanned) {
+            current.getSpans(0, current.length, HintTypefaceSpan::class.java).size
+        } else {
+            0
+        }
+        val layoutName = try {
+            val field = TextView::class.java.getDeclaredField("mHintLayout")
+            field.isAccessible = true
+            field.get(this)?.javaClass?.name ?: "null"
+        } catch (e: Exception) {
+            "unavailable:${e.javaClass.simpleName}"
+        }
+        val name = try {
+            resources.getResourceEntryName(id)
+        } catch (e: Exception) {
+            id.toString()
+        }
+        Log.i(
+            HINT_LOG,
+            "stage=$stage id=$name spans=$count hintClass=${current?.javaClass?.simpleName} " +
+                "hintLayout=$layoutName overlay=${hintOverlay?.typeface == hintFace}"
+        )
+        if (BuildConfig.DEBUG && stage == "bind" && !current.isNullOrEmpty() && count == 0) {
+            error("QkEditText $name hint is missing HintTypefaceSpan after bind")
+        }
     }
 
     fun pinTypeface(typeface: Typeface?) {
@@ -250,11 +373,23 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
         }
     }
 
+    override fun onDraw(canvas: Canvas) {
+        val showOverlay = hintFace != null && !isInEditMode && text.isNullOrEmpty()
+        if (showOverlay) {
+            ensureHintSpan()
+            hideFrameworkHint()
+        }
+        super.onDraw(canvas)
+        // After the framework hint. BoringLayout paints the typed-text face on
+        // top of anything drawn earlier, so the pinned placeholder goes last.
+        if (showOverlay) drawPinnedHint(canvas)
+    }
+
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
-        if (hintFace != null && text.isNullOrEmpty()) {
+        if (hintFace != null) {
             ensureHintSpan()
-            fitHint()
+            logHintSpan("layout")
         }
     }
 
@@ -288,6 +423,8 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
     }
 
     private companion object {
+        private const val HINT_LOG = "QkHint"
+
         val fontWeightAdjustmentField: Field? = try {
             TextView::class.java.getDeclaredField("mFontWeightAdjustment").apply {
                 isAccessible = true

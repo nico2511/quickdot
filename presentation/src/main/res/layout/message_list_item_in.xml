@@ -166,6 +166,7 @@
                                 android:layout_height="wrap_content"
                                 android:ellipsize="end"
                                 android:maxLines="1"
+                                android:textAllCaps="true"
                                 android:maxWidth="220dp"
                                 android:textStyle="bold"
                                 app:textSize="tertiary"

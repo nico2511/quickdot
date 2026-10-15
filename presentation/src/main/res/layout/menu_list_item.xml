@@ -35,7 +35,7 @@
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/title"
-        style="@style/TextPrimary"
+        style="@style/TextMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"

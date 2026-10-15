@@ -40,7 +40,7 @@
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/titleView"
-        style="@style/TextPrimary"
+        style="@style/TextMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"

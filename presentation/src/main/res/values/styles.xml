@@ -56,15 +56,38 @@
         <item name="textFont">display</item>
     </style>
 
-    <!-- Conversation and contact names. Primary size so the row stays the same height. -->
+    <!-- Conversation and contact names. Primary size so the row stays the same height.
+         textAllCaps is display-only; the stored name and the sent message stay as typed. -->
     <style name="TextName" parent="TextPrimary">
         <item name="android:ellipsize">end</item>
         <item name="android:fontFamily">@font/doto_bold</item>
         <item name="android:maxLines">1</item>
+        <item name="android:textAllCaps">true</item>
         <item name="android:textFontWeight">700</item>
         <item name="android:textStyle">bold</item>
         <item name="fontFamily">@font/doto_bold</item>
         <item name="textFont">display</item>
+    </style>
+
+    <!-- Drawer rows, settings entries, and dialog action lists. Secondary size keeps
+         long French labels on one line inside the existing row. -->
+    <style name="TextMenu">
+        <item name="android:fontFamily">@font/doto_bold</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/doto_bold</item>
+        <item name="textFont">display</item>
+        <item name="textSize">secondary</item>
+    </style>
+
+    <!-- Framework popup and context menus are not QkTextViews, so they cannot pin.
+         Point them at the bold file itself and do not ask for a synthetic bold. -->
+    <style name="TextAppearance.Quickdot.PopupMenu" parent="TextAppearance.AppCompat.Widget.PopupMenu.Large">
+        <item name="android:fontFamily">@font/doto_bold</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/doto_bold</item>
     </style>
 
     <style name="TextLabel">
@@ -202,15 +225,12 @@
         <item name="android:paddingEnd">16dp</item>
     </style>
 
-    <style name="DrawerText">
+    <style name="DrawerText" parent="TextMenu">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:lines">1</item>
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
-        <item name="textFont">body</item>
-        <item name="textSize">primary</item>
+        <item name="android:maxLines">1</item>
     </style>
 
     <style name="DrawerIcon">

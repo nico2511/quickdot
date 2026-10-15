@@ -46,6 +46,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="12dp"
+            android:textAllCaps="true"
             android:textColor="?android:attr/textColorPrimary"
             app:textFont="label"
             app:textSize="secondary"

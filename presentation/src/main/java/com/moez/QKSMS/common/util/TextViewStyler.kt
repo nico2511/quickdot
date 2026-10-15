@@ -141,8 +141,9 @@ class TextViewStyler @Inject constructor(
             // and on Android 14 Typeface.create swaps that face for the system sans.
             when {
                 textView is QkEditText -> {
-                    // One typeface paints both the hint and the typed text. Pin Doto bold
-                    // while the field is empty, then switch to the field's own face.
+                    // The hint is a separate layout. A typeface span holds Doto bold so
+                    // Android 14's font-weight adjustment cannot swap it for the system
+                    // sans. The view face is only what the user types.
                     val filledStyle = if (fontAttr == FONT_DISPLAY) Typeface.NORMAL else style
                     textView.bindFaces(
                         emptyFace = fontProvider.displayBold,

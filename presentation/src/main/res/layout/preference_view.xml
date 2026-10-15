@@ -47,7 +47,7 @@
 
         <dev.octoshrimpy.quik.common.widget.QkTextView
             android:id="@+id/titleView"
-            style="@style/TextPrimary"
+            style="@style/TextMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:duplicateParentState="true"

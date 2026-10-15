@@ -34,6 +34,13 @@
         <item name="android:windowBackground">@color/backgroundDark</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="actionBarPopupTheme">@style/PopupTheme</item>
+        <item name="android:contextPopupMenuStyle">@style/Widget.Quickdot.PopupMenu</item>
+        <item name="android:popupMenuStyle">@style/Widget.Quickdot.PopupMenu</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
+        <item name="popupMenuStyle">@style/Widget.Quickdot.PopupMenu</item>
+        <item name="textAppearanceLargePopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
+        <item name="textAppearanceSmallPopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
         <item name="homeAsUpIndicator">@drawable/qd_back</item>
         <item name="bubbleColor">@color/bubbleDark</item>
         <item name="colorAccent">@color/accent</item>
@@ -65,9 +72,17 @@
         <item name="android:alertDialogTheme">@style/QuickdotAlertDialog</item>
     </style>
 
+    <style name="Widget.Quickdot.PopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@color/backgroundDark</item>
+    </style>
+
     <style name="PopupTheme" parent="ThemeOverlay.AppCompat">
         <item name="android:colorBackground">@color/backgroundDark</item>
         <item name="android:textColor">@color/textPrimaryDark</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
+        <item name="textAppearanceLargePopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
+        <item name="textAppearanceSmallPopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
     </style>
 
     <!-- Black theme -->
@@ -89,7 +104,11 @@
 
     <style name="PopupTheme.Black">
         <item name="android:colorBackground">@color/black</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
         <item name="bubbleColor">@color/bubbleBlack</item>
+        <item name="textAppearanceLargePopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
+        <item name="textAppearanceSmallPopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
     </style>
 
     <style name="QuickdotAlertDialog" parent="ThemeOverlay.AppCompat.Dialog.Alert">

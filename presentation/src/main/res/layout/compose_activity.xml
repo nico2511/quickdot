@@ -489,6 +489,7 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/doto_bold"
                 android:maxLines="1"
+                android:textAllCaps="true"
                 android:textDirection="ltr"
                 android:textFontWeight="700"
                 android:textStyle="bold"

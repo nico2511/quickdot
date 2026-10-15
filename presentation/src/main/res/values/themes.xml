@@ -46,6 +46,13 @@
         <item name="android:windowBackground">@color/backgroundLight</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="actionBarPopupTheme">@style/PopupTheme</item>
+        <item name="android:contextPopupMenuStyle">@style/Widget.Quickdot.PopupMenu</item>
+        <item name="android:popupMenuStyle">@style/Widget.Quickdot.PopupMenu</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
+        <item name="popupMenuStyle">@style/Widget.Quickdot.PopupMenu</item>
+        <item name="textAppearanceLargePopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
+        <item name="textAppearanceSmallPopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
         <item name="homeAsUpIndicator">@drawable/qd_back</item>
         <item name="bubbleColor">@color/bubbleLight</item>
         <item name="colorAccent">@color/accent</item>
@@ -77,9 +84,17 @@
         <item name="android:alertDialogTheme">@style/QuickdotAlertDialog</item>
     </style>
 
+    <style name="Widget.Quickdot.PopupMenu" parent="Widget.AppCompat.Light.PopupMenu">
+        <item name="android:popupBackground">@color/backgroundLight</item>
+    </style>
+
     <style name="PopupTheme" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:colorBackground">@color/backgroundLight</item>
         <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
+        <item name="textAppearanceLargePopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
+        <item name="textAppearanceSmallPopupMenu">@style/TextAppearance.Quickdot.PopupMenu</item>
     </style>
 
     <style name="AppTheme.Gallery" parent="Theme.AppCompat.NoActionBar">

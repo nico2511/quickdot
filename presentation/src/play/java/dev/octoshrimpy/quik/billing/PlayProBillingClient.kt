@@ -29,10 +29,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * One-time product `quickdot_pro`. Entitlement is cached in [ProBillingHook]
- * so style stays unlocked when Play cannot be reached. A successful query
- * that does not include the product clears the cache (refund or no purchase).
- * Pending purchases do not unlock style. SMS is not involved.
+ * One-time product `quickdot_pro`. Cold start and every return to the
+ * foreground call [queryPurchasesAsync][BillingClient.queryPurchasesAsync]
+ * for in-app purchases. PURCHASED unlocks every conversation. A successful
+ * query with no PURCHASED row (refund, or still PENDING) locks style to one
+ * conversation. A failed or disconnected query keeps the cached unlock and
+ * retries with backoff while the app is in the foreground. SMS is not involved.
  */
 @Singleton
 class PlayProBillingClient @Inject constructor(
@@ -48,7 +50,20 @@ class PlayProBillingClient @Inject constructor(
     private var productDetails: ProductDetails? = null
     private var started = false
     private var connecting = false
+    private var inForeground = false
+    private var connectAttempt = 0
+    private var queryAttempt = 0
+    private var announceRestore = false
     private var pendingActivity: WeakReference<Activity>? = null
+    private val pendingAcks = mutableSetOf<String>()
+
+    private val reconnect = Runnable {
+        connecting = false
+        connect()
+    }
+    private val requery = Runnable {
+        if (!ready()) connect() else queryPurchases()
+    }
 
     override fun start() {
         if (started) {
@@ -66,7 +81,16 @@ class PlayProBillingClient @Inject constructor(
         connect()
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onStart(owner: LifecycleOwner) {
+                inForeground = true
+                connectAttempt = 0
+                queryAttempt = 0
                 refresh()
+            }
+
+            override fun onStop(owner: LifecycleOwner) {
+                inForeground = false
+                main.removeCallbacks(reconnect)
+                main.removeCallbacks(requery)
             }
         })
     }
@@ -85,22 +109,36 @@ class PlayProBillingClient @Inject constructor(
     }
 
     override fun restore() {
+        announceRestore = true
         if (!ready()) {
             toast(R.string.settings_pro_restore_offline)
             publishKeep(unavailable = true)
-            if (started) connect()
+            connectAttempt = 0
+            connect()
             return
         }
-        queryPurchases(userInitiated = true)
+        queryPurchases()
     }
 
     override fun onPurchasesUpdated(result: BillingResult, purchases: MutableList<Purchase>?) {
         if (result.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) return
         if (result.responseCode == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
-            queryPurchases(userInitiated = false)
+            queryPurchases()
             return
         }
-        applyQuery(result, purchases.orEmpty(), userInitiated = false)
+        // This callback lists the purchases that just changed, not the full
+        // inventory. Revoking from it would lock a paying user. Grant a
+        // PURCHASED row, ignore PENDING, then query the full in-app list.
+        if (result.responseCode == BillingClient.BillingResponseCode.OK) {
+            val ours = purchases.orEmpty().filter { it.products.contains(PRODUCT_ID) }
+            val purchased = ours.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED }
+            purchased.forEach { acknowledge(it) }
+            if (purchased.isNotEmpty()) {
+                hook.grant()
+                publishOwned()
+            }
+        }
+        queryPurchases()
     }
 
     private fun refresh() {
@@ -109,18 +147,20 @@ class PlayProBillingClient @Inject constructor(
             connect()
             return
         }
-        queryPurchases(userInitiated = false)
+        queryPurchases()
     }
 
     private fun connect() {
         if (!started || connecting || ready()) return
+        main.removeCallbacks(reconnect)
         connecting = true
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(result: BillingResult) {
                 connecting = false
                 if (result.responseCode == BillingClient.BillingResponseCode.OK) {
+                    connectAttempt = 0
                     queryProduct()
-                    queryPurchases(userInitiated = false)
+                    queryPurchases()
                 } else {
                     Timber.w("Billing setup %s %s", result.responseCode, result.debugMessage)
                     publishKeep(
@@ -128,14 +168,32 @@ class PlayProBillingClient @Inject constructor(
                             BillingClient.BillingResponseCode.BILLING_UNAVAILABLE
                     )
                     pendingActivity = null
+                    scheduleReconnect()
                 }
             }
 
             override fun onBillingServiceDisconnected() {
                 connecting = false
                 Timber.w("Billing service disconnected")
+                scheduleReconnect()
             }
         })
+    }
+
+    private fun scheduleReconnect() {
+        if (!started || !inForeground) return
+        main.removeCallbacks(reconnect)
+        val delay = proRetryDelayMs(connectAttempt)
+        connectAttempt += 1
+        main.postDelayed(reconnect, delay)
+    }
+
+    private fun scheduleRequery() {
+        if (!started || !inForeground) return
+        main.removeCallbacks(requery)
+        val delay = proRetryDelayMs(queryAttempt)
+        queryAttempt += 1
+        main.postDelayed(requery, delay)
     }
 
     private fun queryProduct() {
@@ -182,62 +240,79 @@ class PlayProBillingClient @Inject constructor(
         }
     }
 
-    private fun queryPurchases(userInitiated: Boolean) {
+    private fun queryPurchases() {
         if (!ready()) return
         val params = QueryPurchasesParams.newBuilder()
             .setProductType(BillingClient.ProductType.INAPP)
             .build()
         billingClient.queryPurchasesAsync(params) { result, purchases ->
-            applyQuery(result, purchases, userInitiated)
+            applyQuery(result, purchases)
         }
     }
 
     private fun applyQuery(
         result: BillingResult,
-        purchases: List<Purchase>,
-        userInitiated: Boolean
+        purchases: List<Purchase>
     ) {
         val succeeded = result.responseCode == BillingClient.BillingResponseCode.OK
         val ours = purchases.filter { it.products.contains(PRODUCT_ID) }
         val purchased = ours.any { it.purchaseState == Purchase.PurchaseState.PURCHASED }
         val pending = ours.any { it.purchaseState == Purchase.PurchaseState.PENDING }
+        val announce = announceRestore
         when (decideProEntitlement(succeeded, purchased, pending)) {
             ProEntitlement.GRANT -> {
+                queryAttempt = 0
+                main.removeCallbacks(requery)
                 ours.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED }
                     .forEach { acknowledge(it) }
                 hook.grant()
                 publishOwned()
-                if (userInitiated) toast(R.string.settings_pro_restored)
+                if (announce) toast(R.string.settings_pro_restored)
+                announceRestore = false
             }
             ProEntitlement.PENDING -> {
-                if (hook.isUnlocked()) publishOwned() else publishPending()
-                if (userInitiated) toast(R.string.settings_pro_summary_pending)
+                queryAttempt = 0
+                main.removeCallbacks(requery)
+                // Payment has not finished. Do not unlock, including a stale cache.
+                hook.revoke()
+                publishPending()
+                if (announce) toast(R.string.settings_pro_summary_pending)
+                announceRestore = false
             }
             ProEntitlement.REVOKE -> {
+                queryAttempt = 0
+                main.removeCallbacks(requery)
                 hook.revoke()
                 publishLocked()
-                if (userInitiated) toast(R.string.settings_pro_nothing_to_restore)
+                if (announce) toast(R.string.settings_pro_nothing_to_restore)
+                announceRestore = false
             }
             ProEntitlement.KEEP -> {
                 val unavailable = result.responseCode ==
                     BillingClient.BillingResponseCode.BILLING_UNAVAILABLE
                 publishKeep(unavailable)
-                if (userInitiated) toast(R.string.settings_pro_restore_offline)
+                if (announce) toast(R.string.settings_pro_restore_offline)
+                announceRestore = false
+                scheduleRequery()
             }
         }
     }
 
-    private fun acknowledge(purchase: Purchase) {
+    private fun acknowledge(purchase: Purchase, attempt: Int = 0) {
+        if (purchase.purchaseState != Purchase.PurchaseState.PURCHASED) return
         if (purchase.isAcknowledged || !ready()) return
+        if (!pendingAcks.add(purchase.purchaseToken)) return
         val params = AcknowledgePurchaseParams.newBuilder()
             .setPurchaseToken(purchase.purchaseToken)
             .build()
         billingClient.acknowledgePurchase(params) { result ->
-            if (result.responseCode != BillingClient.BillingResponseCode.OK) {
-                Timber.w("Acknowledge %s %s", result.responseCode, result.debugMessage)
-            }
-            hook.grant()
-            publishOwned()
+            pendingAcks.remove(purchase.purchaseToken)
+            if (result.responseCode == BillingClient.BillingResponseCode.OK) return@acknowledgePurchase
+            Timber.w("Acknowledge %s %s", result.responseCode, result.debugMessage)
+            if (!inForeground) return@acknowledgePurchase
+            main.postDelayed({
+                acknowledge(purchase, attempt + 1)
+            }, proRetryDelayMs(attempt))
         }
     }
 

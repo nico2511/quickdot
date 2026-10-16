@@ -21,7 +21,7 @@
             android:orientation="vertical">
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
-                style="@style/TextTertiary"
+                style="@style/TextSection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -29,10 +29,7 @@
                 android:drawableEnd="@drawable/matrix_band"
                 android:drawablePadding="8dp"
                 android:drawableTint="?android:attr/textColorTertiary"
-                android:letterSpacing="0.14"
-                android:text="@string/theme_section_preview"
-                android:textAllCaps="true"
-                app:textFont="label" />
+                android:text="@string/theme_section_preview" />
 
             <LinearLayout
                 android:id="@+id/preview"
@@ -106,7 +103,7 @@
             </LinearLayout>
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
-                style="@style/TextTertiary"
+                style="@style/TextSection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -115,10 +112,7 @@
                 android:drawableEnd="@drawable/matrix_band"
                 android:drawablePadding="8dp"
                 android:drawableTint="?android:attr/textColorTertiary"
-                android:letterSpacing="0.14"
-                android:text="@string/theme_section_accent"
-                android:textAllCaps="true"
-                app:textFont="label" />
+                android:text="@string/theme_section_accent" />
 
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/swatches"
@@ -136,10 +130,10 @@
                 android:background="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:padding="16dp"
+                style="@style/TextStamp"
                 android:text="@string/theme_style_conversation"
                 android:textColor="@color/accent"
                 android:visibility="gone"
-                app:textFont="label"
                 app:textSize="secondary" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView

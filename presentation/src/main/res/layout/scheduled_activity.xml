@@ -123,11 +123,9 @@
                         android:layout_gravity="end"
                         android:layout_marginTop="8dp"
                         android:gravity="end"
+                        style="@style/TextStamp"
                         android:letterSpacing="0.08"
-                        android:text="@string/scheduled_empty_message_3_timestamp"
-                        android:textColor="?android:attr/textColorTertiary"
-                        app:textFont="display"
-                        app:textSize="tertiary" />
+                        android:text="@string/scheduled_empty_message_3_timestamp" />
 
                     <Space
                         android:layout_width="match_parent"

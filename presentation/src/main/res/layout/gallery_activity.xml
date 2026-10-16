@@ -75,6 +75,7 @@
                 android:id="@+id/toolbarSubtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/TextStamp"
                 android:layout_marginTop="2dp"
                 android:textColor="@color/textTertiaryDark"
                 android:visibility="gone"

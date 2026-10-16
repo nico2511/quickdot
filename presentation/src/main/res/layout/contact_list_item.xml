@@ -52,7 +52,7 @@
 
         <dev.octoshrimpy.quik.common.widget.QkTextView
             android:id="@+id/section"
-            style="@style/TextTertiary"
+            style="@style/TextSection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/dotted_rule"
@@ -61,7 +61,6 @@
             android:drawableTint="?android:attr/textColorTertiary"
             android:gravity="center"
             android:letterSpacing="0.16"
-            app:textFont="display"
             tools:text="Recent" />
 
     </LinearLayout>
@@ -95,12 +94,14 @@
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/subtitle"
-        style="@style/TextSecondary"
+        style="@style/TextStamp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:ellipsize="end"
         android:lines="1"
+        android:textColor="?android:attr/textColorSecondary"
+        app:textSize="secondary"
         app:layout_constraintBottom_toTopOf="@id/numbers"
         app:layout_constraintEnd_toEndOf="@id/title"
         app:layout_constraintStart_toStartOf="@id/title"

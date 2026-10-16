@@ -50,22 +50,19 @@
             android:padding="16dp">
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
-                style="@style/TextTertiary"
+                style="@style/TextSection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:letterSpacing="0.14"
-                android:text="@string/settings_pro_title"
-                android:textAllCaps="true"
-                app:textFont="label" />
+                android:text="@string/settings_pro_title" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/proPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                style="@style/TextStamp"
                 android:text="@string/settings_pro_price"
                 android:textColor="@color/accent"
-                app:textFont="label"
                 app:textSize="secondary" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
@@ -94,10 +91,9 @@
                     android:gravity="center"
                     android:paddingTop="12dp"
                     android:paddingBottom="12dp"
+                    style="@style/TextStamp"
                     android:text="@string/settings_pro_purchase"
-                    android:textAllCaps="false"
                     android:textColor="@color/white"
-                    app:textFont="label"
                     app:textSize="secondary" />
 
                 <dev.octoshrimpy.quik.common.widget.QkTextView
@@ -110,9 +106,9 @@
                     android:gravity="center"
                     android:paddingTop="12dp"
                     android:paddingBottom="12dp"
+                    style="@style/TextStamp"
                     android:text="@string/settings_pro_restore"
-                    android:textAllCaps="false"
-                    app:textFont="label"
+                    android:textColor="?android:attr/textColorPrimary"
                     app:textSize="secondary" />
 
             </LinearLayout>

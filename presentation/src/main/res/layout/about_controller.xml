@@ -48,21 +48,18 @@
             android:padding="16dp">
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
-                style="@style/TextTertiary"
+                style="@style/TextSection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:letterSpacing="0.14"
-                android:text="@string/about_credits_title"
-                android:textAllCaps="true"
-                app:textFont="label" />
+                android:text="@string/about_credits_title" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
+                style="@style/TextStamp"
                 android:text="@string/about_credits_names"
                 android:textColor="?android:attr/textColorPrimary"
-                app:textFont="display"
                 app:textSize="secondary" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView

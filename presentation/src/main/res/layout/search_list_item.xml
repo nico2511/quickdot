@@ -48,13 +48,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        style="@style/TextSection"
         android:text="@string/main_message_results_title"
-        android:textColor="?android:attr/textColorSecondary"
-        app:textFont="label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/resultsSeparator"
-        app:textSize="secondary" />
+        app:layout_constraintTop_toBottomOf="@id/resultsSeparator" />
 
     <dev.octoshrimpy.quik.common.widget.GroupAvatarView
         android:id="@+id/avatars"
@@ -102,7 +100,7 @@
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/date"
-        style="@style/TextTertiary"
+        style="@style/TextStamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -110,7 +108,6 @@
         app:layout_constraintBottom_toBottomOf="@id/title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="100"
-        app:textFont="display"
         tools:text="Oct 11" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

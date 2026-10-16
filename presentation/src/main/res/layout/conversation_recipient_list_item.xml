@@ -26,7 +26,7 @@
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/section"
-        style="@style/TextTertiary"
+        style="@style/TextSection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -37,11 +37,8 @@
         android:drawablePadding="8dp"
         android:drawableTint="?android:attr/textColorTertiary"
         android:gravity="center"
-        android:letterSpacing="0.14"
         android:text="@string/info_section_people"
-        android:textAllCaps="true"
         android:visibility="gone"
-        app:textFont="label"
         tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -78,14 +75,15 @@
 
         <dev.octoshrimpy.quik.common.widget.QkTextView
             android:id="@+id/address"
-            style="@style/TextSecondary"
+            style="@style/TextStamp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textColor="?android:attr/textColorSecondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/name"
             app:layout_constraintStart_toStartOf="@id/name"
             app:layout_constraintTop_toBottomOf="@id/name"
-            app:textFont="label"
+            app:textSize="secondary"
             tools:text="(123) 456-7890" />
 
         <ImageView

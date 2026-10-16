@@ -33,6 +33,21 @@
         <item name="textSize">tertiary</item>
     </style>
 
+    <!-- Dates, times, counters, badges, and chips. Bold display is what
+         QkTextView.pinTypeface holds on Android 14. Capitals match names. -->
+    <style name="TextStamp" parent="TextTertiary">
+        <item name="android:fontFamily">@font/doto_bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/doto_bold</item>
+        <item name="textFont">display</item>
+    </style>
+
+    <style name="TextSection" parent="TextStamp">
+        <item name="android:letterSpacing">0.14</item>
+    </style>
+
     <!-- Screen titles. fontFamily is the same pin as the thread title: Android 14
          otherwise resolves this bold display face back to the system sans. -->
     <style name="TextDisplay">
@@ -88,13 +103,6 @@
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textSize">16sp</item>
         <item name="fontFamily">@font/doto_bold</item>
-    </style>
-
-    <style name="TextLabel">
-        <item name="android:letterSpacing">0.04</item>
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
-        <item name="textFont">label</item>
-        <item name="textSize">secondary</item>
     </style>
 
     <style name="SearchSquare">
@@ -168,7 +176,7 @@
         <item name="textSize">toolbar</item>
     </style>
 
-    <style name="PreferenceCategory">
+    <style name="PreferenceCategory" parent="TextSection">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_horizontal</item>
@@ -181,7 +189,6 @@
         <item name="android:letterSpacing">0.14</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textColor">?android:attr/textColorTertiary</item>
-        <item name="textFont">label</item>
         <item name="textSize">tertiary</item>
     </style>
 

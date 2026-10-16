@@ -40,7 +40,9 @@
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/timestamp"
-                style="@style/TextLabel"
+                style="@style/TextStamp"
+                android:textColor="?android:attr/textColorSecondary"
+                app:textSize="secondary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -67,6 +69,7 @@
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/simIndex"
+                style="@style/TextStamp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="?android:attr/textColorSecondary"
@@ -188,14 +191,13 @@
 
                                 <dev.octoshrimpy.quik.common.widget.QkTextView
                                     android:id="@+id/quoteName"
+                                    style="@style/TextStamp"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:ellipsize="end"
                                     android:maxLines="1"
-                                    android:textAllCaps="true"
                                     android:maxWidth="220dp"
-                                    android:textStyle="bold"
-                                    app:textSize="tertiary"
+                                    android:textColor="?android:attr/textColorPrimary"
                                     tools:text="You" />
 
                                 <dev.octoshrimpy.quik.common.widget.QkTextView
@@ -235,8 +237,9 @@
                         android:visibility="gone"
                         tools:visibility="visible">
 
-                        <TextView
+                        <dev.octoshrimpy.quik.common.widget.QkTextView
                             android:id="@+id/reactionText"
+                            style="@style/TextStamp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/message_only"
@@ -248,8 +251,9 @@
                             android:paddingEnd="8dp"
                             android:paddingBottom="4dp"
                             android:text="👍"
+                            android:textAllCaps="false"
                             android:textColor="?android:attr/textColorPrimary"
-                            android:textSize="16sp" />
+                            app:textSize="primary" />
 
                     </LinearLayout>
 
@@ -315,9 +319,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="12dp"
                 android:contentDescription="@string/compose_message_attachment"
-                android:textColor="?android:attr/textColorTertiary"
-                app:textFont="label"
-                app:textSize="tertiary"
+                style="@style/TextStamp"
+                android:textAllCaps="false"
                 tools:text="Sending..." />
 
             <ImageView

@@ -25,11 +25,10 @@
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/label"
-        style="@style/TextTertiary"
+        style="@style/TextStamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:letterSpacing="0.08"
-        app:textFont="label" />
+        android:letterSpacing="0.08" />
 
 </LinearLayout>

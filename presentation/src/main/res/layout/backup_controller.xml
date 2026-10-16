@@ -61,8 +61,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="16dp"
+                    style="@style/TextStamp"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@id/progressCancel"
                     app:layout_constraintStart_toEndOf="@id/progressIcon"
                     app:layout_constraintTop_toTopOf="parent"
@@ -74,7 +74,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:textColor="?android:attr/textColorTertiary"
+                    style="@style/TextStamp"
                     app:layout_constraintEnd_toEndOf="@id/progressTitle"
                     app:layout_constraintStart_toStartOf="@id/progressTitle"
                     app:layout_constraintTop_toBottomOf="@id/progressTitle"
@@ -179,9 +179,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            style="@style/TextStamp"
             android:text="@string/backup_now"
             android:textColor="@color/textPrimaryDark"
-            android:textStyle="bold"
             app:textSize="primary" />
 
     </LinearLayout>

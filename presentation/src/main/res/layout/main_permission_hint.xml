@@ -51,11 +51,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
+        style="@style/TextStamp"
         android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintEnd_toStartOf="@id/snackbarButton"
         app:layout_constraintStart_toEndOf="@id/sprocket"
         app:layout_constraintTop_toBottomOf="@id/rule"
-        app:textFont="display"
         app:textSize="primary"
         tools:text="Love texting again" />
 
@@ -84,13 +84,12 @@
         android:paddingTop="8dp"
         android:paddingEnd="12dp"
         android:paddingBottom="8dp"
-        android:textAllCaps="false"
+        style="@style/TextStamp"
         android:textColor="@color/accent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:textColor="theme"
-        app:textFont="label"
         app:textSize="secondary"
         tools:text="Change" />
 

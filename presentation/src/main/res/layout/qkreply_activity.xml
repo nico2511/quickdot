@@ -115,15 +115,14 @@
         android:id="@+id/simIndex"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        style="@style/TextStamp"
         android:gravity="center"
         android:textColor="?android:attr/textColorPrimaryInverse"
-        android:textSize="14dp"
-        android:textStyle="bold"
+        app:textSize="secondary"
         app:layout_constraintBottom_toBottomOf="@id/sim"
         app:layout_constraintEnd_toEndOf="@id/sim"
         app:layout_constraintStart_toStartOf="@id/sim"
         app:layout_constraintTop_toTopOf="@id/sim"
-        tools:ignore="SpUsage"
         tools:text="1" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
@@ -131,6 +130,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
+        style="@style/TextStamp"
         android:gravity="center"
         android:textColor="?android:attr/textColorSecondary"
         app:layout_constraintBottom_toTopOf="@id/send"

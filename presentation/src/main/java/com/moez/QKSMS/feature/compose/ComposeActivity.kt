@@ -93,6 +93,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import dev.octoshrimpy.quik.databinding.ComposeActivityBinding
+import dev.octoshrimpy.quik.databinding.PinnedDialogBodyBinding
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import java.text.SimpleDateFormat
@@ -678,11 +679,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun showDetails(details: String) {
-        AlertDialog.Builder(this)
-            .setTitle(R.string.compose_details_title)
-            .setMessage(details)
-            .setCancelable(true)
-            .show()
+        showPinnedDialog(R.string.compose_details_title, details)
     }
 
     override fun showMessageLinkAskDialog(uri: Uri) {
@@ -832,9 +829,16 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun showReactionsDialog(reactions: List<String>) {
+        showPinnedDialog(R.string.compose_reactions_title, reactions.joinToString("\n"))
+    }
+
+    private fun showPinnedDialog(title: Int, body: String) {
+        val dialogBinding = PinnedDialogBodyBinding.inflate(layoutInflater)
+        dialogBinding.title.setText(title)
+        dialogBinding.body.text = body
         AlertDialog.Builder(this)
-            .setTitle(R.string.compose_reactions_title)
-            .setMessage(reactions.joinToString("\n"))
+            .setView(dialogBinding.root)
+            .setCancelable(true)
             .show()
     }
 

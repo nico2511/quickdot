@@ -58,13 +58,14 @@
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/date"
-        style="@style/TextSecondary"
+        style="@style/TextStamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:textColor="?android:attr/textColorSecondary"
         app:layout_constraintStart_toStartOf="@id/recipients"
         app:layout_constraintTop_toBottomOf="@id/recipients"
-        app:textFont="display"
+        app:textSize="secondary"
         tools:text="Oct 11" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView

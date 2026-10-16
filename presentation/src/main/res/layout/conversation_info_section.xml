@@ -12,7 +12,7 @@
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/section"
-        style="@style/TextTertiary"
+        style="@style/TextSection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/matrix_band"
@@ -20,9 +20,6 @@
         android:drawablePadding="8dp"
         android:drawableTint="?android:attr/textColorTertiary"
         android:gravity="center"
-        android:letterSpacing="0.14"
-        android:text="@string/info_section_attachments"
-        android:textAllCaps="true"
-        app:textFont="label" />
+        android:text="@string/info_section_attachments" />
 
 </LinearLayout>

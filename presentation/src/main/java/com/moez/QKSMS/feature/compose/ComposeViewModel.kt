@@ -1226,9 +1226,10 @@ class ComposeViewModel @Inject constructor(
                     else -> 0
                 }
 
-                if ((delay != 0 || state.scheduled != 0L) && !permissionManager.hasExactAlarms()) {
+                // Ask for exact alarms when the user picked a time. The send still
+                // proceeds: without the grant the alarm is inexact, not dropped.
+                if (state.scheduled != 0L && !permissionManager.hasExactAlarms()) {
                     externalNavigator.showExactAlarmsSettings()
-                    return@withLatestFrom false
                 }
 
                 val subId = state.subscription?.subscriptionId ?: -1

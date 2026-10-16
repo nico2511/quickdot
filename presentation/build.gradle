@@ -22,12 +22,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         applicationId 'com.nico2511.quickdot'
         minSdkVersion 23
-        targetSdkVersion 33
+        targetSdkVersion 36
         versionCode 13
         versionName '0.1.12'
         setProperty("archivesBaseName", "Quickdot-v${versionName}")

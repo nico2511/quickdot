@@ -63,6 +63,10 @@ class ScheduledActivity : QkThemedActivity(), ScheduledView {
         super.onCreate(savedInstanceState)
         binding = ScheduledActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        consumeBackPress {
+            backPressedIntent.onNext(Unit)
+            true
+        }
         setTitle(R.string.scheduled_title)
         showBackButton(true)
         viewModel.bindView(this)
@@ -103,8 +107,6 @@ class ScheduledActivity : QkThemedActivity(), ScheduledView {
         // show compose button
         binding.compose.isVisible = state.conversationId == null
     }
-
-    override fun onBackPressed() = backPressedIntent.onNext(Unit)
 
     override fun clearSelection() = scheduledMessageAdapter.clearSelection()
 

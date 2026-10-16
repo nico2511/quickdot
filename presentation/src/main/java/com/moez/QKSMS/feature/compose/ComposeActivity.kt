@@ -185,25 +185,19 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         uris.forEach(attachAnyFileSelectedIntent::onNext)
     }
 
-    private val pickFilesWithDocsUI = registerForActivityResult(
-        ActivityResultContracts.GetMultipleContents()
+    private val pickFiles = registerForActivityResult(
+        ActivityResultContracts.OpenMultipleDocuments()
     ) { uris ->
-        uris.forEach(attachAnyFileSelectedIntent::onNext)
-    }
-
-    private val pickFilesWithChooser = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == RESULT_OK) {
-            val data = result.data ?: return@registerForActivityResult
-
-            val uris = data.clipData?.let { clipData ->
-                (0 until clipData.itemCount).mapNotNull { clipData.getItemAt(it).uri }
-            } ?: listOfNotNull(data.data)
-
-            uris.forEach { uri ->
-                attachAnyFileSelectedIntent.onNext(uri)
+        uris.forEach { uri ->
+            try {
+                contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+            } catch (_: SecurityException) {
+                // The grant from the picker is enough to read the file while composing.
             }
+            attachAnyFileSelectedIntent.onNext(uri)
         }
     }
 
@@ -280,6 +274,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         super.onCreate(savedInstanceState)
         binding = ComposeActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        consumeBackPress {
+            backPressedIntent.onNext(Unit)
+            true
+        }
         showBackButton(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         binding.toolbarAvatar.square = true
@@ -795,20 +793,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun requestFilePicker() {
-        // On older Android versions, let's still use the older method of creating a chooser,
-        // and allowing the user to pick which file they would like.
-        // On Android 17 however, we must use Documents UI, so let's do it properly.
-        if (Build.VERSION.SDK_INT >= 37) {
-            pickFilesWithDocsUI.launch("*/*")
-        } else {
-            val intent = Intent(Intent.ACTION_PICK)
-                .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
-                .putExtra(Intent.EXTRA_LOCAL_ONLY, false)
-                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                .setType("*/*")
-            pickFilesWithChooser.launch(Intent.createChooser(intent, null))
-        }
+        // Documents UI returns a content URI the app can read without READ_MEDIA_*.
+        pickFiles.launch(arrayOf("*/*"))
     }
 
     override fun setDraft(draft: String) {
@@ -928,8 +914,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             rail.setVisible(false)
         }
     }
-
-    override fun onBackPressed() = backPressedIntent.onNext(Unit)
 
     override fun focusMessage() {
         binding.message.requestFocus()

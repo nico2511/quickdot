@@ -42,12 +42,7 @@ class BlockingActivity : QkThemedActivity() {
         if (!router.hasRootController()) {
             router.setRoot(RouterTransaction.with(BlockingController()))
         }
-    }
-
-    override fun onBackPressed() {
-        if (!router.handleBack()) {
-            super.onBackPressed()
-        }
+        consumeBackPress { router.handleBack() }
     }
 
 }

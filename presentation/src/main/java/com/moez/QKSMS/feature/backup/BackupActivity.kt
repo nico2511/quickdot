@@ -43,12 +43,7 @@ class BackupActivity : QkThemedActivity() {
         if (!router.hasRootController()) {
             router.setRoot(RouterTransaction.with(BackupController()))
         }
-    }
-
-    override fun onBackPressed() {
-        if (!router.handleBack()) {
-            super.onBackPressed()
-        }
+        consumeBackPress { router.handleBack() }
     }
 
 }

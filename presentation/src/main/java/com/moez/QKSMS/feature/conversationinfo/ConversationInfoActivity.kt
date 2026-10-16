@@ -42,12 +42,7 @@ class ConversationInfoActivity : QkThemedActivity() {
             val threadId = intent.extras?.getLong("threadId") ?: 0L
             router.setRoot(RouterTransaction.with(ConversationInfoController(threadId)))
         }
-    }
-
-    override fun onBackPressed() {
-        if (!router.handleBack()) {
-            super.onBackPressed()
-        }
+        consumeBackPress { router.handleBack() }
     }
 
 }

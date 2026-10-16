@@ -19,6 +19,7 @@
 package dev.octoshrimpy.quik.repository
 
 import com.moez.QKSMS.manager.QkTransaction
+import dev.octoshrimpy.quik.manager.scheduleMessageAlarm
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.ContentUris
@@ -625,10 +626,7 @@ open class MessageRepositoryImpl @Inject constructor(
             }
 
             // create alarm that will trigger sending the message
-            (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager)
-                .setExactAndAllowWhileIdle(
-                    AlarmManager.RTC_WAKEUP, sendTime, getIntentForDelayedSms(message.id)
-                )
+            scheduleMessageAlarm(context, sendTime, getIntentForDelayedSms(message.id))
 
             Timber.v("set ${delayMs}ms delay for message id ${message.id}")
 

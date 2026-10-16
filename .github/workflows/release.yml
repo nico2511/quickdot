@@ -58,6 +58,9 @@ jobs:
         run: ./gradlew assemblePlayRelease assembleFossRelease bundlePlayRelease
         env:
           CI: "true"
+          # Play Console license public key. Play release verifies purchase
+          # signatures with it. An empty value fails closed (no unlock).
+          PLAY_LICENSE_KEY: ${{ secrets.PLAY_LICENSE_KEY }}
 
       - name: Upload FOSS APK
         uses: actions/upload-artifact@v4

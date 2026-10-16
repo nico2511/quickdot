@@ -19,6 +19,7 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
+import dev.octoshrimpy.quik.BuildConfig
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.util.ProBillingHook
 import io.reactivex.Observable
@@ -31,9 +32,11 @@ import javax.inject.Singleton
 /**
  * One-time product `quickdot_pro`. Cold start and every return to the
  * foreground call [queryPurchasesAsync][BillingClient.queryPurchasesAsync]
- * for in-app purchases. PURCHASED unlocks every conversation. A successful
- * query with no PURCHASED row (refund, or still PENDING) locks style to one
- * conversation. A failed or disconnected query keeps the cached unlock and
+ * for in-app purchases. A PURCHASED row unlocks every conversation only
+ * after its signature matches [BuildConfig.PLAY_LICENSE_KEY] (SHA1withRSA).
+ * A successful query with no trusted PURCHASED row (refund, still PENDING,
+ * or a bad signature) locks style to one conversation. A failed or
+ * disconnected query keeps the cached unlock and
  * retries with backoff while the app is in the foreground. SMS is not involved.
  */
 @Singleton
@@ -54,6 +57,7 @@ class PlayProBillingClient @Inject constructor(
     private var connectAttempt = 0
     private var queryAttempt = 0
     private var announceRestore = false
+    private var loggedMissingLicenseKey = false
     private var pendingActivity: WeakReference<Activity>? = null
     private val pendingAcks = mutableSetOf<String>()
 
@@ -130,7 +134,7 @@ class PlayProBillingClient @Inject constructor(
         // inventory. Revoking from it would lock a paying user. Grant a
         // PURCHASED row, ignore PENDING, then query the full in-app list.
         if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-            val ours = purchases.orEmpty().filter { it.products.contains(PRODUCT_ID) }
+            val ours = purchases.orEmpty().filter { it.products.contains(PRODUCT_ID) && signatureAccepted(it) }
             val purchased = ours.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED }
             purchased.forEach { acknowledge(it) }
             if (purchased.isNotEmpty()) {
@@ -255,7 +259,7 @@ class PlayProBillingClient @Inject constructor(
         purchases: List<Purchase>
     ) {
         val succeeded = result.responseCode == BillingClient.BillingResponseCode.OK
-        val ours = purchases.filter { it.products.contains(PRODUCT_ID) }
+        val ours = purchases.filter { it.products.contains(PRODUCT_ID) && signatureAccepted(it) }
         val purchased = ours.any { it.purchaseState == Purchase.PurchaseState.PURCHASED }
         val pending = ours.any { it.purchaseState == Purchase.PurchaseState.PENDING }
         val announce = announceRestore
@@ -296,6 +300,25 @@ class PlayProBillingClient @Inject constructor(
                 scheduleRequery()
             }
         }
+    }
+
+    /** Unsigned or invalid purchases are ignored, so they cannot unlock. */
+    private fun signatureAccepted(purchase: Purchase): Boolean {
+        val key = BuildConfig.PLAY_LICENSE_KEY
+        if (key.isBlank() && !BuildConfig.DEBUG && !loggedMissingLicenseKey) {
+            loggedMissingLicenseKey = true
+            Timber.w("PLAY_LICENSE_KEY is empty. This release build will not unlock Pro.")
+        }
+        val accepted = purchaseMayUnlock(
+            purchase.originalJson,
+            purchase.signature,
+            key,
+            BuildConfig.DEBUG
+        )
+        if (!accepted && key.isNotBlank()) {
+            Timber.w("Rejected quickdot_pro. The purchase signature did not verify.")
+        }
+        return accepted
     }
 
     private fun acknowledge(purchase: Purchase, attempt: Int = 0) {

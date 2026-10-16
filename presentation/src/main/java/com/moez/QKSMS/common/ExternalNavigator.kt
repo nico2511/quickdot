@@ -48,10 +48,12 @@ class ExternalNavigator @Inject constructor(
 
     fun showSourceCode() = openExternalActivity("https://github.com/nico2511/quickdot")
 
-    fun showChangelog() = openExternalActivity("https://github.com/nico2511/quickdot/releases")
+    fun showUpstream() = openExternalActivity("https://github.com/quik-sms/quik")
+
+    fun showChangelog() = openExternalActivity("https://github.com/nico2511/quickdot/commits/master")
 
     fun showLicense() =
-        openExternalActivity("https://github.com/nico2511/quickdot/blob/master/LICENSE")
+        openExternalActivity("https://www.gnu.org/licenses/gpl-3.0.html")
 
     fun makePhoneCall(address: String) {
         val action = if (permissions.hasCalling()) Intent.ACTION_CALL else Intent.ACTION_DIAL
@@ -96,7 +98,7 @@ class ExternalNavigator @Inject constructor(
     fun showInvite() {
         Intent(Intent.ACTION_SEND)
             .setType("text/plain")
-            .putExtra(Intent.EXTRA_TEXT, "https://github.com/nico2511/quickdot/releases/latest")
+            .putExtra(Intent.EXTRA_TEXT, "https://github.com/nico2511/quickdot")
             .let { Intent.createChooser(it, null) }
             .let(::startActivityExternal)
     }

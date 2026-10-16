@@ -41,12 +41,7 @@ class SettingsActivity : QkThemedActivity() {
         if (!router.hasRootController()) {
             router.setRoot(RouterTransaction.with(SettingsController()))
         }
-    }
-
-    override fun onBackPressed() {
-        if (!router.handleBack()) {
-            super.onBackPressed()
-        }
+        consumeBackPress { router.handleBack() }
     }
 
 }

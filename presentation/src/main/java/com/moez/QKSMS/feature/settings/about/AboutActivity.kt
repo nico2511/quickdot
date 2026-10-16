@@ -22,11 +22,6 @@ class AboutActivity : QkThemedActivity() {
         if (!router.hasRootController()) {
             router.setRoot(RouterTransaction.with(AboutController()))
         }
-    }
-
-    override fun onBackPressed() {
-        if (!router.handleBack()) {
-            super.onBackPressed()
-        }
+        consumeBackPress { router.handleBack() }
     }
 }

@@ -103,6 +103,14 @@
             app:title="@string/about_source_title" />
 
         <dev.octoshrimpy.quik.common.widget.PreferenceView
+            android:id="@+id/upstream"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/qd_share"
+            app:summary="@string/about_upstream"
+            app:title="@string/about_upstream_title" />
+
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/changelog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

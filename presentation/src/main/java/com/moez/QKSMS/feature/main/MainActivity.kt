@@ -145,6 +145,10 @@ class MainActivity : QkThemedActivity(), MainView {
         super.onCreate(savedInstanceState)
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        consumeBackPress {
+            backPressedSubject.onNext(NavItem.BACK)
+            true
+        }
         // The large screen title and the selection label live in custom views.
         // Leave the default action-bar title off so "0 selected" does not show.
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -485,8 +489,6 @@ class MainActivity : QkThemedActivity(), MainView {
 
     override fun onOptionsItemSelected(item: MenuItem) =
         optionsItemIntent.onNext(item.itemId).let { true }
-
-    override fun onBackPressed() = backPressedSubject.onNext(NavItem.BACK)
 
     private fun tintAccentMarks(root: View, color: Int) {
         if (root.tag == "accentMark") {

@@ -347,6 +347,8 @@
     <string name="about_version_title">Version</string>
     <string name="about_developer_title">Développeurs</string>
     <string name="about_source_title">Code source</string>
+    <string name="about_upstream_title">Projet d’origine</string>
+    <string name="about_credits_title">Crédits</string>
     <string name="about_changelog_title">Liste des modifications</string>
     <string name="about_contact_title">Contact</string>
     <string name="about_license_title">Licence</string>
@@ -363,12 +365,67 @@
     <string name="theme_plus" translatable="false">Custom Color</string>
     <string name="theme_hex">HEX</string>
     <string name="theme_apply">Appliquer</string>
-    <string name="about_developer" translatable="false">Une équipe de merveilleux développeurs du monde entier !</string>
+    <string name="accent_signal">Signal</string>
+    <string name="accent_cobalt">Cobalt</string>
+    <string name="accent_pine">Pin</string>
+    <string name="accent_oxide">Oxyde</string>
+    <string name="accent_plum">Prune</string>
+    <string name="accent_graphite">Graphite</string>
+    <string name="theme_section_preview">Aperçu</string>
+    <string name="theme_section_accent">Accent</string>
+    <string name="theme_preview_in">En route</string>
+    <string name="theme_preview_out">Merci</string>
+    <string name="theme_style_conversation">Style complet sur cette conversation</string>
+    <string name="theme_style_conversation_done">Cette conversation garde le style complet</string>
+    <string name="theme_pro_note">La version gratuite garde le style complet sur une conversation. Quickdot Pro coûte 1 EUR, une seule fois, et garde l’accent partout.</string>
+    <string name="settings_pro_title">Quickdot Pro</string>
+    <string name="settings_pro_price">1 EUR · une seule fois</string>
+    <string name="settings_pro_summary">Style complet sur une conversation de votre choix. L’achat le débloque partout.</string>
+    <string name="settings_pro_summary_owned">Débloqué. L’accent s’applique à chaque conversation.</string>
+    <string name="settings_pro_summary_pending">Le paiement est en attente. Le style reste sur une conversation jusqu’à ce que Play termine l’achat.</string>
+    <string name="settings_pro_summary_unavailable">La facturation Play n’est pas disponible sur cet appareil. Le style reste sur une conversation.</string>
+    <string name="settings_pro_purchase">Acheter</string>
+    <string name="settings_pro_restore">Restaurer</string>
+    <string name="settings_pro_owned">Débloqué</string>
+    <string name="settings_pro_pending">En attente</string>
+    <string name="settings_pro_restored">Achat restauré.</string>
+    <string name="settings_pro_nothing_to_restore">Aucun achat à restaurer.</string>
+    <string name="settings_pro_restore_offline">Impossible de joindre Play. Le déblocage enregistré est inchangé.</string>
+    <string name="settings_pro_product_missing">Quickdot Pro n’est pas encore disponible sur Play.</string>
+    <string name="main_screen_title">Messages</string>
+    <string name="contacts_title">Nouveau message</string>
+    <string name="contacts_section_recent">Récents</string>
+    <string name="contacts_section_starred">Favoris</string>
+    <string name="contacts_section_groups">Groupes</string>
+    <string name="contacts_section_new">Envoyer à</string>
+    <string name="contacts_empty_title">Aucun contact</string>
+    <string name="contacts_empty_message">Saisissez un numéro ci-dessus, ou ajoutez des personnes à vos contacts.</string>
+    <string name="contacts_search_empty_title">Aucun résultat</string>
+    <string name="contacts_search_empty_message">Personne ne correspond à cette recherche.</string>
+    <string name="contacts_permission_title">Contacts désactivés</string>
+    <string name="contacts_clear">Effacer la recherche</string>
+    <string name="drawer_section_mailbox">Boîte</string>
+    <string name="drawer_section_tools">Outils</string>
+    <string name="drawer_section_app">Application</string>
+    <string name="info_section_people">Personnes</string>
+    <string name="info_section_conversation">Conversation</string>
+    <string name="info_section_attachments">Pièces jointes</string>
+    <string name="backup_category">Fichiers</string>
+    <string name="backup_category_note">Note</string>
+    <string name="scheduled_category_preview">Aperçu</string>
+    <string name="settings_category_about">Application</string>
+    <string name="settings_theme_summary_applied">%1$s · s’applique dans toute l’application</string>
+    <string name="settings_theme_summary_one">%1$s · style complet sur une conversation</string>
+    <string name="blocking_category_sources">Sources</string>
+    <string name="blocking_category_messages">Messages</string>
+    <string name="blocking_manager_category">Gestionnaires</string>
+    <string name="about_developer" translatable="false">Quickdot</string>
     <string name="about_source" translatable="false">https://github.com/nico2511/quickdot</string>
-    <string name="about_changelog" translatable="false">https://github.com/nico2511/quickdot/releases</string>
+    <string name="about_upstream" translatable="false">https://github.com/quik-sms/quik</string>
+    <string name="about_changelog" translatable="false">https://github.com/nico2511/quickdot/commits/master</string>
     <string name="about_contact" translatable="false">https://github.com/nico2511/quickdot/issues</string>
-    <string name="about_license" translatable="false">GNU General Public License v3.0</string>
-    <string name="about_copyright" translatable="false">© 2014–2024</string>
+    <string name="about_license" translatable="false">https://www.gnu.org/licenses/gpl-3.0.html</string>
+    <string name="about_copyright" translatable="false">© 2014–2026</string>
     <string name="changelog_title" translatable="false">New in Quickdot</string>
     <string name="changelog_version" translatable="false">Version %s</string>
     <string name="changelog_added" translatable="false">Added</string>

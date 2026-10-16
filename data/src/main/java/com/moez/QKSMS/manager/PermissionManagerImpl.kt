@@ -69,6 +69,9 @@ class PermissionManagerImpl @Inject constructor(private val context: Context) : 
     }
 
     override fun hasStorage(): Boolean {
+        // Saving a message part inserts a new MediaStore row. Scoped storage
+        // does not require WRITE_EXTERNAL_STORAGE for that on Android 10+.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) return true
         return hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 

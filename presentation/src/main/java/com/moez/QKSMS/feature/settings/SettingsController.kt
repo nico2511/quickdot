@@ -146,14 +146,14 @@ class SettingsController : QkController<SettingsControllerBinding, SettingsView,
     override fun proRestoreClicks(): Observable<*> = binding.proRestore.clicks()
 
     override fun render(state: SettingsState) {
-        binding.theme.findViewById<View>(R.id.themePreview)?.setBackgroundTint(colors.snapAccent(state.theme))
+        val accent = colors.displayAccent(state.theme)
+        binding.theme.findViewById<View>(R.id.themePreview)?.setBackgroundTint(accent)
         val accentLabel = colors.accentLabel(state.theme)
         binding.theme.summary = context.getString(
             if (colors.styleIsAppWide()) R.string.settings_theme_summary_applied
             else R.string.settings_theme_summary_one,
             accentLabel
         )
-        val accent = colors.snapAccent(state.theme)
         binding.proPrice.setTextColor(accent)
         if (state.proPrice.isNotEmpty()) binding.proPrice.text = state.proPrice
         if (state.proSummary.isNotEmpty()) binding.proSummary.text = state.proSummary

@@ -53,10 +53,11 @@ class Colors @Inject constructor(
         Accent(R.string.accent_pine, 0xFF1B7F4E.toInt()),
         Accent(R.string.accent_oxide, 0xFFC44914.toInt()),
         Accent(R.string.accent_plum, 0xFF8A3D6E.toInt()),
-        Accent(R.string.accent_graphite, 0xFF3A3A3A.toInt())
+        Accent(R.string.accent_graphite, AccentPaint.GRAPHITE)
     )
 
     fun snapAccent(color: Int): Int {
+        AccentPaint.canonicalize(color)?.let { return it }
         return accents.minBy { accent ->
             val dr = Color.red(color) - Color.red(accent.color)
             val dg = Color.green(color) - Color.green(accent.color)
@@ -65,8 +66,20 @@ class Colors @Inject constructor(
         }.color
     }
 
-    /** The accent chosen in Settings. This is what app chrome paints. */
-    fun accentColor(): Int = snapAccent(prefs.theme().get())
+    /** The accent chosen in Settings, painted for the current night mode. */
+    fun accentColor(): Int = displayAccent(prefs.theme().get())
+
+    /**
+     * Canonical accent, shifted when Graphite would sit on a night surface.
+     * Callers that save a colour keep [snapAccent]. Callers that paint use this.
+     */
+    fun displayAccent(color: Int): Int = AccentPaint.display(snapAccent(color), night())
+
+    private fun night(): Boolean {
+        val system = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK ==
+                Configuration.UI_MODE_NIGHT_YES
+        return AccentPaint.night(prefs.nightMode.get(), prefs.night.get(), system)
+    }
 
     fun accentLabel(color: Int = accentColor()): String {
         val snapped = snapAccent(color)
@@ -168,7 +181,7 @@ class Colors @Inject constructor(
                 prefs.quickdotPro.asObservable(),
                 prefs.styledThreadId.asObservable(),
                 Function3<Int, Boolean, Long, Theme> { color, _, _ ->
-                    Theme(snapAccent(color), this@Colors)
+                    Theme(displayAccent(color), this@Colors)
                 }
         )
     }

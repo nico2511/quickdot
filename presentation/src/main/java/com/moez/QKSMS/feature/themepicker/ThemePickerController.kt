@@ -46,7 +46,7 @@ class ThemePickerController(
             val swatch = AccentSwatchBinding.inflate(inflater, binding.swatches, false)
             swatch.root.tag = accent.color
             swatch.label.text = activity?.getString(accent.nameRes)
-            swatch.swatch.setTint(accent.color)
+            swatch.swatch.setTint(colors.displayAccent(accent.color))
             swatch.root.setOnClickListener { themeSelected.onNext(accent.color) }
             binding.swatches.addView(swatch.root)
         }
@@ -65,15 +65,17 @@ class ThemePickerController(
 
     override fun setCurrentTheme(color: Int) {
         val snapped = colors.snapAccent(color)
-        binding.previewSend.setBackgroundTint(snapped)
-        binding.previewAvatar.setBackgroundTint(snapped)
-        binding.styleConversation.setTextColor(snapped)
+        val paint = colors.displayAccent(snapped)
+        binding.previewSend.setBackgroundTint(paint)
+        binding.previewAvatar.setBackgroundTint(paint)
+        binding.styleConversation.setTextColor(paint)
         for (index in 0 until binding.swatches.childCount) {
             val child = binding.swatches.getChildAt(index)
             val selected = child.tag == snapped
             val frame = child.findViewById<View>(R.id.swatchFrame)
-            if (selected) frame.setBackgroundTint(snapped) else frame.backgroundTintList = null
-            child.findViewById<ImageView>(R.id.swatch).setTint(child.tag as Int)
+            val swatch = colors.displayAccent(child.tag as Int)
+            if (selected) frame.setBackgroundTint(swatch) else frame.backgroundTintList = null
+            child.findViewById<ImageView>(R.id.swatch).setTint(swatch)
         }
     }
 

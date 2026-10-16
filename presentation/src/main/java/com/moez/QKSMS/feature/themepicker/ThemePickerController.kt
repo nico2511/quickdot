@@ -1,10 +1,14 @@
 package dev.octoshrimpy.quik.feature.themepicker
 
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.core.widget.TextViewCompat
+import kotlin.math.roundToInt
 import com.jakewharton.rxbinding2.view.clicks
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkController
@@ -46,6 +50,7 @@ class ThemePickerController(
             val swatch = AccentSwatchBinding.inflate(inflater, binding.swatches, false)
             swatch.root.tag = accent.color
             swatch.label.text = activity?.getString(accent.nameRes)
+            fitAccentLabel(swatch.label)
             swatch.swatch.setTint(colors.displayAccent(accent.color))
             swatch.root.setOnClickListener { themeSelected.onNext(accent.color) }
             binding.swatches.addView(swatch.root)
@@ -92,5 +97,24 @@ class ThemePickerController(
     }
 
     override fun render(state: ThemePickerState) = Unit
+
+    /**
+     * TextStamp sets a fixed size, which turns autosize off. GRAPHITE is wider
+     * than the swatch at that size once letter spacing is added, and a large
+     * text preference makes every name wider. Shrink to fit one line. Do not
+     * ellipsize: a cut name is the bug this avoids.
+     */
+    private fun fitAccentLabel(label: TextView) {
+        val maxSp = (label.textSize / label.resources.displayMetrics.scaledDensity)
+            .roundToInt()
+            .coerceAtLeast(8)
+        TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(
+            label,
+            8,
+            maxSp,
+            1,
+            TypedValue.COMPLEX_UNIT_SP
+        )
+    }
 
 }

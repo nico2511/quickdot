@@ -23,7 +23,9 @@ buildscript {
     ext.mockito_version = '2.18.3'
     ext.moshi_version = '1.8.0'
     ext.okhttp3_version = '4.10.0'
-    ext.realm_version = '10.15.0'
+    // Last Realm Java release. librealm-jni.so is built with 16 KB ELF
+    // alignment. File format stays v23, so existing local Realms open.
+    ext.realm_version = '10.19.0'
     ext.realm_adapters_version = '3.1.0'
     ext.rxandroid_version = '2.0.1'
     ext.rxdogtag_version = '0.2.0'
@@ -49,7 +51,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.2'
+        // 8.5.1+ zip-aligns uncompressed native libraries to 16 KB.
+        classpath 'com.android.tools.build:gradle:8.5.2'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.5.2'
         classpath 'com.google.gms:google-services:4.3.14'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"

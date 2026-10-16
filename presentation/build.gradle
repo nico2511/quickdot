@@ -40,6 +40,21 @@ android {
             dimension "distribution"
             // Play Console listing. One-time product quickdot_pro.
             applicationId "com.nico2511.quickdot"
+            // Base64 X.509 license public key. Gradle property or env
+            // PLAY_LICENSE_KEY. Empty in a release build fails closed:
+            // purchases are not unlocked until the signature verifies.
+            def licenseKey = (
+                    project.findProperty("PLAY_LICENSE_KEY")
+                            ?: System.getenv("PLAY_LICENSE_KEY")
+                            ?: ""
+            ).toString().trim()
+                    .replace("\\", "\\\\")
+                    .replace("\"", "\\\"")
+                    .replace("\$", "\\\$")
+                    .replace("\r", "")
+                    .replace("\n", "")
+            buildConfigField "String", "PLAY_LICENSE_KEY", "\"${licenseKey}\""
+            proguardFile "proguard-billing.pro"
         }
         foss {
             dimension "distribution"

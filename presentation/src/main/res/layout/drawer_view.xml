@@ -42,7 +42,7 @@
             android:text="@string/main_screen_title" />
 
         <dev.octoshrimpy.quik.common.widget.QkTextView
-            style="@style/TextTertiary"
+            style="@style/TextSection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -53,10 +53,7 @@
             android:drawablePadding="8dp"
             android:drawableTint="?android:attr/textColorTertiary"
             android:gravity="center"
-            android:letterSpacing="0.14"
-            android:text="@string/drawer_section_mailbox"
-            android:textAllCaps="true"
-            app:textFont="label" />
+            android:text="@string/drawer_section_mailbox" />
 
         <LinearLayout
             android:id="@+id/inbox"
@@ -97,7 +94,7 @@
         </LinearLayout>
 
         <dev.octoshrimpy.quik.common.widget.QkTextView
-            style="@style/TextTertiary"
+            style="@style/TextSection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -108,10 +105,7 @@
             android:drawablePadding="8dp"
             android:drawableTint="?android:attr/textColorTertiary"
             android:gravity="center"
-            android:letterSpacing="0.14"
-            android:text="@string/drawer_section_tools"
-            android:textAllCaps="true"
-            app:textFont="label" />
+            android:text="@string/drawer_section_tools" />
 
         <LinearLayout
             android:id="@+id/backup"
@@ -182,7 +176,7 @@
         </LinearLayout>
 
         <dev.octoshrimpy.quik.common.widget.QkTextView
-            style="@style/TextTertiary"
+            style="@style/TextSection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -193,10 +187,7 @@
             android:drawablePadding="8dp"
             android:drawableTint="?android:attr/textColorTertiary"
             android:gravity="center"
-            android:letterSpacing="0.14"
-            android:text="@string/drawer_section_app"
-            android:textAllCaps="true"
-            app:textFont="label" />
+            android:text="@string/drawer_section_app" />
 
         <LinearLayout
             android:id="@+id/settings"
@@ -277,12 +268,12 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                style="@style/TextStamp"
                 android:text="@string/rate_title"
                 android:textColor="?android:attr/textColorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/rateIcon"
                 app:layout_constraintTop_toTopOf="parent"
-                app:textFont="body"
                 app:textSize="primary" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
@@ -307,11 +298,11 @@
                 android:paddingStart="16dp"
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp"
+                style="@style/TextStamp"
                 android:text="@string/rate_dismiss"
                 android:textColor="?android:attr/textColorTertiary"
                 app:layout_constraintEnd_toStartOf="@id/rateOkay"
                 app:layout_constraintTop_toBottomOf="@id/rateSummary"
-                app:textFont="label"
                 app:textSize="secondary" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
@@ -322,11 +313,11 @@
                 android:layout_marginEnd="8dp"
                 android:background="?attr/selectableItemBackground"
                 android:padding="16dp"
+                style="@style/TextStamp"
                 android:text="@string/rate_okay"
                 android:textColor="@color/accent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rateSummary"
-                app:textFont="label"
                 app:textSize="secondary" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

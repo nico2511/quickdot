@@ -37,9 +37,9 @@
         android:layout_marginTop="12dp"
         android:gravity="center"
         android:letterSpacing="0.06"
+        style="@style/TextStamp"
         android:text="@string/gallery_error"
         android:textColor="@color/textSecondaryDark"
-        app:textFont="label"
         app:textSize="secondary" />
 
 </LinearLayout>

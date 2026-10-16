@@ -25,7 +25,7 @@
     android:paddingTop="8dp">
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
-        style="@style/TextTertiary"
+        style="@style/TextSection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -36,10 +36,7 @@
         android:drawablePadding="8dp"
         android:drawableTint="?android:attr/textColorTertiary"
         android:gravity="center"
-        android:letterSpacing="0.14"
-        android:text="@string/info_section_conversation"
-        android:textAllCaps="true"
-        app:textFont="label" />
+        android:text="@string/info_section_conversation" />
 
     <dev.octoshrimpy.quik.common.widget.PreferenceView
         android:id="@+id/groupName"

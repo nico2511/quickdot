@@ -41,15 +41,17 @@
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/version"
-        style="@style/TextSecondary"
+        style="@style/TextStamp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="24dp"
+        android:textColor="?android:attr/textColorSecondary"
         app:layout_constraintBottom_toTopOf="@id/changelog"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintVertical_weight="1"
+        app:textSize="secondary"
         tools:text="Version 3.6.5" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -69,7 +71,7 @@
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/more"
-        style="@style/TextSecondary"
+        style="@style/TextStamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -81,7 +83,8 @@
         android:paddingBottom="8dp"
         android:letterSpacing="0.06"
         android:text="@string/changelog_more"
-        app:textFont="label"
+        android:textColor="?android:attr/textColorSecondary"
+        app:textSize="secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/dismiss"
         app:layout_constraintTop_toBottomOf="@id/changelog"
@@ -89,7 +92,7 @@
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/dismiss"
-        style="@style/TextSecondary"
+        style="@style/TextStamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -102,7 +105,8 @@
         android:paddingBottom="8dp"
         android:letterSpacing="0.06"
         android:text="@string/changelog_dismiss"
-        app:textFont="label"
+        android:textColor="?android:attr/textColorSecondary"
+        app:textSize="secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/changelog"

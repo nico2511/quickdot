@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="24dp"
+    android:paddingTop="20dp"
+    android:paddingEnd="24dp"
+    android:paddingBottom="8dp">
+
+    <dev.octoshrimpy.quik.common.widget.QkTextView
+        android:id="@+id/title"
+        style="@style/TextHeadline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="?android:attr/textColorPrimary"
+        app:textSize="dialog" />
+
+    <dev.octoshrimpy.quik.common.widget.QkTextView
+        android:id="@+id/body"
+        style="@style/TextStamp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:lineSpacingExtra="4dp"
+        android:textColor="?android:attr/textColorSecondary"
+        app:textSize="secondary" />
+
+</LinearLayout>

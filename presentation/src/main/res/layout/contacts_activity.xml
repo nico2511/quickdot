@@ -130,12 +130,14 @@
 
         <dev.octoshrimpy.quik.common.widget.QkTextView
             android:id="@+id/permissionTitle"
-            style="@style/TextPrimary"
+            style="@style/TextStamp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="@string/contacts_permission_title" />
+            android:text="@string/contacts_permission_title"
+            android:textColor="?android:attr/textColorPrimary"
+            app:textSize="primary" />
 
         <dev.octoshrimpy.quik.common.widget.QkTextView
             android:id="@+id/permissionMessage"
@@ -157,9 +159,9 @@
             android:minWidth="120dp"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
+            style="@style/TextStamp"
             android:text="@string/main_permission_allow"
             android:textColor="@color/white"
-            app:textFont="label"
             app:textSize="secondary" />
 
     </LinearLayout>
@@ -218,12 +220,14 @@
 
         <dev.octoshrimpy.quik.common.widget.QkTextView
             android:id="@+id/emptyTitle"
-            style="@style/TextPrimary"
+            style="@style/TextStamp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:gravity="center"
-            android:text="@string/contacts_empty_title" />
+            android:text="@string/contacts_empty_title"
+            android:textColor="?android:attr/textColorPrimary"
+            app:textSize="primary" />
 
         <dev.octoshrimpy.quik.common.widget.QkTextView
             android:id="@+id/emptyMessage"

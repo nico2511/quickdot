@@ -58,29 +58,25 @@
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/date"
+        style="@style/TextStamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:textColor="?android:attr/textColorTertiary"
         app:layout_constraintBottom_toBottomOf="@id/title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/title"
         app:layout_constraintTop_toTopOf="@id/title"
-        app:textFont="display"
-        app:textSize="tertiary"
         tools:text="Oct 5" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/blocker"
+        style="@style/TextStamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:textColor="?android:attr/textColorTertiary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/title"
         app:layout_constraintTop_toBottomOf="@id/title"
-        app:textFont="label"
-        app:textSize="tertiary"
         tools:text="Call Control" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView

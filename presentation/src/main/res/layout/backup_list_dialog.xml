@@ -43,10 +43,10 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="24dp"
+        style="@style/TextStamp"
         android:letterSpacing="0.06"
         android:text="@string/backup_restore_dialog_summary"
-        android:textColor="?android:attr/textColorTertiary"
-        app:textFont="label"
+        android:textAllCaps="false"
         app:textSize="tertiary" />
 
     <androidx.recyclerview.widget.RecyclerView

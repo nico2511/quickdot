@@ -129,6 +129,13 @@ android {
     androidResources {
         noCompress 'ttf'
     }
+
+    // Store native libraries uncompressed and 16 KB zip-aligned (AGP 8.5.1+).
+    packaging {
+        jniLibs {
+            useLegacyPackaging = false
+        }
+    }
     namespace 'dev.octoshrimpy.quik'
     buildFeatures {
         buildConfig true

@@ -28,7 +28,6 @@ import android.content.ContentValues
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.provider.MediaStore
@@ -355,30 +354,28 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 .subscribe { registerForContextMenu(it) }
 
             // drag drop handlers for speech-to-text icon
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                binding.speechToTextIcon.setOnLongClickListener {
-                    it.startDragAndDrop(null, View.DragShadowBuilder(binding.speechToTextFrame), null, 0)
-                    binding.speechToTextFrame.isVisible = false
+            binding.speechToTextIcon.setOnLongClickListener {
+                it.startDragAndDrop(null, View.DragShadowBuilder(binding.speechToTextFrame), null, 0)
+                binding.speechToTextFrame.isVisible = false
 
-                    binding.contentView.setOnDragListener { _, event ->
-                        when (event.action) {
-                            ACTION_DROP -> {
-                                binding.speechToTextFrame.x = (event.x - (binding.speechToTextFrame.width / 2))
-                                binding.speechToTextFrame.y = (event.y - (binding.speechToTextFrame.height / 2))
+                binding.contentView.setOnDragListener { _, event ->
+                    when (event.action) {
+                        ACTION_DROP -> {
+                            binding.speechToTextFrame.x = (event.x - (binding.speechToTextFrame.width / 2))
+                            binding.speechToTextFrame.y = (event.y - (binding.speechToTextFrame.height / 2))
 
-                                // get offset from root view as a percentage of root view for saving
-                                prefs.showSttOffsetX.set((binding.speechToTextFrame.x - binding.contentView.x) / binding.contentView.width)
-                                prefs.showSttOffsetY.set((binding.speechToTextFrame.y - binding.contentView.y) / binding.contentView.height)
-                            }
-
-                            ACTION_DRAG_ENDED, ACTION_DRAG_EXITED -> {
-                                binding.speechToTextFrame.isVisible = true
-                            }
+                            // get offset from root view as a percentage of root view for saving
+                            prefs.showSttOffsetX.set((binding.speechToTextFrame.x - binding.contentView.x) / binding.contentView.width)
+                            prefs.showSttOffsetY.set((binding.speechToTextFrame.y - binding.contentView.y) / binding.contentView.height)
                         }
-                        true
+
+                        ACTION_DRAG_ENDED, ACTION_DRAG_EXITED -> {
+                            binding.speechToTextFrame.isVisible = true
+                        }
                     }
                     true
                 }
+                true
             }
 
             // start/stop audio message recording

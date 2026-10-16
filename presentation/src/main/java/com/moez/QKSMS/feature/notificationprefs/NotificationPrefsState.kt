@@ -18,7 +18,6 @@
  */
 package dev.octoshrimpy.quik.feature.notificationprefs
 
-import android.os.Build
 import dev.octoshrimpy.quik.util.Preferences
 
 data class NotificationPrefsState(
@@ -34,6 +33,6 @@ data class NotificationPrefsState(
     val action3Summary: String = "",
     val vibrationEnabled: Boolean = true,
     val ringtoneName: String = "",
-    val qkReplyEnabled: Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.N,
+    val qkReplyEnabled: Boolean = false,
     val qkReplyTapDismiss: Boolean = true
 )

@@ -337,18 +337,7 @@ class NotificationManagerImpl @Inject constructor(
                                     .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ).build()
                         }
 
-                        Preferences.NOTIFICATION_ACTION_REPLY -> {
-                            if (Build.VERSION.SDK_INT >= 24) {
-                                getReplyAction(threadId)
-                            } else {
-                                val intent = Intent(context, QkReplyActivity::class.java).putExtra("threadId", threadId)
-                                val pi = PendingIntent.getActivity(context, threadId.toInt(), intent,
-                                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-                                NotificationCompat.Action
-                                        .Builder(R.drawable.qd_notif_reply, actionLabels[action], pi)
-                                        .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_REPLY).build()
-                            }
-                        }
+                        Preferences.NOTIFICATION_ACTION_REPLY -> getReplyAction(threadId)
 
                         Preferences.NOTIFICATION_ACTION_CALL -> {
                             val address = conversation.recipients[0]?.address

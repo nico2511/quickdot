@@ -21,9 +21,7 @@ package dev.octoshrimpy.quik.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.provider.Telephony
-import androidx.annotation.RequiresApi
 import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.interactor.SyncMessages
 import dev.octoshrimpy.quik.util.Preferences
@@ -34,7 +32,6 @@ class DefaultSmsChangedReceiver : BroadcastReceiver() {
     @Inject lateinit var prefs: Preferences
     @Inject lateinit var syncMessages: SyncMessages
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
 

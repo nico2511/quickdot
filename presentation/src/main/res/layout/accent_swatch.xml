@@ -26,9 +26,10 @@
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/label"
         style="@style/TextStamp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:letterSpacing="0.08" />
+        android:gravity="center_horizontal"
+        android:maxLines="1" />
 
 </LinearLayout>

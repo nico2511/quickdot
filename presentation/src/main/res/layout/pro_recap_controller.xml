@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/windowBackground">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/square_outline"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <dev.octoshrimpy.quik.common.widget.QkTextView
+                    android:id="@+id/statusTitle"
+                    style="@style/TextSection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pro_recap_title" />
+
+                <dev.octoshrimpy.quik.common.widget.QkTextView
+                    android:id="@+id/unlockedBadge"
+                    style="@style/TextStamp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/square_key"
+                    android:paddingStart="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="4dp"
+                    android:text="@string/settings_pro_owned"
+                    android:textColor="@color/white"
+                    android:visibility="gone"
+                    app:textSize="secondary" />
+
+                <dev.octoshrimpy.quik.common.widget.QkTextView
+                    android:id="@+id/statusSummary"
+                    style="@style/TextSecondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    tools:text="@string/settings_pro_summary" />
+
+            </LinearLayout>
+
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                style="@style/PreferenceCategory"
+                android:text="@string/pro_recap_features_title" />
+
+            <include
+                android:id="@+id/featureAccent"
+                layout="@layout/pro_recap_feature_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/featurePalette"
+                layout="@layout/pro_recap_feature_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/featureHex"
+                layout="@layout/pro_recap_feature_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/featureConversation"
+                layout="@layout/pro_recap_feature_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/featureQuote"
+                layout="@layout/pro_recap_feature_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:id="@+id/proActions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <dev.octoshrimpy.quik.common.widget.QkTextView
+                    android:id="@+id/proPurchase"
+                    style="@style/TextStamp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/square_key"
+                    android:backgroundTint="@color/accent"
+                    android:gravity="center"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:text="@string/settings_pro_purchase"
+                    android:textColor="@color/white"
+                    app:textSize="secondary" />
+
+                <dev.octoshrimpy.quik.common.widget.QkTextView
+                    android:id="@+id/proRestore"
+                    style="@style/TextStamp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/square_outline"
+                    android:gravity="center"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:text="@string/settings_pro_restore"
+                    android:textColor="?android:attr/textColorPrimary"
+                    app:textSize="secondary" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

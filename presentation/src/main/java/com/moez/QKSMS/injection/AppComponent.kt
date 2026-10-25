@@ -41,6 +41,7 @@ import dev.octoshrimpy.quik.feature.conversationinfo.injection.ConversationInfoC
 import dev.octoshrimpy.quik.feature.messageutils.MessageUtilsController
 import dev.octoshrimpy.quik.feature.settings.SettingsController
 import dev.octoshrimpy.quik.feature.settings.about.AboutController
+import dev.octoshrimpy.quik.feature.settings.pro.ProRecapController
 import dev.octoshrimpy.quik.feature.settings.swipe.SwipeActionsController
 import dev.octoshrimpy.quik.feature.themepicker.injection.ThemePickerComponent
 import dev.octoshrimpy.quik.feature.widget.WidgetAdapter
@@ -65,6 +66,7 @@ interface AppComponent {
     fun inject(application: QKApplication)
 
     fun inject(controller: AboutController)
+    fun inject(controller: ProRecapController)
     fun inject(controller: BackupController)
     fun inject(controller: BlockedMessagesController)
     fun inject(controller: BlockedNumbersController)

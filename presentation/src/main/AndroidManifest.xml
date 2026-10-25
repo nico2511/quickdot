@@ -115,6 +115,9 @@
             android:name=".feature.settings.about.AboutActivity"
             android:exported="false" />
         <activity
+            android:name=".feature.settings.pro.ProRecapActivity"
+            android:exported="false" />
+        <activity
             android:name=".feature.gallery.GalleryActivity"
             android:exported="false"
             android:theme="@style/AppTheme.Gallery" />

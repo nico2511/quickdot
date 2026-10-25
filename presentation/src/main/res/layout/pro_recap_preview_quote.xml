@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/bubbleColor"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <dev.octoshrimpy.quik.common.widget.QkTextView
+        android:id="@+id/quoteName"
+        style="@style/TextStamp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/pro_recap_quote_name"
+        android:textColor="?android:attr/textColorPrimary"
+        app:textSize="secondary" />
+
+    <dev.octoshrimpy.quik.common.widget.QkTextView
+        android:id="@+id/quoteExcerpt"
+        style="@style/TextSecondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="@string/pro_recap_quote_excerpt" />
+
+</LinearLayout>

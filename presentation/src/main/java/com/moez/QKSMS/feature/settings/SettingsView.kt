@@ -18,7 +18,6 @@
  */
 package dev.octoshrimpy.quik.feature.settings
 
-import android.app.Activity
 import dev.octoshrimpy.quik.common.base.QkViewContract
 import dev.octoshrimpy.quik.common.widget.PreferenceView
 import io.reactivex.Observable
@@ -34,8 +33,7 @@ interface SettingsView : QkViewContract<SettingsState> {
     fun signatureChanged(): Observable<String>
     fun mmsSizeSelected(): Observable<Int>
     fun messageLinkHandlingSelected(): Observable<Int>
-    fun proPurchaseClicks(): Observable<Activity>
-    fun proRestoreClicks(): Observable<*>
+    fun proCardClicks(): Observable<*>
 
     fun showNightModeDialog()
     fun showStartTimePicker(hour: Int, minute: Int)

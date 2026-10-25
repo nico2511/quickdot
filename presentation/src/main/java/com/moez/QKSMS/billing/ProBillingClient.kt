@@ -16,6 +16,8 @@ interface ProBillingClient {
 
 data class ProOfferState(
     val price: String,
+    /** Formatted one-time price from Play when known; null until product details load. */
+    val storePrice: String? = null,
     val summary: String,
     val purchaseLabel: String,
     val purchaseEnabled: Boolean,

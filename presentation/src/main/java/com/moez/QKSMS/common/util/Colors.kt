@@ -27,6 +27,7 @@ import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
 import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.util.Preferences
 import dev.octoshrimpy.quik.util.ProBillingHook
+import dev.octoshrimpy.quik.util.resolveEffectiveAccentStored
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import javax.inject.Inject
@@ -66,14 +67,27 @@ class Colors @Inject constructor(
         }.color
     }
 
-    /** The accent chosen in Settings, painted for the current night mode. */
-    fun accentColor(): Int = displayAccent(prefs.theme().get())
+    /** Effective accent for the current Pro state, painted for night mode. */
+    fun accentColor(): Int = paintedAccent(prefs.theme().get())
 
     /**
      * Canonical accent, shifted when Graphite would sit on a night surface.
-     * Callers that save a colour keep [snapAccent]. Callers that paint use this.
+     * Callers that save a colour keep [snapAccent]. Swatches and labels use this
+     * without the Pro gate so the stored choice stays visible in the picker.
      */
     fun displayAccent(color: Int): Int = AccentPaint.display(snapAccent(color), night())
+
+    /**
+     * Single resolver for painting: Pro gate, then graphite night shift.
+     */
+    fun paintedAccent(storedColor: Int, proUnlocked: Boolean = proBillingHook.isUnlocked()): Int {
+        val effective = resolveEffectiveAccentStored(
+            snapAccent(storedColor),
+            proBillingHook.enforcementEnabled,
+            proUnlocked
+        )
+        return AccentPaint.display(effective, night())
+    }
 
     private fun night(): Boolean {
         val system = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK ==
@@ -94,7 +108,7 @@ class Colors @Inject constructor(
      */
     fun accentForThread(threadId: Long): Int {
         return if (proBillingHook.accentAppliesTo(threadId)) accentColor()
-        else Preferences.DEFAULT_THEME_COLOR
+        else paintedAccent(Preferences.DEFAULT_THEME_COLOR)
     }
 
     /** True when the chosen accent is not limited to one conversation. */
@@ -180,8 +194,8 @@ class Colors @Inject constructor(
                 prefs.theme().asObservable(),
                 prefs.quickdotPro.asObservable(),
                 prefs.styledThreadId.asObservable(),
-                Function3<Int, Boolean, Long, Theme> { color, _, _ ->
-                    Theme(displayAccent(color), this@Colors)
+                Function3<Int, Boolean, Long, Theme> { color, proUnlocked, _ ->
+                    Theme(paintedAccent(color, proUnlocked), this@Colors)
                 }
         )
     }

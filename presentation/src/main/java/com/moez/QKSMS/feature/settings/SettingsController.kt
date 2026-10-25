@@ -146,7 +146,7 @@ class SettingsController : QkController<SettingsControllerBinding, SettingsView,
     override fun proRestoreClicks(): Observable<*> = binding.proRestore.clicks()
 
     override fun render(state: SettingsState) {
-        val accent = colors.displayAccent(state.theme)
+        val accent = colors.paintedAccent(state.theme)
         binding.theme.findViewById<View>(R.id.themePreview)?.setBackgroundTint(accent)
         val accentLabel = colors.accentLabel(state.theme)
         binding.theme.summary = context.getString(

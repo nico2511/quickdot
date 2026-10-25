@@ -1,9 +1,9 @@
 Quickdot est un fork de Quik (qui poursuit QKSMS) sous licence GPLv3. Ce n’est pas l’application Quik officielle, pas un produit Nothing, et sans lien avec Nothing ou le projet Quik.
 
-Quickdot habille vos SMS d’un style inspiré de Nothing : formes carrées, polices Doto et Space Mono, et un accent rouge Signal sur la version gratuite du Play Store. SMS et MMS comme d’habitude : messages programmés, sauvegarde, blocage, pièces jointes, notes vocales, et le reste de l’offre Quik.
+Quickdot habille vos SMS d’un style monochrome minimal en pointillés : formes carrées, polices Doto et Space Mono, et un accent rouge sur la version gratuite du Play Store. SMS et MMS comme d’habitude : messages programmés, sauvegarde, blocage, pièces jointes, notes vocales, et le reste de l’offre Quik.
 
 <b>Gratuit sur Google Play</b>
-• Interface Quickdot complète avec l’accent rouge Signal partout
+• Interface Quickdot complète avec l’accent rouge partout
 • Envoi et réception de messages sans limite
 
 <b>Quickdot Pro</b> (achat unique sur Google Play)

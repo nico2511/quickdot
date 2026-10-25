@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_pro_price">Inclus</string>
+    <string name="settings_pro_summary">Les accents personnalisés, les couleurs par conversation et les réponses avec citation sont inclus.</string>
+    <string name="theme_pro_note">Cette variante inclut toutes les fonctions Pro.</string>
+</resources>

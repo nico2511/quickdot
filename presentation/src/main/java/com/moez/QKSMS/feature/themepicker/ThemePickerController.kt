@@ -12,7 +12,7 @@ import androidx.gridlayout.widget.GridLayout
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
 import dev.octoshrimpy.quik.R
-import dev.octoshrimpy.quik.billing.ProBillingClient
+import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkController
 import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
@@ -41,7 +41,7 @@ class ThemePickerController(
 
     @Inject override lateinit var presenter: ThemePickerPresenter
     @Inject lateinit var colors: Colors
-    @Inject lateinit var proBillingClient: ProBillingClient
+    @Inject lateinit var navigator: Navigator
 
     private val themeSelected: Subject<Int> = PublishSubject.create()
     private val lockedAccentClicksSubject: Subject<Int> = PublishSubject.create()
@@ -108,7 +108,7 @@ class ThemePickerController(
     override fun resetAccentClicks(): Observable<*> = binding.resetConversationAccent.clicks()
 
     override fun requestProPurchase() {
-        activity?.let { proBillingClient.purchase(it) }
+        navigator.showProRecap()
     }
 
     override fun setAccentLocks(showLocks: Boolean) {

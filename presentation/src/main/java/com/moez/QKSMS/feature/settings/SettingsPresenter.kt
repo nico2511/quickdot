@@ -171,13 +171,9 @@ class SettingsPresenter @Inject constructor(
     override fun bindIntents(view: SettingsView) {
         super.bindIntents(view)
 
-        view.proPurchaseClicks()
+        view.proCardClicks()
                 .autoDisposable(view.scope())
-                .subscribe { activity -> proBillingClient.purchase(activity) }
-
-        view.proRestoreClicks()
-                .autoDisposable(view.scope())
-                .subscribe { proBillingClient.restore() }
+                .subscribe { navigator.showProRecap() }
 
         view.preferenceClicks()
                 .autoDisposable(view.scope())

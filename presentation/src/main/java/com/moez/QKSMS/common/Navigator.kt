@@ -25,6 +25,7 @@ import androidx.core.net.toUri
 import dev.octoshrimpy.quik.compat.TelephonyCompat
 import dev.octoshrimpy.quik.extensions.resourceExists
 import dev.octoshrimpy.quik.feature.settings.about.AboutActivity
+import dev.octoshrimpy.quik.feature.settings.pro.ProRecapActivity
 import dev.octoshrimpy.quik.feature.backup.BackupActivity
 import dev.octoshrimpy.quik.feature.blocking.BlockingActivity
 import dev.octoshrimpy.quik.feature.compose.ComposeActivity
@@ -135,6 +136,10 @@ class Navigator @Inject constructor(
 
     fun showAbout() {
         startActivity(Intent(context, AboutActivity::class.java))
+    }
+
+    fun showProRecap() {
+        startActivity(Intent(context, ProRecapActivity::class.java))
     }
 
     fun showBlockedConversations() {

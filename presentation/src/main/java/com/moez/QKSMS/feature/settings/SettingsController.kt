@@ -19,7 +19,6 @@
 package dev.octoshrimpy.quik.feature.settings
 
 import android.animation.ObjectAnimator
-import android.app.Activity
 import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Build
@@ -141,9 +140,7 @@ class SettingsController : QkController<SettingsControllerBinding, SettingsView,
 
     override fun messageLinkHandlingSelected(): Observable<Int> = messageLinkHandlingDialog.adapter.menuItemClicks
 
-    override fun proPurchaseClicks(): Observable<Activity> = binding.proPurchase.clicks().map { activity!! }
-
-    override fun proRestoreClicks(): Observable<*> = binding.proRestore.clicks()
+    override fun proCardClicks(): Observable<*> = binding.quickdotPro.clicks()
 
     override fun render(state: SettingsState) {
         val accent = colors.paintedAccent(state.theme)
@@ -157,11 +154,7 @@ class SettingsController : QkController<SettingsControllerBinding, SettingsView,
         binding.proPrice.setTextColor(accent)
         if (state.proPrice.isNotEmpty()) binding.proPrice.text = state.proPrice
         if (state.proSummary.isNotEmpty()) binding.proSummary.text = state.proSummary
-        binding.proActions.isVisible = state.proActionsVisible
-        if (state.proPurchaseLabel.isNotEmpty()) binding.proPurchase.text = state.proPurchaseLabel
-        binding.proPurchase.isEnabled = state.proPurchaseEnabled
-        binding.proPurchase.alpha = if (state.proPurchaseEnabled) 1f else 0.45f
-        binding.proPurchase.setBackgroundTint(accent)
+        binding.proActions.isVisible = false
         binding.night.summary = state.nightModeSummary
         nightModeDialog.adapter.selectedItem = state.nightModeId
         binding.nightStart.setVisible(state.nightModeId == Preferences.NIGHT_MODE_AUTO)

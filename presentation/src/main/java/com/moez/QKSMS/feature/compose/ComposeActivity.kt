@@ -67,8 +67,8 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.R
-import dev.octoshrimpy.quik.billing.ProBillingClient
 import dev.octoshrimpy.quik.common.ExternalNavigator
+import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkThemedActivity
 import dev.octoshrimpy.quik.common.util.DateFormatter
 import dev.octoshrimpy.quik.common.util.extensions.autoScrollToStart
@@ -113,7 +113,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     @Inject lateinit var messageAdapter: MessagesAdapter
     @Inject lateinit var externalNavigator : ExternalNavigator
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-    @Inject lateinit var proBillingClient: ProBillingClient
+    @Inject lateinit var navigator: Navigator
 
     private lateinit var binding: ComposeActivityBinding
     private var replyProLocked = false
@@ -947,6 +947,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun requestProPurchase() {
-        proBillingClient.purchase(this)
+        navigator.showProRecap()
     }
 }

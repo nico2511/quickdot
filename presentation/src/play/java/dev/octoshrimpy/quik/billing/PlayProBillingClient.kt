@@ -51,6 +51,7 @@ class PlayProBillingClient @Inject constructor(
 
     private lateinit var billingClient: BillingClient
     private var productDetails: ProductDetails? = null
+    private var storePrice: String? = null
     private var started = false
     private var connecting = false
     private var inForeground = false
@@ -234,7 +235,8 @@ class PlayProBillingClient @Inject constructor(
             productDetails = details
             val price = oneTimeOffer(details)?.formattedPrice
             if (price != null) {
-                state.onNext(state.value!!.copy(price = price))
+                storePrice = price
+                state.onNext(state.value!!.copy(price = price, storePrice = price))
             }
             val activity = pendingActivity?.get()
             if (activity != null && !activity.isFinishing) {
@@ -375,6 +377,7 @@ class PlayProBillingClient @Inject constructor(
         state.onNext(
             ProOfferState(
                 price = currentPrice(),
+                storePrice = storePrice,
                 summary = context.getString(R.string.settings_pro_summary_owned),
                 purchaseLabel = context.getString(R.string.settings_pro_owned),
                 purchaseEnabled = false,
@@ -387,6 +390,7 @@ class PlayProBillingClient @Inject constructor(
         state.onNext(
             ProOfferState(
                 price = currentPrice(),
+                storePrice = storePrice,
                 summary = context.getString(R.string.settings_pro_summary_pending),
                 purchaseLabel = context.getString(R.string.settings_pro_pending),
                 purchaseEnabled = false,
@@ -405,6 +409,7 @@ class PlayProBillingClient @Inject constructor(
             unavailable -> state.onNext(
                 ProOfferState(
                     price = currentPrice(),
+                    storePrice = storePrice,
                     summary = context.getString(R.string.settings_pro_summary_unavailable),
                     purchaseLabel = context.getString(R.string.settings_pro_purchase),
                     purchaseEnabled = true,
@@ -419,6 +424,7 @@ class PlayProBillingClient @Inject constructor(
         return if (locked) {
             ProOfferState(
                 price = price ?: context.getString(R.string.settings_pro_price),
+                storePrice = storePrice,
                 summary = context.getString(R.string.settings_pro_summary),
                 purchaseLabel = context.getString(R.string.settings_pro_purchase),
                 purchaseEnabled = true,
@@ -427,6 +433,7 @@ class PlayProBillingClient @Inject constructor(
         } else {
             ProOfferState(
                 price = price ?: context.getString(R.string.settings_pro_price),
+                storePrice = storePrice,
                 summary = context.getString(R.string.settings_pro_summary_owned),
                 purchaseLabel = context.getString(R.string.settings_pro_owned),
                 purchaseEnabled = false,

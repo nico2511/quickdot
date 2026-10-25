@@ -87,7 +87,7 @@ class ThemePickerController(
     override fun onAttach(view: View) {
         super.onAttach(view)
         presenter.bindIntents(this)
-        setTitle(R.string.title_theme)
+        setTitle(if (threadId != 0L) R.string.title_conversation_accent else R.string.title_theme)
         showBackButton(true)
     }
 
@@ -105,7 +105,7 @@ class ThemePickerController(
         binding.hexPicker.hexInput.clicks()
     )
 
-    override fun styleConversationClicks(): Observable<*> = binding.styleConversation.clicks()
+    override fun resetAccentClicks(): Observable<*> = binding.resetConversationAccent.clicks()
 
     override fun requestProPurchase() {
         activity?.let { proBillingClient.purchase(it) }
@@ -130,7 +130,14 @@ class ThemePickerController(
         binding.previewSend.setBackgroundTint(paint)
         binding.previewSend.setTint(textColorOnAccent(paint))
         binding.previewAvatar.setBackgroundTint(paint)
-        binding.styleConversation.setTextColor(paint)
+        binding.previewOutgoing.setBackgroundTint(paint)
+        binding.previewOutgoing.setTextColor(textColorOnAccent(paint))
+        binding.previewIncoming.background?.mutate()?.let { drawable ->
+            if (drawable is android.graphics.drawable.GradientDrawable) {
+                val width = (1.5f * binding.root.resources.displayMetrics.density).toInt().coerceAtLeast(1)
+                drawable.setStroke(width, paint)
+            }
+        }
 
         val preset = colors.isPresetAccent(snapped)
         for (index in 0 until binding.swatches.childCount) {
@@ -170,15 +177,11 @@ class ThemePickerController(
         binding.hexPicker.hexContrastWarning.isVisible = showContrastWarning
     }
 
-    override fun showStyled(styled: Boolean) {
-        binding.styleConversation.setText(
-            if (styled) R.string.theme_style_conversation_done
-            else R.string.theme_style_conversation
-        )
+    override fun showResetConversationAccent(show: Boolean) {
+        binding.resetConversationAccent.isVisible = show && threadId != 0L
     }
 
-    override fun showFreeStyleChoice(show: Boolean) {
-        binding.styleConversation.isVisible = show && threadId != 0L
+    override fun showProNote(show: Boolean) {
         binding.proNote.isVisible = show
     }
 

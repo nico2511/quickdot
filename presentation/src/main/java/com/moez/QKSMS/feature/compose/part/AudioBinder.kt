@@ -43,6 +43,7 @@ import dev.octoshrimpy.quik.feature.compose.MessagesAdapter
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.MmsPart
 import dev.octoshrimpy.quik.util.GlideApp
+import dev.octoshrimpy.quik.util.textColorOnAccent
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -199,12 +200,13 @@ class AudioBinder @Inject constructor(
 
         // tint colours
         val ctx = holder.itemView.context
+        val threadAccent = colors.accentForThread(message.threadId)
         val secondaryColor = if (message.isMe())
-            ctx.getColorCompat(R.color.bubbleOutgoing)
+            threadAccent
         else
             ctx.resolveThemeColor(R.attr.bubbleColor)
         val primaryColor = if (message.isMe())
-            ctx.getColorCompat(R.color.bubbleOutgoingText)
+            textColorOnAccent(threadAccent)
         else
             ctx.resolveThemeColor(android.R.attr.textColorPrimary)
 

@@ -75,6 +75,7 @@ import dev.octoshrimpy.quik.databinding.MessageListItemInBinding
 import dev.octoshrimpy.quik.databinding.MessageListItemOutBinding
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.Preferences
+import dev.octoshrimpy.quik.util.textColorOnAccent
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
@@ -220,7 +221,8 @@ class MessagesAdapter @Inject constructor(
         val status: TextView
         val meters: List<ImageView>
         var identity: View? = null
-        val speaker = if (isOutgoing) 0 else colors.speakerInk(message.address)
+        val accent = colors.accentForThread(message.threadId)
+        val speaker = if (isOutgoing) 0 else accent
 
         if (isOutgoing) {
             val binding = MessageListItemOutBinding.bind(holder.itemView)
@@ -281,7 +283,6 @@ class MessagesAdapter @Inject constructor(
                 binding.resendIcon.visibility = View.GONE
             }
 
-            val accent = colors.accentForThread(message.threadId)
             binding.cancelIcon.setTint(accent)
             binding.sendNowIcon.setTint(accent)
             binding.resendIcon.setTint(accent)
@@ -312,14 +313,14 @@ class MessagesAdapter @Inject constructor(
             // Bind the avatar and bubble colour
             binding.avatar.apply {
                 square = true
-                speakerInk = true
+                speakerInk = false
+                threadId = message.threadId
                 setRecipient(contactCache[message.address])
                 setVisible(!canGroup(message, next), View.INVISIBLE)
             }
             identity = binding.identity
-            identity.setBackgroundTint(speaker)
+            identity.setBackgroundTint(accent)
 
-            val accent = colors.accentForThread(message.threadId)
             body.apply {
                 highlightColor = accent.withAlpha(0x33)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -437,7 +438,7 @@ class MessagesAdapter @Inject constructor(
             minHeight = if (quoted != null) 0 else 36.dpToPx(context)
             if (!emojiOnly) {
                 setTextColor(when {
-                    isOutgoing -> context.getColorCompat(R.color.bubbleOutgoingText)
+                    isOutgoing -> textColorOnAccent(accent)
                     // Body text stays the theme primary so it clears AA on the page.
                     else -> context.resolveThemeColor(android.R.attr.textColorPrimary)
                 })
@@ -449,7 +450,7 @@ class MessagesAdapter @Inject constructor(
             quoteName.text = quoted.name
             quoteExcerpt.text = quoted.excerpt
             val ink = if (isOutgoing) {
-                context.getColorCompat(R.color.bubbleOutgoingText)
+                textColorOnAccent(accent)
             } else {
                 context.resolveThemeColor(android.R.attr.textColorSecondary)
             }
@@ -472,10 +473,10 @@ class MessagesAdapter @Inject constructor(
             )
             if (!emojiOnly) {
                 if (isOutgoing) {
-                    setBackgroundTint(context.getColorCompat(R.color.bubbleOutgoing))
+                    setBackgroundTint(accent)
                 } else {
-                    // The speaker ink is the stroke only; a view tint would fill the bubble.
-                    applySpeakerStroke(speaker)
+                    // The accent is the stroke only; a view tint would fill the bubble.
+                    applySpeakerStroke(accent)
                 }
             }
         }
@@ -484,11 +485,7 @@ class MessagesAdapter @Inject constructor(
 
         // Bind the parts
         parts.adapter = partsAdapterProvider.get().apply {
-            this.theme = if (message.isMe()) {
-                Colors.Theme(context.getColorCompat(R.color.bubbleOutgoing), colors)
-            } else {
-                Colors.Theme(speaker, colors)
-            }
+            this.theme = colors.themeForThread(message.threadId)
             setData(message, previous, next, holder, audioState)
             contextMenuValue = message.id
             clicks.subscribe(partClicks)    // part clicks gets passed back to compose view model

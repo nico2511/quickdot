@@ -97,8 +97,8 @@ class Preferences @Inject constructor(
     val quickdotPro = rxPrefs.getBoolean("quickdotPro", false)
 
     /**
-     * The one conversation a free account keeps full style on, once billing
-     * enforcement is turned on. 0 means the user has not chosen one yet.
+     * Legacy: one conversation id for free-tier styling. Migrated into
+     * [threadTheme] on first read; kept so old keys are not orphaned silently.
      */
     val styledThreadId = rxPrefs.getLong("styledThreadId", 0L)
 
@@ -166,6 +166,18 @@ class Preferences @Inject constructor(
             })
             nightModeSummary.delete()
         }
+
+        migrateLegacyStyledThread()
+    }
+
+    private fun migrateLegacyStyledThread() {
+        val legacyThreadId = styledThreadId.get()
+        if (legacyThreadId == 0L) return
+        val pref = threadTheme(legacyThreadId)
+        if (!pref.isSet) {
+            pref.set(theme().get())
+        }
+        styledThreadId.set(0L)
     }
 
     /**
@@ -193,6 +205,17 @@ class Preferences @Inject constructor(
             0L -> rxPrefs.getInteger("theme", DEFAULT_THEME_COLOR)
             else -> rxPrefs.getInteger("theme_$recipientId", default)
         }
+    }
+
+    /** Per-conversation accent override. Absent until the user picks a colour in conversation info. */
+    fun threadTheme(threadId: Long): Preference<Int> {
+        return rxPrefs.getInteger("thread_theme_$threadId", DEFAULT_THEME_COLOR)
+    }
+
+    fun hasThreadTheme(threadId: Long): Boolean = threadTheme(threadId).isSet
+
+    fun clearThreadTheme(threadId: Long) {
+        threadTheme(threadId).delete()
     }
 
     fun notifications(threadId: Long = 0): Preference<Boolean> {

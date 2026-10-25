@@ -25,6 +25,7 @@
     <string name="title_settings">Paramètres</string>
     <string name="title_notification_prefs">Notifications</string>
     <string name="title_theme">Thème</string>
+    <string name="title_conversation_accent">Accent de la conversation</string>
     <string name="title_conversations">Rechercher dans les conversations…</string>
     <string name="title_compose">Entrer un nom ou un numéro</string>
     <string name="setup_skip">Ignorer</string>
@@ -386,7 +387,8 @@
     <string name="theme_preview_out">Merci</string>
     <string name="theme_style_conversation">Style complet sur cette conversation</string>
     <string name="theme_style_conversation_done">Cette conversation garde le style complet</string>
-    <string name="theme_pro_note">La version gratuite garde le style complet sur une conversation. Quickdot Pro coûte 1 EUR, une seule fois, et garde l’accent partout.</string>
+    <string name="theme_reset_conversation_accent">Réinitialiser</string>
+    <string name="theme_pro_note">Sans Quickdot Pro, l’accent reste le rouge Signal. Pro coûte 1 EUR, une seule fois, et débloque vos couleurs.</string>
     <string name="settings_pro_title">Quickdot Pro</string>
     <string name="settings_pro_price">1 EUR · une seule fois</string>
     <string name="settings_pro_summary">Style complet sur une conversation de votre choix. L’achat le débloque partout.</string>
@@ -425,6 +427,7 @@
     <string name="settings_category_about">Application</string>
     <string name="settings_theme_summary_applied">%1$s · s’applique dans toute l’application</string>
     <string name="settings_theme_summary_one">%1$s · style complet sur une conversation</string>
+    <string name="settings_theme_summary_pro_required">%1$s · Quickdot Pro requis pour l’appliquer</string>
     <string name="blocking_category_sources">Sources</string>
     <string name="blocking_category_messages">Messages</string>
     <string name="blocking_manager_category">Gestionnaires</string>

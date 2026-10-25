@@ -139,16 +139,16 @@
                 layout="@layout/theme_hex_picker" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
-                android:id="@+id/styleConversation"
+                android:id="@+id/resetConversationAccent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 android:background="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:padding="16dp"
                 style="@style/TextStamp"
-                android:text="@string/theme_style_conversation"
-                android:textColor="@color/accent"
+                android:text="@string/theme_reset_conversation_accent"
+                android:textColor="?android:attr/textColorSecondary"
                 android:visibility="gone"
                 app:textSize="secondary" />
 

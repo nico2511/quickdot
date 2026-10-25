@@ -121,10 +121,11 @@ fun Recipient.getThemedIcon(context: Context, theme: Colors.Theme, width: Int, h
 fun Person.Builder.fromRecipient(
     recipient: Recipient,
     context: Context,
-    colors: Colors
+    colors: Colors,
+    threadId: Long = 0L,
 ): Person.Builder {
     setName(recipient.getDisplayName())
-    setIcon(recipient.getThemedIcon(context, colors.theme(recipient), 512, 512))
+    setIcon(recipient.getThemedIcon(context, colors.theme(recipient, threadId), 512, 512))
 
     recipient.contact
         ?.let { contact -> "${ContactsContract.Contacts.CONTENT_LOOKUP_URI}/${contact.lookupKey}" }
@@ -139,7 +140,7 @@ fun Person.Builder.fromRecipient(
  * Return a Person object corresponding to this recipient
  */
 @TargetApi(29)
-fun Recipient.toPerson(context : Context, colors: Colors): Person {
-    val person = Person.Builder().fromRecipient(this, context, colors)
+fun Recipient.toPerson(context: Context, colors: Colors, threadId: Long = 0L): Person {
+    val person = Person.Builder().fromRecipient(this, context, colors, threadId)
     return person.build()
 }

@@ -79,6 +79,7 @@ import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
 import dev.octoshrimpy.quik.common.util.extensions.scrapViews
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setTint
+import dev.octoshrimpy.quik.util.textColorOnAccent
 import dev.octoshrimpy.quik.common.util.extensions.setVisible
 import dev.octoshrimpy.quik.common.util.extensions.showKeyboard
 import dev.octoshrimpy.quik.common.widget.MicInputCloudView
@@ -311,7 +312,9 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                     binding.loading.setTint(onSurface)
                     val accent = colors.accentForThread(threadId.blockingFirst())
                     binding.send.setBackgroundTint(accent)
+                    binding.send.setTint(textColorOnAccent(accent))
                     binding.scheduledSend.setBackgroundTint(accent)
+                    binding.scheduledSend.setTint(textColorOnAccent(accent))
                     // Attach stays an outline. The menu behind it is monochrome.
                     // Red is reserved for send and failure.
                     binding.attach.backgroundTintList = null

@@ -99,7 +99,8 @@ class ConversationInfoAdapter @Inject constructor(
                 binding.section.isVisible = position == 0
                         || getItem(position - 1) !is ConversationInfoRecipient
                 binding.avatar.square = true
-                binding.avatar.speakerInk = true
+                binding.avatar.speakerInk = false
+                binding.avatar.threadId = threadId
                 binding.avatar.setRecipient(recipient)
 
                 binding.name.text = recipient.contact?.name ?: recipient.address

@@ -151,7 +151,7 @@ class SettingsController : QkController<SettingsControllerBinding, SettingsView,
         val accentLabel = colors.accentLabel(state.theme)
         binding.theme.summary = context.getString(
             if (colors.styleIsAppWide()) R.string.settings_theme_summary_applied
-            else R.string.settings_theme_summary_one,
+            else R.string.settings_theme_summary_pro_required,
             accentLabel
         )
         binding.proPrice.setTextColor(accent)

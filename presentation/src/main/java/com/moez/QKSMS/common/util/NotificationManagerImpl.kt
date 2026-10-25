@@ -181,7 +181,7 @@ class NotificationManagerImpl @Inject constructor(
 
         val notification = NotificationCompat.Builder(context, getChannelIdForNotification(threadId))
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                .setColor(colors.theme(lastRecipient).theme)
+                .setColor(colors.accentForThread(threadId))
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setNumber(messages.size)
@@ -282,7 +282,7 @@ class NotificationManagerImpl @Inject constructor(
         // Add all of the people from this conversation to the notification, so that the system can
         // appropriately bypass DND mode
         conversation.recipients.forEach { recipient ->
-            notification.addPerson(recipient.toPerson(context, colors))
+            notification.addPerson(recipient.toPerson(context, colors, threadId))
         }
 
         // Add the action buttons
@@ -432,7 +432,7 @@ class NotificationManagerImpl @Inject constructor(
                 .setContentTitle(context.getString(R.string.notification_message_failed_title))
                 .setContentText(context.getString(R.string.notification_message_failed_text, conversation.getTitle()))
                 .addAction(resendAction)
-                .setColor(colors.theme(lastRecipient).theme)
+                .setColor(colors.accentForThread(threadId))
                 .setPriority(NotificationManagerCompat.IMPORTANCE_MAX)
                 .setSmallIcon(R.drawable.qd_notif_failed)
                 .setAutoCancel(true)

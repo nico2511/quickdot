@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings_pro_price">Included</string>
-    <string name="settings_pro_summary">Full style is unlocked on every conversation.</string>
-    <string name="theme_pro_note">This build includes full style on every conversation.</string>
+    <string name="settings_pro_summary">Custom accents, per-conversation colours, and reply quotes are included.</string>
+    <string name="theme_pro_note">This build includes every Pro feature.</string>
 </resources>

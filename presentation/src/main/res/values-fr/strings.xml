@@ -125,6 +125,8 @@
     <string name="compose_hint">Écrire un message…</string>
     <string name="compose_no_valid_recipients">Impossible d’envoyer aux autres participants</string>
     <string name="compose_menu_reply">Répondre</string>
+    <string name="compose_menu_reply_pro">Répondre · Pro</string>
+    <string name="compose_reply_swipe_pro_cd">Répondre avec citation (Quickdot Pro)</string>
     <string name="compose_reply_you">Vous</string>
     <string name="compose_reply_photo">[Photo]</string>
     <string name="compose_reply_close">Retirer la réponse</string>

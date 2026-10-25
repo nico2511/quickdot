@@ -114,4 +114,5 @@ interface ComposeView : QkView<ComposeState> {
     fun showReactionsDialog(reactions: List<String>)
     fun startSpeechRecognition()
     fun focusMessage()
+    fun requestProPurchase()
 }

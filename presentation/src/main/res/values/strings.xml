@@ -158,6 +158,8 @@
     <string name="compose_hint">Write a message…</string>
     <string name="compose_no_valid_recipients">Can\'t send to other participants</string>
     <string name="compose_menu_reply">Reply</string>
+    <string name="compose_menu_reply_pro">Reply · Pro</string>
+    <string name="compose_reply_swipe_pro_cd">Reply with quote (Quickdot Pro)</string>
     <string name="compose_reply_you">You</string>
     <string name="compose_reply_photo">[Photo]</string>
     <string name="compose_reply_close">Remove reply</string>

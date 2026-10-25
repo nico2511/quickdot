@@ -53,8 +53,6 @@ buildscript {
     dependencies {
         // 8.5.1+ zip-aligns uncompressed native libraries to 16 KB.
         classpath 'com.android.tools.build:gradle:8.5.2'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.5.2'
-        classpath 'com.google.gms:google-services:4.3.14'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "io.realm:realm-gradle-plugin:$realm_version"
     }

@@ -19,8 +19,10 @@
 package dev.octoshrimpy.quik.common.widget
 
 import android.graphics.Typeface
+import android.os.Build
 import android.text.TextPaint
 import android.text.style.MetricAffectingSpan
+import android.widget.TextView
 
 /**
  * Puts one exact [Typeface] on the hint paint.
@@ -45,5 +47,31 @@ class HintTypefaceSpan(val typeface: Typeface) : MetricAffectingSpan() {
     private fun apply(paint: TextPaint) {
         paint.typeface = typeface
         paint.isFakeBoldText = false
+    }
+}
+
+/**
+ * Applies a pinned [typeface] on [view] without [TextView.setTypeface] re-running
+ * [Typeface.create] when [Configuration.fontWeightAdjustment] is non-zero.
+ */
+internal fun applyPinnedTypeface(
+    view: TextView,
+    typeface: Typeface,
+    setTypeface: (Typeface) -> Unit,
+) {
+    val adjustment = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        view.resources.configuration.fontWeightAdjustment
+    } else {
+        0
+    }
+    if (adjustment != 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        val weight = typeface.weight.coerceIn(1, 1000)
+        val italic = typeface.isItalic
+        // TextView adds fontWeightAdjustment inside setTypeface; pre-compensate so
+        // the resolved weight matches the pinned face.
+        val compensated = (weight - adjustment).coerceIn(1, 1000)
+        setTypeface(Typeface.create(typeface, compensated, italic))
+    } else {
+        setTypeface(typeface)
     }
 }

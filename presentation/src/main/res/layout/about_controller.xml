@@ -69,6 +69,13 @@
                 android:layout_marginTop="6dp"
                 android:text="@string/about_credits" />
 
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                style="@style/TextSecondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/about_fonts_credits" />
+
         </LinearLayout>
 
         <dev.octoshrimpy.quik.common.widget.QkTextView
@@ -122,6 +129,14 @@
             app:icon="@drawable/qd_send"
             app:summary="@string/about_contact"
             app:title="@string/about_contact_title" />
+
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
+            android:id="@+id/openSourceLicenses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/qd_title"
+            app:summary="@string/about_open_source_licenses_summary"
+            app:title="@string/about_open_source_licenses_title" />
 
         <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/license"

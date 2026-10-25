@@ -513,6 +513,9 @@
     <string name="about_developer">Quickdot</string>
     <string name="about_credits_names" translatable="false">Quik · QKSMS</string>
     <string name="about_credits" translatable="false">Quickdot is a fork of Quik, which continues QKSMS. Quik and QKSMS are free software under the GNU General Public License v3.</string>
+    <string name="about_fonts_credits" translatable="false">Typefaces: Geist (Vercel, OFL 1.1), Doto (Oliver Lalan, OFL 1.1), Space Mono (Colophon Foundry, OFL 1.1).</string>
+    <string name="about_open_source_licenses_title">Open-source licenses</string>
+    <string name="about_open_source_licenses_summary" translatable="false">Bundled font licenses (OFL 1.1)</string>
     <string name="about_source" translatable="false">https://github.com/nico2511/quickdot</string>
     <string name="about_upstream" translatable="false">https://github.com/quik-sms/quik</string>
     <string name="about_changelog" translatable="false">https://github.com/nico2511/quickdot/commits/master</string>

@@ -355,6 +355,7 @@
     <string name="about_changelog_title">Liste des modifications</string>
     <string name="about_contact_title">Contact</string>
     <string name="about_license_title">Licence</string>
+    <string name="about_open_source_licenses_title">Licences open source</string>
     <string name="about_copyright_title">Droits d’auteur</string>
     <string name="widget_loading">Chargement…</string>
     <string name="widget_more">Afficher plus de conversations</string>

@@ -33,30 +33,40 @@ import javax.inject.Singleton
 
 /**
  * Bundled OFL faces. Doto is for headings and numbers, Space Mono for labels,
- * Inter for body and message text. Nothing is downloaded at runtime.
+ * Geist for body and message text. Nothing is downloaded at runtime.
  *
  * [displayBold] is the weight avatar initials and the thread title use.
- * Regular Doto's dots vanish at those sizes and the letters read as Inter.
+ * Regular Doto's dots vanish at those sizes and the letters read as Geist.
  *
- * The four static files used to share a family name, and the bold file carried
+ * The four static Doto files used to share a family name, and the bold file carried
  * a variable-font STAT table with no fvar. Android 14's font matcher (Nothing OS)
  * then resolved "bold" back to the regular face or to the system sans. The
  * family below sets each weight explicitly so a later weight adjustment stays
  * inside Doto.
+ *
+ * Geist ships as a single variable file. On API 29+ the family pins 400/500/700
+ * so bold and medium weights stay inside Geist on Android 14.
  */
 @Singleton
 class FontProvider @Inject constructor(context: Context) {
 
-    val body: Typeface = load(context, R.font.inter, Typeface.SANS_SERIF)
+    val body: Typeface
     val label: Typeface = load(context, R.font.space_mono, Typeface.MONOSPACE)
     val display: Typeface
     val displayBold: Typeface
 
     init {
+        val bodyFallback = load(context, R.font.geist, Typeface.SANS_SERIF)
+        body = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            geistFamilyOrNull(context) ?: bodyFallback
+        } else {
+            bodyFallback
+        }
+
         val regular = load(context, R.font.doto_regular, Typeface.SANS_SERIF)
         val boldFile = load(context, R.font.doto_bold, regular)
         val family = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            familyOrNull(context)
+            dotoFamilyOrNull(context)
         } else {
             null
         }
@@ -73,7 +83,27 @@ class FontProvider @Inject constructor(context: Context) {
         }
     }
 
-    private fun familyOrNull(context: Context): Typeface? {
+    private fun geistFamilyOrNull(context: Context): Typeface? {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return null
+        return try {
+            val resources = context.resources
+            fun font(weight: Int): Font {
+                return Font.Builder(resources, R.font.geist_wght).setWeight(weight).build()
+            }
+            val family = FontFamily.Builder(font(400))
+                .addFont(font(500))
+                .addFont(font(700))
+                .build()
+            Typeface.CustomFallbackBuilder(family)
+                .setStyle(FontStyle(400, FontStyle.FONT_SLANT_UPRIGHT))
+                .build()
+        } catch (e: Exception) {
+            Timber.w(e, "Geist family failed to build")
+            null
+        }
+    }
+
+    private fun dotoFamilyOrNull(context: Context): Typeface? {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return null
         return try {
             val resources = context.resources

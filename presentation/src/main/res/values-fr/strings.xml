@@ -391,7 +391,7 @@
     <string name="theme_style_conversation">Définir un accent pour cette conversation</string>
     <string name="theme_style_conversation_done">Cette conversation a son propre accent</string>
     <string name="theme_reset_conversation_accent">Réinitialiser</string>
-    <string name="theme_pro_note">Sans Quickdot Pro, l’accent reste le rouge Signal. Pro débloque les couleurs personnalisées, les accents par conversation et les réponses avec citation, en achat unique.</string>
+    <string name="theme_pro_note">Sans Quickdot Pro, l’accent reste le rouge par défaut. Pro débloque les couleurs personnalisées, les accents par conversation et les réponses avec citation, en achat unique.</string>
     <string name="settings_pro_title">Quickdot Pro</string>
     <string name="settings_pro_price">Achat unique</string>
     <string name="settings_pro_summary">Accents personnalisés, couleurs par conversation et réponses avec citation. Achat unique sur Google Play.</string>
@@ -413,7 +413,7 @@
     <string name="pro_recap_feature_accent_title">Accent personnalisé partout</string>
     <string name="pro_recap_feature_accent_summary">Votre accent sur les bulles, Envoyer, repères, avatars et notifications dans chaque conversation.</string>
     <string name="pro_recap_feature_palette_title">Palette étendue</string>
-    <string name="pro_recap_feature_palette_summary">Douze accents prédéfinis en plus du rouge Signal.</string>
+    <string name="pro_recap_feature_palette_summary">Douze accents prédéfinis, dont le rouge par défaut.</string>
     <string name="pro_recap_feature_hex_title">Sélecteur hexadécimal</string>
     <string name="pro_recap_feature_hex_summary">Saisissez une couleur #RRGGBB avec contrôle de contraste sur le fond.</string>
     <string name="pro_recap_feature_conversation_title">Accent par conversation</string>

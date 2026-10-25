@@ -1,9 +1,9 @@
 Quickdot is a GPLv3 fork of Quik (which continues QKSMS). It is not the official Quik app, not a Nothing product, and not affiliated with Nothing or the Quik project.
 
-Quickdot brings a sharp, Nothing-inspired style to everyday texting: square marks, Doto and Space Mono type, and a Signal red accent on the free Google Play build. SMS and MMS work as you expect—scheduled messages, backup, blocking, attachments, voice notes, and the rest of the Quik feature set.
+Quickdot brings a sharp, minimal monochrome dot-matrix style to everyday texting: square marks, Doto and Space Mono type, and a red accent on the free Google Play build. SMS and MMS work as you expect—scheduled messages, backup, blocking, attachments, voice notes, and the rest of the Quik feature set.
 
 <b>Free on Google Play</b>
-• Full Quickdot interface with the Signal red accent everywhere
+• Full Quickdot interface with the red accent everywhere
 • Send and receive messages without limits
 
 <b>Quickdot Pro</b> (one-time purchase on Google Play)

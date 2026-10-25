@@ -86,7 +86,7 @@ The genuine **Legacy** surfaces are the shared `QkDialog` (radios), alert dialog
 | Attachment sheet | Partially | `light-compose-attach.png` | `dark-compose-attach.png` | Square keys and 4dp labels. Glyphs are Material (`ic_person`, `ic_event`, `ic_mic`, camera, gallery) | Small |
 | Conversation details | Partially | `light-conversation-info.png` | `dark-conversation-info.png` | Sprocket, matrix sections, square avatar. Row icons are Material. Name/delete dialogs are stock alerts | Small icons, small dialogs |
 | Settings | Partially | `light-settings.png`, `light-settings-scrolled.png` | `dark-settings.png`, `dark-settings-scrolled.png` | Sprocket, matrix categories, square switches, Pro card (UI only). Every row icon is Material | Small |
-| Accent picker | Styled | `light-theme-picker.png` | `dark-theme-picker.png` | Square swatches, live thread, sprocket, matrix. HSV picker class is unused | — |
+| Accent picker | Styled | `light-theme-picker.png` | `dark-theme-picker.png` | Square swatches (12 presets + Signal), `#RRGGBB` hex with contrast warning, per-conversation reset, live preview, sprocket, matrix. Play locks non-Signal presets and hex until Quickdot Pro | — |
 | Night / font / delay dialogs | Legacy | `light-dialog-night.png`, `light-dialog-font.png`, `light-dialog-delay.png` | matching `dark-dialog-*` | `QkDialog`: bold title, `radio_button` rows, no matrix. Same chrome for MMS size, link handling, notification preview, swipe-action choice | Medium (one component) |
 | Signature dialog | Legacy | not separately framed (row opens `TextInputDialog`) | | Bold field inside an alert | Small |
 | Swipe actions | Partially | `light-swipe-actions.png` | not re-shot after the dark pass died on a disk error | Sprocket and a square avatar in the preview. Action icons are Material. Title has no matrix band | Small |
@@ -103,7 +103,7 @@ The genuine **Legacy** surfaces are the shared `QkDialog` (radios), alert dialog
 | Contacts picker | Partially | not captured (activity is not exported; no in-app path was completed) | | Layout has sprocket, dotted rules, styled empty and permission states | Small if a Material icon remains |
 | Gallery / media viewer | Legacy | not captured (`GalleryActivity` needs a part id and is not exported) | | Translucent toolbar, no sprocket or matrix. Invalid page is a plain string. Save toast is a system toast | Medium |
 | Quick reply | Partially | `light-qkreply.png` | not shot | 4dp card and a display title. Composer is the 22dp pill. Send and SIM icons are Material. Menu (`qkreply.xml`) is Material. On API 24+ the notification Reply action is the system inline reply, not this activity (`qkreply` defaults off) | Medium |
-| Message notification | Partially | `light-notification-shade.png` | not shot | Small icon is the pixel Q. Color is the accent `#E10600`. Shade layout is MessagingStyle. Actions (Mark read, Reply, Call) use Material icons. Reply is `RemoteInput` | Medium for icons. Large to replace the shade, and not worth it |
+| Message notification | Partially | `light-notification-shade.png` | not shot | Small icon is the pixel Q. Colour follows the effective accent (Signal on free Play, chosen or per-conversation with Pro). Shade layout is MessagingStyle. Actions (Mark read, Reply, Call) use Material icons. Reply is `RemoteInput` | Medium for icons. Large to replace the shade, and not worth it |
 | Failed-send / MMS download notifications | Partially | not triggered | | Same pattern: accent color, Material small icon (`ic_notification_failed`, `ic_file_download`) | Small icons |
 | Conversation widget | Legacy | `light-widget-picker.png`, `light-widget-quickdot.png` (picker preview, not placed on the home screen) | widget code follows system night | `rounded_rectangle_4dp` card, `circle_mask` avatar, Material add icon, framework `TextView`s. RemoteViews cannot use Doto without prerendered bitmaps | Medium. Large only if custom type is required |
 | Speak-unseen widget | Legacy | not placed | | Full-bleed image, no chrome | Small |
@@ -136,6 +136,6 @@ Do these as shared pieces. Fixing them one screen at a time will redo the same d
 
 ## Not a style bug
 
-- Quickdot Pro on Settings is a labeled card. Billing is not connected. `ProBillingHook.enforcementEnabled` stays false, so the accent still applies everywhere.
-- `HSVPickerView` is still in the tree and is not on the accent screen.
+- Quickdot Pro on Settings is the purchase recap: price from Play when available, summary, Buy, Restore, and Unlocked. On the `play` flavor, `ProBillingHook.enforcementEnabled` is on: free users see the full Nothing-inspired chrome with Signal red `#E10600` as the painted accent; Pro unlocks custom accents, the 12-colour palette, hex input, per-conversation accents, and reply quotes. The `foss` flavor skips enforcement and includes everything.
+- `HSVPickerView` remains in the tree for legacy callers; the accent screen uses the hex field and preset grid instead.
 - System role sheet, runtime permission dialogs, ringtone picker, time picker, and toasts are platform UI.

@@ -1,6 +1,19 @@
 # Play Console setup for Quickdot Pro
 
-The `play` flavor (`applicationId` `com.nico2511.quickdot`) sells one product. The `foss` flavor does not call Play Billing. Create the product before a license tester can complete a purchase. The price is configured in Play Console, not in the app. The app shows `1 EUR · one-time` until Play returns a formatted price.
+The `play` flavor (`applicationId` `com.nico2511.quickdot`) sells one in-app product. The `foss` flavor does not call Play Billing and includes every Pro feature. Create the product before a license tester can complete a purchase. The price is configured only in Play Console; the app shows the formatted price from Play when available, otherwise the string `One-time purchase` / `Achat unique`.
+
+## What is free, Pro, and FOSS
+
+| | Play (free) | Play + Quickdot Pro | FOSS build |
+| --- | --- | --- | --- |
+| Nothing-inspired UI (typography, layout, icons) | Yes | Yes | Yes |
+| Accent colour | Signal red everywhere | Custom accent everywhere | Custom accent everywhere |
+| Accent palette | Signal only | 12 preset colours + `#RRGGBB` hex with contrast check | Same as Pro |
+| Per-conversation accent | No | Yes (bubbles, Send, rules, avatars, notifications) | Yes |
+| Reply with quote | No | Yes | Yes |
+| SMS send/receive | Unrestricted | Unrestricted | Unrestricted |
+
+Quickdot Pro is a **one-time** purchase, not a subscription and not a consumable.
 
 ## 1. App
 
@@ -12,12 +25,10 @@ The `play` flavor (`applicationId` `com.nico2511.quickdot`) sells one product. T
 
 1. Monetize with Play → Products → One-time products.
 2. Create a product with product ID exactly `quickdot_pro`.
-3. Name: Quickdot Pro.
-4. Description: Unlocks the chosen accent on every conversation. Sending messages stays free.
-5. Set the price to **1 EUR** (Play localizes it for other countries).
+3. Name: **Quickdot Pro**.
+4. Description (suggested): *Unlock custom accent colours, per-conversation accents, and reply quotes. Sending and receiving messages stays free.*
+5. Set the price in Play Console (localized per country).
 6. Activate the product. Inactive products are not returned by `queryProductDetailsAsync`.
-
-This is a one-time product, not a subscription and not a consumable. The app acknowledges it and does not consume it.
 
 ## 3. License testers
 
@@ -28,9 +39,12 @@ This is a one-time product, not a subscription and not a consumable. The app ack
 
 ## 4. What the app does with the purchase
 
-- **Purchase.** Settings → Purchase calls `launchBillingFlow` for `quickdot_pro`.
-- **Pending.** A pending payment does not unlock style. The next time the app is in the foreground it queries purchases again and unlocks only after the state is `PURCHASED`.
-- **Acknowledgement.** A purchased and unacknowledged item is acknowledged in the app. Style is granted even if acknowledgement has to be retried on the next query.
+- **Recap (Settings).** The Quickdot Pro card shows the Play price when known, a short summary, **Buy**, **Restore**, and **Unlocked** when owned.
+- **Purchase.** Settings → Buy calls `launchBillingFlow` for `quickdot_pro`. Locked accent swatches and the hex field route to the same purchase flow.
+- **Pending.** A pending payment does not unlock Pro. The next time the app is in the foreground it queries purchases again and unlocks only after the state is `PURCHASED`.
+- **Acknowledgement.** A purchased and unacknowledged item is acknowledged in the app. Pro is granted even if acknowledgement has to be retried on the next query.
 - **Restore.** Settings → Restore, and every cold start, calls `queryPurchasesAsync`. A reinstall with an empty cache finds the Play purchase and unlocks again.
 - **Offline cache.** `quickdotPro` in shared preferences is the saved unlock. If Play cannot be reached, that value is left as-is. A successful query with no `quickdot_pro` purchase clears it (refund, or a restore with nothing to restore).
-- **SMS.** Nothing in the send, receive, or notification path reads this entitlement. Only the conversation accent is limited on the free Play build.
+- **Accent painting.** On the free Play build, the UI paints Signal red until Pro is unlocked; preferences still store the chosen colour. Per-conversation overrides and non-Signal presets are Pro-gated in the theme picker.
+- **Reply quotes.** Quoting a message when replying is Pro-gated on Play; FOSS is unrestricted.
+- **SMS.** Nothing in the send, receive, or notification delivery path is paywalled. Only accent painting and reply quotes read the entitlement.

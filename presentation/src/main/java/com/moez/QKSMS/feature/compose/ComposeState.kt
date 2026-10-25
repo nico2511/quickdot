@@ -59,4 +59,5 @@ data class ComposeState(
     val audioMsgRecording: Boolean = false,
     val saveDraft: Boolean = true,
     val reply: ReplyTarget? = null,
+    val replyProLocked: Boolean = false,
 )

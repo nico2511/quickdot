@@ -78,6 +78,9 @@ import dev.octoshrimpy.quik.util.ActiveSubscriptionObservable
 import dev.octoshrimpy.quik.util.FileUtils
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.Preferences
+import dev.octoshrimpy.quik.util.ProBillingHook
+import dev.octoshrimpy.quik.util.canStartMessageQuote
+import dev.octoshrimpy.quik.util.messageQuoteLocked
 import dev.octoshrimpy.quik.extensions.getResourceBytes
 import dev.octoshrimpy.quik.util.Constants.Companion.DELAY_CANCELLED_CACHED_ATTACHMENTS_FILE_PREFIX
 import dev.octoshrimpy.quik.util.Constants.Companion.SAVED_MESSAGE_TEXT_FILE_PREFIX
@@ -128,6 +131,7 @@ class ComposeViewModel @Inject constructor(
     private val sendNewMessage: SendNewMessage,
     private val subscriptionManager: SubscriptionManagerCompat,
     private val saveImage: SaveImage,
+    private val proBillingHook: ProBillingHook,
 ) : QkViewModel<ComposeView, ComposeState>(ComposeState(
         editingMode = threadId == 0L && addresses.isEmpty(),
         threadId = threadId,
@@ -313,6 +317,11 @@ class ComposeViewModel @Inject constructor(
     @SuppressLint("StringFormatInvalid")
     override fun bindView(view: ComposeView) {
         super.bindView(view)
+
+        prefs.quickdotPro.asObservable()
+            .startWith(prefs.quickdotPro.get())
+            .autoDisposable(view.scope())
+            .subscribe { refreshReplyProLocked() }
 
         val sharing = (sharedText.isNotEmpty() || sharedAttachments.isNotEmpty())
         if (shouldShowContacts) {
@@ -521,13 +530,15 @@ class ComposeViewModel @Inject constructor(
         )
             .observeOn(AndroidSchedulers.mainThread())
             .withLatestFrom(conversation) { messageId, conversation -> messageId to conversation }
-            .mapNotNull { (messageId, conversation) ->
-                messageRepo.getMessage(messageId)?.let { message ->
-                    replyTarget(message, conversation)
-                }
-            }
             .autoDisposable(view.scope())
-            .subscribe { target ->
+            .subscribe { (messageId, conversation) ->
+                if (!canStartMessageQuote(proBillingHook.enforcementEnabled, proBillingHook.isUnlocked())) {
+                    view.requestProPurchase()
+                    return@subscribe
+                }
+                val target = messageRepo.getMessage(messageId)?.let { message ->
+                    replyTarget(message, conversation)
+                } ?: return@subscribe
                 newState { copy(reply = target) }
                 view.clearSelection()
                 view.focusMessage()
@@ -1335,6 +1346,17 @@ class ComposeViewModel @Inject constructor(
             }
             .autoDisposable(view.scope())
             .subscribe()
+    }
+
+    private fun refreshReplyProLocked() {
+        newState {
+            copy(
+                replyProLocked = messageQuoteLocked(
+                    proBillingHook.enforcementEnabled,
+                    proBillingHook.isUnlocked()
+                )
+            )
+        }
     }
 
     private fun replyTarget(message: Message, conversation: Conversation): ReplyTarget {

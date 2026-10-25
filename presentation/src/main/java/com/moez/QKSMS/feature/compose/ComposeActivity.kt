@@ -67,6 +67,7 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.billing.ProBillingClient
 import dev.octoshrimpy.quik.common.ExternalNavigator
 import dev.octoshrimpy.quik.common.base.QkThemedActivity
 import dev.octoshrimpy.quik.common.util.DateFormatter
@@ -112,8 +113,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     @Inject lateinit var messageAdapter: MessagesAdapter
     @Inject lateinit var externalNavigator : ExternalNavigator
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject lateinit var proBillingClient: ProBillingClient
 
     private lateinit var binding: ComposeActivityBinding
+    private var replyProLocked = false
 
     override val activityVisibleIntent: Subject<Boolean> = PublishSubject.create()
     override val chipsSelectedIntent: Subject<HashMap<String, String?>> = PublishSubject.create()
@@ -227,6 +230,11 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 .apply { setTint(getColorCompat(R.color.accent)) }
                 .toBitmap(iconLength, iconLength)
         }
+        private val replyLockIcon: Bitmap by lazy {
+            ContextCompat.getDrawable(this@ComposeActivity, R.drawable.qd_lock)!!
+                .apply { setTint(getColorCompat(R.color.accent)) }
+                .toBitmap(iconLength, iconLength)
+        }
 
         override fun isLongPressDragEnabled(): Boolean = false
 
@@ -262,8 +270,9 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         ) {
             if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE && dX > 0f) {
                 val item = viewHolder.itemView
-                val top = item.top + (item.height - replyIcon.height) / 2f
-                c.drawBitmap(replyIcon, item.left + iconLeft.toFloat(), top, null)
+                val icon = if (replyProLocked) replyLockIcon else replyIcon
+                val top = item.top + (item.height - icon.height) / 2f
+                c.drawBitmap(icon, item.left + iconLeft.toFloat(), top, null)
             }
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
         }
@@ -552,7 +561,21 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         binding.toolbar.menu.findItem(R.id.details)?.isVisible = !state.editingMode && state.selectedMessages == 1
         binding.toolbar.menu.findItem(R.id.delete)?.isVisible = !state.editingMode && ((state.selectedMessages > 0) || state.canSend)
         binding.toolbar.menu.findItem(R.id.forward)?.isVisible = !state.editingMode && state.selectedMessages == 1
-        binding.toolbar.menu.findItem(R.id.reply)?.isVisible = !state.editingMode && state.selectedMessages == 1
+        binding.toolbar.menu.findItem(R.id.reply)?.let { item ->
+            item.isVisible = !state.editingMode && state.selectedMessages == 1
+            if (item.isVisible) {
+                item.title = getString(
+                    if (state.replyProLocked) R.string.compose_menu_reply_pro
+                    else R.string.compose_menu_reply
+                )
+                item.contentDescription = if (state.replyProLocked) {
+                    getString(R.string.compose_reply_swipe_pro_cd)
+                } else {
+                    getString(R.string.compose_menu_reply)
+                }
+            }
+        }
+        replyProLocked = state.replyProLocked
         binding.toolbar.menu.findItem(R.id.show_status)?.isVisible = !state.editingMode && state.selectedMessages > 0
         selectionActive = state.selectedMessages > 0
         binding.toolbar.menu.findItem(R.id.previous)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
@@ -921,5 +944,9 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     override fun focusMessage() {
         binding.message.requestFocus()
+    }
+
+    override fun requestProPurchase() {
+        proBillingClient.purchase(this)
     }
 }

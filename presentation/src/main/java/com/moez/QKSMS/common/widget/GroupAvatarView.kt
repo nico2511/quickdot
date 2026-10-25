@@ -38,6 +38,13 @@ class GroupAvatarView @JvmOverloads constructor(
     private var layout: GroupAvatarViewBinding =
         GroupAvatarViewBinding.inflate(LayoutInflater.from(context), this)
 
+    var threadId: Long = 0
+        set(value) {
+            field = value
+            layout.avatar1.threadId = value
+            layout.avatar2.threadId = value
+        }
+
     var monochrome: Boolean = false
         set(value) {
             field = value

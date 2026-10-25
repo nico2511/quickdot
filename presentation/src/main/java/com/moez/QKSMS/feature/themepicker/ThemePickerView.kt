@@ -7,7 +7,7 @@ interface ThemePickerView : QkViewContract<ThemePickerState> {
 
     fun themeSelected(): Observable<Int>
 
-    fun styleConversationClicks(): Observable<*>
+    fun resetAccentClicks(): Observable<*>
 
     fun hexInputChanges(): Observable<String>
 
@@ -23,9 +23,9 @@ interface ThemePickerView : QkViewContract<ThemePickerState> {
 
     fun setAccentLocks(showLocks: Boolean)
 
-    fun showStyled(styled: Boolean)
+    fun showResetConversationAccent(show: Boolean)
 
-    fun showFreeStyleChoice(show: Boolean)
+    fun showProNote(show: Boolean)
 
     fun requestProPurchase()
 

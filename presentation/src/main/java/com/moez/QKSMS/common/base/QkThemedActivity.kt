@@ -32,12 +32,7 @@ import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeBoolean
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
-import dev.octoshrimpy.quik.extensions.Optional
 import dev.octoshrimpy.quik.extensions.asObservable
-import dev.octoshrimpy.quik.extensions.mapNotNull
-import dev.octoshrimpy.quik.repository.ConversationRepository
-import dev.octoshrimpy.quik.repository.MessageRepository
-import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
@@ -55,9 +50,6 @@ import javax.inject.Inject
 abstract class QkThemedActivity : QkActivity() {
 
     @Inject lateinit var colors: Colors
-    @Inject lateinit var conversationRepo: ConversationRepository
-    @Inject lateinit var messageRepo: MessageRepository
-    @Inject lateinit var phoneNumberUtils: PhoneNumberUtils
 
     /**
      * In case the activity should be themed for a specific conversation, the selected conversation
@@ -71,28 +63,7 @@ abstract class QkThemedActivity : QkActivity() {
      */
     val theme: Observable<Colors.Theme> = threadId
             .distinctUntilChanged()
-            .switchMap { threadId ->
-                val conversation = conversationRepo.getConversation(threadId)
-                when {
-                    conversation == null -> Observable.just(Optional(null))
-
-                    conversation.recipients.size == 1 -> Observable.just(Optional(conversation.recipients.first()))
-
-                    else -> messageRepo.getLastIncomingMessage(conversation.id)
-                            .asObservable()
-                            .mapNotNull { messages -> messages.firstOrNull() }
-                            .distinctUntilChanged { message -> message.address }
-                            .mapNotNull { message ->
-                                conversation.recipients.find { recipient ->
-                                    phoneNumberUtils.compare(recipient.address, message.address)
-                                }
-                            }
-                            .map { recipient -> Optional(recipient) }
-                            .startWith(Optional(conversation.recipients.firstOrNull()))
-                            .distinctUntilChanged()
-                }
-            }
-            .switchMap { colors.themeObservable(it.value) }
+            .switchMap { activeThreadId -> colors.themeObservableForThread(activeThreadId) }
 
     @SuppressLint("InlinedApi")
     override fun onCreate(savedInstanceState: Bundle?) {

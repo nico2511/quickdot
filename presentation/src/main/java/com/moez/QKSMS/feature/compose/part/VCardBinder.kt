@@ -77,10 +77,10 @@ class VCardBinder @Inject constructor(colors: Colors, private val context: Conte
 
         val ctx = holder.itemView.context
         if (message.isMe()) {
-            binding.vCardBackground.setBackgroundTint(ctx.getColorCompat(R.color.bubbleOutgoing))
-            binding.vCardAvatar.setTint(ctx.getColorCompat(R.color.bubbleOutgoingText))
-            binding.name.setTextColor(ctx.getColorCompat(R.color.bubbleOutgoingText))
-            binding.label.setTextColor(ctx.getColorCompat(R.color.bubbleOutgoingText))
+            binding.vCardBackground.setBackgroundTint(theme.theme)
+            binding.vCardAvatar.setTint(theme.textPrimary)
+            binding.name.setTextColor(theme.textPrimary)
+            binding.label.setTextColor(theme.textPrimary)
         } else {
             binding.vCardBackground.applySpeakerStroke(theme.theme)
             binding.vCardAvatar.setTint(ctx.resolveThemeColor(android.R.attr.textColorSecondary))

@@ -100,6 +100,8 @@ class ConversationsAdapter @Inject constructor(
 
         holder.itemView.isActivated = isSelected(conversation.id)
 
+        binding.avatars.threadId = conversation.id
+        binding.avatars.monochrome = false
         binding.avatars.recipients = conversation.recipients
         binding.title.collapseEnabled = conversation.recipients.size > 1
         binding.title.text = buildSpannedString {

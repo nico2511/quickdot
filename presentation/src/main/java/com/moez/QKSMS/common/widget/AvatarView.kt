@@ -90,6 +90,16 @@ class AvatarView @JvmOverloads constructor(
             }
         }
 
+    /** When set, list and thread avatars use this conversation's accent fill. */
+    var threadId: Long = 0
+        set(value) {
+            field = value
+            if (inflated && this::colors.isInitialized) {
+                theme = avatarTheme(null)
+                updateView()
+            }
+        }
+
     /** Compose and contact rows use a square stamp instead of the inbox circle. */
     var square: Boolean = false
         set(value) {
@@ -130,6 +140,9 @@ class AvatarView @JvmOverloads constructor(
     private fun avatarTheme(recipient: Recipient?): Colors.Theme {
         if (calmHeader) {
             return Colors.Theme(context.getColorCompat(R.color.headerAvatar), colors)
+        }
+        if (threadId != 0L) {
+            return colors.themeForThread(threadId)
         }
         val key = recipient?.address ?: address
         if (speakerInk && !key.isNullOrBlank()) {

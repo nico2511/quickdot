@@ -25,33 +25,37 @@ class ThemePickerPresenter @Inject constructor(
     private val proBillingHook: ProBillingHook
 ) : QkPresenter<ThemePickerView, ThemePickerState>(ThemePickerState(threadId = threadId)) {
 
-    private val theme: Preference<Int> = prefs.theme()
+    private val globalTheme: Preference<Int> = prefs.theme()
+
+    private val editingTheme: Preference<Int>
+        get() = if (threadId != 0L) prefs.threadTheme(threadId) else globalTheme
 
     override fun bindIntents(view: ThemePickerView) {
         super.bindIntents(view)
 
-        theme.asObservable()
-                .autoDisposable(view.scope())
-                .subscribe { color -> view.setCurrentTheme(color) }
+        val themeChanges = if (threadId != 0L) {
+            prefs.keyChanges.filter { key ->
+                key == "theme" || key == "quickdotPro" || key == "thread_theme_$threadId"
+            }.startWith("")
+        } else {
+            globalTheme.asObservable().map { }
+        }
 
-        prefs.styledThreadId.asObservable()
+        themeChanges
                 .autoDisposable(view.scope())
-                .subscribe { styledId ->
-                    val styled = threadId != 0L && styledId == threadId
-                    newState { copy(styled = styled) }
-                    view.showStyled(styled)
-                }
+                .subscribe { refreshThemePreview(view) }
 
         prefs.quickdotPro.asObservable()
                 .autoDisposable(view.scope())
                 .subscribe {
-                    view.showFreeStyleChoice(freeChoice())
+                    view.showProNote(showProNote())
                     view.setAccentLocks(showAccentLocks())
+                    refreshThemePreview(view)
                 }
 
         view.themeSelected()
                 .autoDisposable(view.scope())
-                .subscribe { color -> applyPreset(color) }
+                .subscribe { color -> applyPreset(view, color) }
 
         view.lockedAccentClicks()
                 .map { }
@@ -69,18 +73,33 @@ class ThemePickerPresenter @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { input -> onHexInput(view, input) }
 
-        view.styleConversationClicks()
+        view.resetAccentClicks()
                 .autoDisposable(view.scope())
-                .subscribe { markStyledConversation() }
+                .subscribe { resetConversationAccent(view) }
 
         view.setAccentLocks(showAccentLocks())
+        view.showProNote(showProNote())
+        refreshThemePreview(view)
     }
 
-    private fun applyPreset(color: Int) {
+    private fun refreshThemePreview(view: ThemePickerView) {
+        view.setCurrentTheme(currentStoredAccent())
+        view.showResetConversationAccent(threadId != 0L && prefs.hasThreadTheme(threadId))
+    }
+
+    private fun currentStoredAccent(): Int {
+        return when {
+            threadId != 0L && prefs.hasThreadTheme(threadId) -> prefs.threadTheme(threadId).get()
+            threadId != 0L -> prefs.theme().get()
+            else -> globalTheme.get()
+        }
+    }
+
+    private fun applyPreset(view: ThemePickerView, color: Int) {
         if (isPresetAccentLocked(color, proBillingHook.enforcementEnabled, proBillingHook.isUnlocked())) {
             return
         }
-        apply(colors.snapAccent(color))
+        apply(view, colors.snapAccent(color))
     }
 
     private fun onHexInput(view: ThemePickerView, input: String) {
@@ -90,7 +109,7 @@ class ThemePickerPresenter @Inject constructor(
         val parsed = parseAccentHex(input)
         if (parsed == null) {
             if (input.isEmpty()) {
-                view.setHexPreview(colors.displayAccent(theme.get()), false)
+                view.setHexPreview(colors.displayAccent(editingTheme.get()), false)
             }
             return
         }
@@ -101,26 +120,29 @@ class ThemePickerPresenter @Inject constructor(
         )
         view.setHexPreview(snapped, lowContrast)
         if (input.length == 6) {
-            apply(snapped)
+            apply(view, snapped)
         }
     }
 
-    private fun apply(color: Int) {
-        theme.set(color)
-        markStyledConversation()
+    private fun apply(view: ThemePickerView, color: Int) {
+        editingTheme.set(color)
         widgetManager.updateTheme()
+        refreshThemePreview(view)
     }
 
-    private fun markStyledConversation() {
-        if (threadId != 0L) prefs.styledThreadId.set(threadId)
-    }
-
-    private fun freeChoice(): Boolean {
-        return proBillingHook.enforcementEnabled && !proBillingHook.isUnlocked()
+    private fun resetConversationAccent(view: ThemePickerView) {
+        if (threadId == 0L) return
+        prefs.clearThreadTheme(threadId)
+        widgetManager.updateTheme()
+        refreshThemePreview(view)
     }
 
     private fun showAccentLocks(): Boolean {
         return proBillingHook.enforcementEnabled && !proBillingHook.isUnlocked()
+    }
+
+    private fun showProNote(): Boolean {
+        return showAccentLocks()
     }
 
 }

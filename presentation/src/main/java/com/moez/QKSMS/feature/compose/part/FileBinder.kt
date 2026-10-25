@@ -86,10 +86,10 @@ class FileBinder @Inject constructor(colors: Colors, private val context: Contex
 
         val ctx = holder.itemView.context
         if (message.isMe()) {
-            binding.fileBackground.setBackgroundTint(ctx.getColorCompat(R.color.bubbleOutgoing))
-            binding.icon.setTint(ctx.getColorCompat(R.color.bubbleOutgoingText))
-            binding.filename.setTextColor(ctx.getColorCompat(R.color.bubbleOutgoingText))
-            binding.size.setTextColor(ctx.getColorCompat(R.color.bubbleOutgoingText))
+            binding.fileBackground.setBackgroundTint(theme.theme)
+            binding.icon.setTint(theme.textPrimary)
+            binding.filename.setTextColor(theme.textPrimary)
+            binding.size.setTextColor(theme.textPrimary)
         } else {
             binding.fileBackground.applySpeakerStroke(theme.theme)
             binding.icon.setTint(ctx.resolveThemeColor(android.R.attr.textColorSecondary))

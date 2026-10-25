@@ -88,7 +88,7 @@ class ShortcutManagerImpl @Inject constructor(
                 val recipient = conversation.recipients.first()!!
                 recipient.getThemedIcon(
                     context,
-                    colors.theme(recipient),
+                    colors.themeForThread(conversation.id),
                     ShortcutManagerCompat.getIconMaxWidth(context),
                     ShortcutManagerCompat.getIconMaxHeight(context)
                 )
@@ -103,7 +103,7 @@ class ShortcutManagerImpl @Inject constructor(
             }
         }
 
-        val persons = conversation.recipients.map { it.toPerson(context, colors) }.toTypedArray()
+        val persons = conversation.recipients.map { it.toPerson(context, colors, conversation.id) }.toTypedArray()
 
         val intent = Intent(context, ComposeActivity::class.java)
             .setAction(Intent.ACTION_VIEW)

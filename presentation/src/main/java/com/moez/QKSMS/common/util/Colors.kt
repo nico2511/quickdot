@@ -29,9 +29,10 @@ import dev.octoshrimpy.quik.util.AccentPresets
 import dev.octoshrimpy.quik.util.Preferences
 import dev.octoshrimpy.quik.util.ProBillingHook
 import dev.octoshrimpy.quik.util.formatAccentHex
+import dev.octoshrimpy.quik.util.resolveEffectiveAccentForThread
 import dev.octoshrimpy.quik.util.resolveEffectiveAccentStored
+import dev.octoshrimpy.quik.util.textColorOnAccent
 import io.reactivex.Observable
-import io.reactivex.functions.Function3
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.absoluteValue
@@ -111,25 +112,43 @@ class Colors @Inject constructor(
     )
 
     /**
-     * Accent for one conversation. On the Play flavor a free account keeps
-     * [accentColor] on the conversation it chose and signal red on the rest.
-     * Pro, and the FOSS flavor, keep [accentColor] everywhere.
+     * Painted accent for one conversation: per-thread override, then global, then Pro gate.
      */
-    fun accentForThread(threadId: Long): Int {
-        return if (proBillingHook.accentAppliesTo(threadId)) accentColor()
-        else paintedAccent(Preferences.DEFAULT_THEME_COLOR)
+    fun accentForThread(threadId: Long, proUnlocked: Boolean = proBillingHook.isUnlocked()): Int {
+        val global = prefs.theme().get()
+        val hasConversation = threadId != 0L && prefs.hasThreadTheme(threadId)
+        val conversation = if (hasConversation) prefs.threadTheme(threadId).get() else global
+        val effective = resolveEffectiveAccentForThread(
+            hasConversation,
+            conversation,
+            global,
+            proBillingHook.enforcementEnabled,
+            proUnlocked
+        )
+        return AccentPaint.display(snapAccent(effective), night())
     }
 
-    /** True when the chosen accent is not limited to one conversation. */
+    /** True when custom accents are painted (Pro on Play, or FOSS). */
     fun styleIsAppWide(): Boolean {
         return !proBillingHook.enforcementEnabled || proBillingHook.isUnlocked()
     }
 
-    data class Theme(val theme: Int, private val colors: Colors) {
+    data class Theme(
+        val theme: Int,
+        private val colors: Colors,
+        private val contentOnTheme: Int? = null,
+    ) {
         val highlight by lazy { colors.highlightColorForTheme(theme) }
-        val textPrimary by lazy { colors.textPrimaryOnThemeForColor(theme) }
+        val textPrimary by lazy {
+            contentOnTheme ?: colors.textPrimaryOnThemeForColor(theme)
+        }
         val textSecondary by lazy { colors.textSecondaryOnThemeForColor(theme) }
         val textTertiary by lazy { colors.textTertiaryOnThemeForColor(theme) }
+    }
+
+    fun themeForThread(threadId: Long): Theme {
+        val accent = accentForThread(threadId)
+        return Theme(accent, this, textColorOnAccent(accent))
     }
 
     val materialColors: List<List<Int>> = listOf(
@@ -192,22 +211,32 @@ class Colors @Inject constructor(
         return context.getColorCompat(slots[index])
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    fun theme(recipient: Recipient? = null): Theme {
-        return Theme(accentColor(), this)
+    fun theme(recipient: Recipient? = null, threadId: Long = 0L): Theme {
+        return if (threadId != 0L) themeForThread(threadId) else Theme(accentColor(), this)
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    fun themeObservable(recipient: Recipient? = null): Observable<Theme> {
-        return Observable.combineLatest(
+    fun themeObservable(recipient: Recipient? = null, threadId: Long = 0L): Observable<Theme> {
+        if (threadId == 0L) {
+            return Observable.combineLatest(
                 prefs.theme().asObservable(),
                 prefs.quickdotPro.asObservable(),
-                prefs.styledThreadId.asObservable(),
-                Function3<Int, Boolean, Long, Theme> { color, proUnlocked, _ ->
-                    Theme(paintedAccent(color, proUnlocked), this@Colors)
-                }
-        )
+            ) { color, proUnlocked ->
+                Theme(paintedAccent(color, proUnlocked), this@Colors)
+            }
+        }
+        return Observable.combineLatest(
+            prefs.theme().asObservable(),
+            prefs.quickdotPro.asObservable(),
+            prefs.keyChanges.filter { key ->
+                key == "theme" || key == "quickdotPro" || key == "thread_theme_$threadId"
+            }.startWith(""),
+        ) { _, proUnlocked, _ ->
+            themeForThread(threadId)
+        }
     }
+
+    fun themeObservableForThread(threadId: Long): Observable<Theme> =
+        if (threadId == 0L) themeObservable() else themeObservable(threadId = threadId)
 
     fun highlightColorForTheme(theme: Int): Int = FloatArray(3)
             .apply { Color.colorToHSV(theme, this) }

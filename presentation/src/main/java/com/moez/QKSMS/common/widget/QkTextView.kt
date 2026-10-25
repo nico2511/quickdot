@@ -25,7 +25,6 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import dev.octoshrimpy.quik.common.util.TextViewStyler
 import dev.octoshrimpy.quik.injection.appComponent
-import java.lang.reflect.Field
 import javax.inject.Inject
 
 open class QkTextView @JvmOverloads constructor(
@@ -99,32 +98,7 @@ open class QkTextView @JvmOverloads constructor(
     }
 
     private fun applyFace(typeface: Typeface) {
-        val field = fontWeightAdjustmentField
-        val saved = field?.let {
-            try {
-                it.getInt(this)
-            } catch (e: Exception) {
-                null
-            }
-        }
-        if (field != null && saved != null && saved != 0) {
-            try {
-                field.setInt(this, 0)
-            } catch (e: Exception) {
-                // Hidden-API block: the family still has the bold file.
-            }
-        }
-        try {
-            super.setTypeface(typeface)
-        } finally {
-            if (field != null && saved != null && saved != 0) {
-                try {
-                    field.setInt(this, saved)
-                } catch (e: Exception) {
-                    // Restoring the adjustment is best-effort.
-                }
-            }
-        }
+        applyPinnedTypeface(this, typeface) { super.setTypeface(it) }
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
@@ -147,16 +121,6 @@ open class QkTextView @JvmOverloads constructor(
     override fun setTextColor(color: Int) {
         super.setTextColor(color)
         setLinkTextColor(color)
-    }
-
-    private companion object {
-        val fontWeightAdjustmentField: Field? = try {
-            TextView::class.java.getDeclaredField("mFontWeightAdjustment").apply {
-                isAccessible = true
-            }
-        } catch (e: Exception) {
-            null
-        }
     }
 
 }

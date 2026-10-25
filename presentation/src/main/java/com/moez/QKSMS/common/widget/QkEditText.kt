@@ -51,7 +51,6 @@ import dev.octoshrimpy.quik.injection.appComponent
 import dev.octoshrimpy.quik.util.tryOrNull
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import java.lang.reflect.Field
 import javax.inject.Inject
 
 
@@ -394,44 +393,11 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
     }
 
     private fun applyPinned(typeface: Typeface) {
-        val field = fontWeightAdjustmentField
-        val saved = field?.let {
-            try {
-                it.getInt(this)
-            } catch (e: Exception) {
-                null
-            }
-        }
-        if (field != null && saved != null && saved != 0) {
-            try {
-                field.setInt(this, 0)
-            } catch (e: Exception) {
-                // Hidden-API block: the family still has the bold file.
-            }
-        }
-        try {
-            super.setTypeface(typeface)
-        } finally {
-            if (field != null && saved != null && saved != 0) {
-                try {
-                    field.setInt(this, saved)
-                } catch (e: Exception) {
-                    // Restoring the adjustment is best-effort.
-                }
-            }
-        }
+        applyPinnedTypeface(this, typeface) { super.setTypeface(it) }
     }
 
     private companion object {
         private const val HINT_LOG = "QkHint"
-
-        val fontWeightAdjustmentField: Field? = try {
-            TextView::class.java.getDeclaredField("mFontWeightAdjustment").apply {
-                isAccessible = true
-            }
-        } catch (e: Exception) {
-            null
-        }
     }
 
     override fun onCreateInputConnection(editorInfo: EditorInfo): InputConnection {

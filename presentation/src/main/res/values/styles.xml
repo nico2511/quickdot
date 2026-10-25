@@ -123,7 +123,7 @@
     </style>
 
     <style name="SearchPill">
-        <item name="android:background">@drawable/search_pill</item>
+        <item name="android:background">@drawable/search_field</item>
         <item name="android:drawablePadding">8dp</item>
         <item name="android:drawableStart">@drawable/qd_search</item>
         <item name="android:drawableTint">?android:attr/textColorTertiary</item>

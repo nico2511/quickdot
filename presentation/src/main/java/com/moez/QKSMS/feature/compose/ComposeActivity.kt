@@ -33,7 +33,9 @@ import android.os.SystemClock
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import android.text.TextUtils
 import android.text.format.DateFormat
+import android.widget.ImageView
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.view.ContextMenu
@@ -117,6 +119,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     private lateinit var binding: ComposeActivityBinding
     private var replyProLocked = false
+    private var replyActionView: View? = null
 
     override val activityVisibleIntent: Subject<Boolean> = PublishSubject.create()
     override val chipsSelectedIntent: Subject<HashMap<String, String?>> = PublishSubject.create()
@@ -324,6 +327,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                     binding.send.setTint(textColorOnAccent(accent))
                     binding.scheduledSend.setBackgroundTint(accent)
                     binding.scheduledSend.setTint(textColorOnAccent(accent))
+                    binding.scheduledAccentRule.setBackgroundTint(accent)
+                    binding.composeQuoteRule.setBackgroundTint(accent)
                     // Attach stays an outline. The menu behind it is monochrome.
                     // Red is reserved for send and failure.
                     binding.attach.backgroundTintList = null
@@ -528,6 +533,13 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             state.query.isNotEmpty() -> state.query
             else -> state.conversationtitle
         }
+        if (state.selectedMessages > 0) {
+            binding.toolbarTitle.maxLines = 2
+            binding.toolbarTitle.ellipsize = null
+        } else {
+            binding.toolbarTitle.maxLines = 1
+            binding.toolbarTitle.ellipsize = TextUtils.TruncateAt.END
+        }
 
         binding.toolbarSubtitle.setVisible(state.query.isNotEmpty())
         binding.toolbarSubtitle.text = getString(R.string.compose_subtitle_results, state.searchSelectionPosition,
@@ -564,15 +576,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         binding.toolbar.menu.findItem(R.id.reply)?.let { item ->
             item.isVisible = !state.editingMode && state.selectedMessages == 1
             if (item.isVisible) {
-                item.title = getString(
-                    if (state.replyProLocked) R.string.compose_menu_reply_pro
-                    else R.string.compose_menu_reply
-                )
-                item.contentDescription = if (state.replyProLocked) {
-                    getString(R.string.compose_reply_swipe_pro_cd)
-                } else {
-                    getString(R.string.compose_menu_reply)
-                }
+                updateReplyActionView(state.replyProLocked, colors.accentForThread(state.threadId))
             }
         }
         replyProLocked = state.replyProLocked
@@ -867,7 +871,20 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.compose, menu)
+        replyActionView = menu?.findItem(R.id.reply)?.actionView
+        replyActionView?.setOnClickListener {
+            optionsItemIntent.onNext(R.id.reply)
+        }
         return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun updateReplyActionView(locked: Boolean, accent: Int) {
+        val root = replyActionView ?: return
+        root.contentDescription = getString(
+            if (locked) R.string.compose_reply_swipe_pro_cd else R.string.compose_menu_reply
+        )
+        root.findViewById<ImageView>(R.id.replyBackground)?.setBackgroundTint(accent)
+        root.findViewById<ImageView>(R.id.replyLock)?.isVisible = locked
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

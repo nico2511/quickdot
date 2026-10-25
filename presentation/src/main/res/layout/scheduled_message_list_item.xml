@@ -26,19 +26,30 @@
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingStart="20dp"
+    android:paddingStart="12dp"
     android:paddingTop="14dp"
     android:paddingEnd="20dp"
     android:paddingBottom="14dp">
+
+    <View
+        android:id="@+id/accentRule"
+        android:layout_width="3dp"
+        android:layout_height="0dp"
+        android:background="@color/accent"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <dev.octoshrimpy.quik.common.widget.GroupAvatarView
         android:id="@+id/avatars"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="top"
+        android:layout_marginStart="12dp"
         app:monochrome="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/accentRule"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0" />
 

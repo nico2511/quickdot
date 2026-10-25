@@ -179,7 +179,8 @@
                             tools:visibility="visible">
 
                             <View
-                                android:layout_width="2dp"
+                                android:id="@+id/quoteRule"
+                                android:layout_width="3dp"
                                 android:layout_height="match_parent"
                                 android:background="@color/accent" />
 

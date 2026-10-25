@@ -217,13 +217,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="scheduledTitle,scheduledTime,scheduledCancel,scheduledSeparator" />
+        app:constraint_referenced_ids="scheduledAccentRule,scheduledTitle,scheduledTime,scheduledCancel,scheduledSeparator" />
+
+    <View
+        android:id="@+id/scheduledAccentRule"
+        android:layout_width="3dp"
+        android:layout_height="0dp"
+        android:background="@color/accent"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toBottomOf="@id/scheduledCancel"
+        app:layout_constraintStart_toStartOf="@id/messageBackground"
+        app:layout_constraintTop_toTopOf="@id/scheduledTitle" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/scheduledTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingStart="16dp"
+        android:paddingStart="12dp"
         android:paddingEnd="16dp"
         android:paddingBottom="2dp"
         style="@style/TextStamp"
@@ -231,7 +241,7 @@
         android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintBottom_toTopOf="@id/scheduledTime"
         app:layout_constraintEnd_toStartOf="@id/scheduledCancel"
-        app:layout_constraintStart_toStartOf="@id/messageBackground"
+        app:layout_constraintStart_toEndOf="@id/scheduledAccentRule"
         app:layout_constraintTop_toTopOf="@id/scheduledCancel"
         app:layout_constraintVertical_chainStyle="packed"
         app:textSize="secondary" />
@@ -240,20 +250,20 @@
         android:id="@+id/scheduledTime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingStart="16dp"
+        android:paddingStart="12dp"
         android:paddingEnd="16dp"
         style="@style/TextStamp"
         app:layout_constraintBottom_toBottomOf="@id/scheduledCancel"
         app:layout_constraintEnd_toStartOf="@id/scheduledCancel"
-        app:layout_constraintStart_toStartOf="@id/messageBackground"
+        app:layout_constraintStart_toEndOf="@id/scheduledAccentRule"
         app:layout_constraintTop_toBottomOf="@id/scheduledTitle"
         app:textSize="secondary"
         tools:text="December 23rd at 12:00AM" />
 
     <ImageView
         android:id="@+id/scheduledCancel"
-        android:layout_width="44dp"
-        android:layout_height="56dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:contentDescription="@string/compose_schedule_cancel_cd"
         android:padding="10dp"
         android:src="@drawable/qd_clear"
@@ -287,7 +297,8 @@
         tools:visibility="visible">
 
         <View
-            android:layout_width="2dp"
+            android:id="@+id/composeQuoteRule"
+            android:layout_width="3dp"
             android:layout_height="match_parent"
             android:background="@color/accent" />
 
@@ -315,7 +326,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="?android:attr/textColorTertiary"
+                android:textColor="@color/quoteExcerpt"
                 app:textSize="tertiary"
                 tools:text="The sprocket is on the left" />
 
@@ -323,11 +334,11 @@
 
         <ImageView
             android:id="@+id/quoteClose"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/compose_reply_close"
-            android:padding="8dp"
+            android:padding="12dp"
             android:src="@drawable/qd_clear"
             app:tint="?android:attr/textColorSecondary" />
 

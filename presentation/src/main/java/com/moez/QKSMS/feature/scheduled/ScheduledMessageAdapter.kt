@@ -28,7 +28,9 @@ import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkRealmAdapter
 import dev.octoshrimpy.quik.common.base.QkBindingViewHolder
 import dev.octoshrimpy.quik.databinding.ScheduledMessageListItemBinding
+import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.DateFormatter
+import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.model.Contact
 import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.model.ScheduledMessage
@@ -42,7 +44,8 @@ class ScheduledMessageAdapter @Inject constructor(
     private val context: Context,
     private val contactRepo: ContactRepository,
     private val dateFormatter: DateFormatter,
-    private val phoneNumberUtils: PhoneNumberUtils
+    private val phoneNumberUtils: PhoneNumberUtils,
+    private val colors: Colors,
 ) : QkRealmAdapter<ScheduledMessage, QkBindingViewHolder<ScheduledMessageListItemBinding>>() {
 
     private val contacts by lazy { contactRepo.getContacts() }
@@ -86,6 +89,7 @@ class ScheduledMessageAdapter @Inject constructor(
 
         holder.binding.date.text = dateFormatter.getScheduledTimestamp(message.date)
         holder.binding.body.text = message.body
+        holder.binding.accentRule.setBackgroundTint(colors.accentColor())
 
         // update the selected/highlighted state
         holder.binding.root.isActivated = isSelected(message.id) || highlight == message.id

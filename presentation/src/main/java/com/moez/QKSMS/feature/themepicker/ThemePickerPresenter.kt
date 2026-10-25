@@ -8,6 +8,12 @@ import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.manager.WidgetManager
 import dev.octoshrimpy.quik.util.Preferences
 import dev.octoshrimpy.quik.util.ProBillingHook
+import dev.octoshrimpy.quik.util.accentContrastTooLow
+import dev.octoshrimpy.quik.util.isHexAccentLocked
+import dev.octoshrimpy.quik.util.isPresetAccentLocked
+import dev.octoshrimpy.quik.util.parseAccentHex
+import io.reactivex.android.schedulers.AndroidSchedulers
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -26,7 +32,7 @@ class ThemePickerPresenter @Inject constructor(
 
         theme.asObservable()
                 .autoDisposable(view.scope())
-                .subscribe { color -> view.setCurrentTheme(colors.snapAccent(color)) }
+                .subscribe { color -> view.setCurrentTheme(color) }
 
         prefs.styledThreadId.asObservable()
                 .autoDisposable(view.scope())
@@ -38,15 +44,65 @@ class ThemePickerPresenter @Inject constructor(
 
         prefs.quickdotPro.asObservable()
                 .autoDisposable(view.scope())
-                .subscribe { view.showFreeStyleChoice(freeChoice()) }
+                .subscribe {
+                    view.showFreeStyleChoice(freeChoice())
+                    view.setAccentLocks(showAccentLocks())
+                }
 
         view.themeSelected()
                 .autoDisposable(view.scope())
-                .subscribe { color -> apply(colors.snapAccent(color)) }
+                .subscribe { color -> applyPreset(color) }
+
+        view.lockedAccentClicks()
+                .map { }
+                .mergeWith(
+                    view.hexPickerClicks()
+                        .filter { isHexAccentLocked(proBillingHook.enforcementEnabled, proBillingHook.isUnlocked()) }
+                        .map { }
+                )
+                .autoDisposable(view.scope())
+                .subscribe { view.requestProPurchase() }
+
+        view.hexInputChanges()
+                .debounce(200, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .autoDisposable(view.scope())
+                .subscribe { input -> onHexInput(view, input) }
 
         view.styleConversationClicks()
                 .autoDisposable(view.scope())
                 .subscribe { markStyledConversation() }
+
+        view.setAccentLocks(showAccentLocks())
+    }
+
+    private fun applyPreset(color: Int) {
+        if (isPresetAccentLocked(color, proBillingHook.enforcementEnabled, proBillingHook.isUnlocked())) {
+            return
+        }
+        apply(colors.snapAccent(color))
+    }
+
+    private fun onHexInput(view: ThemePickerView, input: String) {
+        if (isHexAccentLocked(proBillingHook.enforcementEnabled, proBillingHook.isUnlocked())) {
+            return
+        }
+        val parsed = parseAccentHex(input)
+        if (parsed == null) {
+            if (input.isEmpty()) {
+                view.setHexPreview(colors.displayAccent(theme.get()), false)
+            }
+            return
+        }
+        val snapped = colors.snapAccent(parsed)
+        val lowContrast = accentContrastTooLow(
+            colors.displayAccent(snapped),
+            colors.themeSurfaceColor()
+        )
+        view.setHexPreview(snapped, lowContrast)
+        if (input.length == 6) {
+            apply(snapped)
+        }
     }
 
     private fun apply(color: Int) {
@@ -60,6 +116,10 @@ class ThemePickerPresenter @Inject constructor(
     }
 
     private fun freeChoice(): Boolean {
+        return proBillingHook.enforcementEnabled && !proBillingHook.isUnlocked()
+    }
+
+    private fun showAccentLocks(): Boolean {
         return proBillingHook.enforcementEnabled && !proBillingHook.isUnlocked()
     }
 

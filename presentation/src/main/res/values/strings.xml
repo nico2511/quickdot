@@ -293,6 +293,15 @@
     <string name="accent_oxide">Oxide</string>
     <string name="accent_plum">Plum</string>
     <string name="accent_graphite">Graphite</string>
+    <string name="accent_teal">Teal</string>
+    <string name="accent_dusk">Dusk</string>
+    <string name="accent_honey">Honey</string>
+    <string name="accent_fog">Fog</string>
+    <string name="accent_lichen">Lichen</string>
+    <string name="accent_rose">Rose</string>
+    <string name="theme_hex_contrast_warning">Low contrast on this background. Text on the accent may be hard to read.</string>
+    <string name="theme_hex_locked_cd">Custom hex colour (Quickdot Pro)</string>
+    <string name="theme_accent_locked_cd">Accent colour (Quickdot Pro)</string>
     <string name="theme_section_preview">Preview</string>
     <string name="theme_section_accent">Accent</string>
     <string name="theme_preview_in">On the way</string>

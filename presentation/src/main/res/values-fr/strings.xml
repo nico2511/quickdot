@@ -371,6 +371,15 @@
     <string name="accent_oxide">Oxyde</string>
     <string name="accent_plum">Prune</string>
     <string name="accent_graphite">Graphite</string>
+    <string name="accent_teal">Sarcelle</string>
+    <string name="accent_dusk">Crépuscule</string>
+    <string name="accent_honey">Miel</string>
+    <string name="accent_fog">Brume</string>
+    <string name="accent_lichen">Lichen</string>
+    <string name="accent_rose">Rose</string>
+    <string name="theme_hex_contrast_warning">Contraste faible sur ce fond. Le texte sur l’accent peut être difficile à lire.</string>
+    <string name="theme_hex_locked_cd">Couleur hex personnalisée (Quickdot Pro)</string>
+    <string name="theme_accent_locked_cd">Couleur d’accent (Quickdot Pro)</string>
     <string name="theme_section_preview">Aperçu</string>
     <string name="theme_section_accent">Accent</string>
     <string name="theme_preview_in">En route</string>

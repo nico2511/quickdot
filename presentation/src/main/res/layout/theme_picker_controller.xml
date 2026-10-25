@@ -114,13 +114,29 @@
                 android:drawableTint="?android:attr/textColorTertiary"
                 android:text="@string/theme_section_accent" />
 
-            <com.google.android.flexbox.FlexboxLayout
+            <androidx.gridlayout.widget.GridLayout
                 android:id="@+id/swatches"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:flexWrap="wrap"
-                app:justifyContent="center" />
+                app:alignmentMode="alignBounds"
+                app:columnCount="3"
+                app:useDefaultMargins="false" />
+
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                android:id="@+id/proNote"
+                style="@style/TextSecondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:text="@string/theme_pro_note"
+                android:visibility="gone"
+                app:textFont="body" />
+
+            <include
+                android:id="@+id/hexPicker"
+                layout="@layout/theme_hex_picker" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/styleConversation"
@@ -135,17 +151,6 @@
                 android:textColor="@color/accent"
                 android:visibility="gone"
                 app:textSize="secondary" />
-
-            <dev.octoshrimpy.quik.common.widget.QkTextView
-                android:id="@+id/proNote"
-                style="@style/TextSecondary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:gravity="center"
-                android:text="@string/theme_pro_note"
-                android:visibility="gone"
-                app:textFont="body" />
 
         </LinearLayout>
 

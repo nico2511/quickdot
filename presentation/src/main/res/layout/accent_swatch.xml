@@ -21,6 +21,16 @@
             android:importantForAccessibility="no"
             android:src="@drawable/dot_matrix_swatch" />
 
+        <ImageView
+            android:id="@+id/lock"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/theme_accent_locked_cd"
+            android:src="@drawable/qd_lock"
+            android:visibility="gone"
+            app:tint="@color/white" />
+
     </FrameLayout>
 
     <dev.octoshrimpy.quik.common.widget.QkTextView

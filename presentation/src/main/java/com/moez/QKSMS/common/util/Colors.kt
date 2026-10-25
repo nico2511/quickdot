@@ -25,8 +25,10 @@ import androidx.core.content.res.getColorOrThrow
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
 import dev.octoshrimpy.quik.model.Recipient
+import dev.octoshrimpy.quik.util.AccentPresets
 import dev.octoshrimpy.quik.util.Preferences
 import dev.octoshrimpy.quik.util.ProBillingHook
+import dev.octoshrimpy.quik.util.formatAccentHex
 import dev.octoshrimpy.quik.util.resolveEffectiveAccentStored
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
@@ -49,23 +51,26 @@ class Colors @Inject constructor(
      * Anything saved from the old Material grid is snapped to the nearest one.
      */
     val accents: List<Accent> = listOf(
-        Accent(R.string.accent_signal, 0xFFE10600.toInt()),
-        Accent(R.string.accent_cobalt, 0xFF2457C5.toInt()),
-        Accent(R.string.accent_pine, 0xFF1B7F4E.toInt()),
-        Accent(R.string.accent_oxide, 0xFFC44914.toInt()),
-        Accent(R.string.accent_plum, 0xFF8A3D6E.toInt()),
-        Accent(R.string.accent_graphite, AccentPaint.GRAPHITE)
+        Accent(R.string.accent_signal, AccentPresets.SIGNAL),
+        Accent(R.string.accent_cobalt, AccentPresets.COBALT),
+        Accent(R.string.accent_pine, AccentPresets.PINE),
+        Accent(R.string.accent_oxide, AccentPresets.OXIDE),
+        Accent(R.string.accent_plum, AccentPresets.PLUM),
+        Accent(R.string.accent_graphite, AccentPaint.GRAPHITE),
+        Accent(R.string.accent_teal, AccentPresets.TEAL),
+        Accent(R.string.accent_dusk, AccentPresets.DUSK),
+        Accent(R.string.accent_honey, AccentPresets.HONEY),
+        Accent(R.string.accent_fog, AccentPresets.FOG),
+        Accent(R.string.accent_lichen, AccentPresets.LICHEN),
+        Accent(R.string.accent_rose, AccentPresets.ROSE),
     )
 
     fun snapAccent(color: Int): Int {
         AccentPaint.canonicalize(color)?.let { return it }
-        return accents.minBy { accent ->
-            val dr = Color.red(color) - Color.red(accent.color)
-            val dg = Color.green(color) - Color.green(accent.color)
-            val db = Color.blue(color) - Color.blue(accent.color)
-            dr * dr + dg * dg + db * db
-        }.color
+        return AccentPresets.snapTowardPreset(color)
     }
+
+    fun isPresetAccent(color: Int): Boolean = AccentPresets.isPreset(snapAccent(color))
 
     /** Effective accent for the current Pro state, painted for night mode. */
     fun accentColor(): Int = paintedAccent(prefs.theme().get())
@@ -97,9 +102,13 @@ class Colors @Inject constructor(
 
     fun accentLabel(color: Int = accentColor()): String {
         val snapped = snapAccent(color)
-        val name = accents.first { it.color == snapped }.nameRes
-        return context.getString(name)
+        val preset = accents.find { it.color == snapped }
+        return preset?.let { context.getString(it.nameRes) } ?: "#${formatAccentHex(snapped)}"
     }
+
+    fun themeSurfaceColor(): Int = context.getColorCompat(
+        if (night()) R.color.backgroundDark else R.color.backgroundLight
+    )
 
     /**
      * Accent for one conversation. On the Play flavor a free account keeps

@@ -90,7 +90,7 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
      * Drawn while the field is empty. Its paint is the pinned Doto face, the
      * same path as screen titles. The EditText hint layout is not used for
      * pixels: Nothing OS still paints that layout with [getPaint], which stays
-     * Inter so typed text stays readable.
+     * Geist so typed text stays readable.
      */
     private var hintOverlay: QkTextView? = null
 
@@ -105,7 +105,7 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
     /**
      * [emptyFace] is the placeholder. [filledFace] stays on this view, so typed
-     * text keeps Inter (or Doto, when the field was already Doto).
+     * text keeps Geist (or Doto, when the field was already Doto).
      * [TextView.setHint](android.widget.TextView) is final, so a later plain
      * hint is wrapped again from [onMeasure]. The wrap keeps [HintTypefaceSpan]
      * on the CharSequence; the pixels come from [hintOverlay].
@@ -146,7 +146,7 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
      * Stock Android skips [BoringLayout] when the hint has a
      * [MetricAffectingSpan][android.text.style.MetricAffectingSpan] and builds a
      * StaticLayout that applies the span. BoringLayout paints [getPaint] and
-     * ignores the span. The inbox field's paint is Inter. Nothing OS still
+     * ignores the span. The inbox field's paint is Geist. Nothing OS still
      * takes that boring path for this hint, so the span stays on the
      * CharSequence and a pinned [QkTextView] draws the placeholder.
      */
@@ -169,7 +169,7 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
     }
 
     /**
-     * Single-line placeholders ellipsize. Doto bold is wider than Inter, so a
+     * Single-line placeholders ellipsize. Doto bold is wider than Geist, so a
      * long French placeholder is drawn smaller until it fits. The floor is
      * 12sp. Typed text keeps [restingTextSizePx] on this view.
      */

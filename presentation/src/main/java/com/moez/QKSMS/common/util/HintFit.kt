@@ -21,7 +21,7 @@ package dev.octoshrimpy.quik.common.util
 /**
  * Size of a single-line hint so it stays inside [availablePx].
  *
- * Doto bold is wider than Inter. At 14sp the French inbox hint
+ * Doto bold is wider than Geist. At 14sp the French inbox hint
  * ("Rechercher dans les conversations…") is about 750px, and the
  * conversation-list pill leaves about 660px for text. Scaling keeps
  * the whole hint visible. The floor stops the hint becoming a caption

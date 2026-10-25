@@ -119,8 +119,8 @@
         <item name="android:textColor">@color/textPrimaryDark</item>
         <item name="colorAccent">@color/accent</item>
         <item name="colorPrimary">@color/dialogSurface</item>
-        <item name="android:fontFamily">@font/inter</item>
-        <item name="fontFamily">@font/inter</item>
+        <item name="android:fontFamily">@font/geist</item>
+        <item name="fontFamily">@font/geist</item>
         <item name="buttonBarPositiveButtonStyle">@style/QuickdotDialogButton</item>
         <item name="buttonBarNegativeButtonStyle">@style/QuickdotDialogButton</item>
         <item name="buttonBarNeutralButtonStyle">@style/QuickdotDialogButton</item>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Geist, SIL Open Font License 1.1. License text: assets/licenses/geist-OFL.txt
+  -->
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <font
+        android:font="@font/geist_wght"
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        app:font="@font/geist_wght"
+        app:fontStyle="normal"
+        app:fontWeight="400" />
+</font-family>

@@ -21,9 +21,11 @@ package dev.octoshrimpy.quik.feature.settings.about
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bluelinelabs.conductor.RouterTransaction
 import com.jakewharton.rxbinding2.view.clicks
 import dev.octoshrimpy.quik.BuildConfig
 import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.QkChangeHandler
 import dev.octoshrimpy.quik.common.base.QkController
 import dev.octoshrimpy.quik.common.widget.PreferenceView
 import dev.octoshrimpy.quik.databinding.AboutControllerBinding
@@ -61,6 +63,14 @@ class AboutController : QkController<AboutControllerBinding, AboutView, Unit, Ab
 
     override fun render(state: Unit) {
         // No special rendering required
+    }
+
+    override fun showOpenSourceLicenses() {
+        router.pushController(
+            RouterTransaction.with(OpenSourceLicensesController())
+                .pushChangeHandler(QkChangeHandler())
+                .popChangeHandler(QkChangeHandler())
+        )
     }
 
 }

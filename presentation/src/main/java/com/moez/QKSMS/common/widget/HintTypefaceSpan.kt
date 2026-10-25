@@ -28,7 +28,7 @@ import android.text.style.MetricAffectingSpan
  * [TextView.setTypeface](android.widget.TextView) on Android 14 runs the face
  * through [Typeface.create] when the configuration has a font-weight adjustment
  * (Nothing OS, and the system bold-text setting). That lookup misses a bundled
- * face and returns the system sans, so a pinned Doto bold still draws as Inter.
+ * face and returns the system sans, so a pinned Doto bold still draws as Geist.
  * A metric span calls [TextPaint.setTypeface] with the instance itself.
  * [Typeface.create] is not used here: it is the call that drops the face.
  */

@@ -66,6 +66,19 @@ class RestoreBackupService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
+    override fun onTimeout(startId: Int) {
+        handleForegroundServiceTimeout()
+    }
+
+    override fun onTimeout(startId: Int, fgsType: Int) {
+        handleForegroundServiceTimeout()
+    }
+
+    private fun handleForegroundServiceTimeout() {
+        backupRepo.stopRestore()
+        stop()
+    }
+
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         when (intent.action) {
@@ -100,12 +113,14 @@ class RestoreBackupService : Service() {
                     is BackupRepository.Progress.Running -> notification
                         .setProgress(progress.max, progress.count, progress.indeterminate)
                         .setContentText(progress.getLabel(this))
-                        .let { notificationManager.notify(NOTIFICATION_ID, it.build()) }
+                        .build()
+                        .let { if (canPostNotifications()) notificationManager.notify(NOTIFICATION_ID, it) }
 
                     else -> notification
                         .setProgress(0, 0, progress.indeterminate)
                         .setContentText(progress.getLabel(this))
-                        .let { notificationManager.notify(NOTIFICATION_ID, it.build()) }
+                        .build()
+                        .let { if (canPostNotifications()) notificationManager.notify(NOTIFICATION_ID, it) }
                 }
             }
 
@@ -120,6 +135,13 @@ class RestoreBackupService : Service() {
     private fun stop() {
         stopForeground(STOP_FOREGROUND_REMOVE)
         stopSelf()
+    }
+
+    private fun canPostNotifications(): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            return true
+        }
+        return NotificationManagerCompat.from(this).areNotificationsEnabled()
     }
 
 }

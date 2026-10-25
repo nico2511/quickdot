@@ -2,7 +2,7 @@ name: Validate fastlane
 
 on:
   pull_request:
-    paths: 'metadata/**'
+    paths: 'fastlane/metadata/**'
 jobs:
   validate:
     runs-on: ubuntu-latest

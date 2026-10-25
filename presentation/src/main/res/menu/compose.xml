@@ -42,8 +42,18 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/reply"
+        android:icon="@drawable/qd_reply"
+        android:orderInCategory="0"
+        android:title="@string/compose_menu_reply"
+        android:visible="false"
+        app:actionLayout="@layout/toolbar_reply_action"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/select_all"
         android:icon="@drawable/qd_select"
+        android:orderInCategory="1"
         android:title="@string/main_menu_select_all"
         android:visible="false"
         app:showAsAction="always" />
@@ -51,12 +61,14 @@
     <item
         android:id="@+id/details"
         android:icon="@drawable/qd_info"
+        android:orderInCategory="2"
         android:title="@string/compose_details_title"
         android:visible="false"
         app:showAsAction="always" />
     <item
         android:id="@+id/delete"
         android:icon="@drawable/qd_delete"
+        android:orderInCategory="3"
         android:title="@string/compose_menu_delete"
         android:visible="false"
         app:showAsAction="always" />
@@ -68,15 +80,9 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/reply"
-        android:icon="@drawable/qd_reply"
-        android:title="@string/compose_menu_reply"
-        android:visible="false"
-        app:showAsAction="always|withText" />
-
-    <item
         android:id="@+id/copy"
         android:icon="@drawable/qd_copy"
+        android:orderInCategory="4"
         android:title="@string/compose_menu_copy"
         android:visible="false"
         app:showAsAction="ifRoom" />
@@ -84,6 +90,7 @@
     <item
         android:id="@+id/share"
         android:icon="@drawable/qd_share"
+        android:orderInCategory="5"
         android:title="@string/compose_menu_share"
         android:visible="false"
         app:showAsAction="ifRoom" />
@@ -91,6 +98,7 @@
     <item
         android:id="@+id/forward"
         android:icon="@drawable/qd_forward"
+        android:orderInCategory="6"
         android:title="@string/compose_menu_forward"
         android:visible="false"
         app:showAsAction="ifRoom" />
@@ -98,6 +106,7 @@
     <item
         android:id="@+id/show_status"
         android:icon="@drawable/qd_status"
+        android:orderInCategory="7"
         android:title="@string/compose_menu_show_status"
         android:visible="false"
         app:showAsAction="ifRoom" />

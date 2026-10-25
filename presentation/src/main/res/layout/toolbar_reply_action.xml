@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:contentDescription="@string/compose_menu_reply">
+
+    <ImageView
+        android:id="@+id/replyBackground"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/square_key"
+        android:importantForAccessibility="no"
+        tools:backgroundTint="@color/accent" />
+
+    <ImageView
+        android:id="@+id/replyIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:importantForAccessibility="no"
+        android:padding="10dp"
+        android:src="@drawable/qd_reply"
+        app:tint="@color/white" />
+
+    <ImageView
+        android:id="@+id/replyLock"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
+        android:contentDescription="@string/compose_reply_swipe_pro_cd"
+        android:src="@drawable/qd_lock"
+        android:visibility="gone"
+        app:tint="@color/white"
+        tools:visibility="visible" />
+
+</FrameLayout>

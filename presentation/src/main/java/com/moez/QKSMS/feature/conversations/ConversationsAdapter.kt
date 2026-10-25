@@ -31,6 +31,7 @@ import dev.octoshrimpy.quik.common.base.QkBindingViewHolder
 import dev.octoshrimpy.quik.common.base.QkRealmAdapter
 import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.DateFormatter
+import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
 import dev.octoshrimpy.quik.common.util.extensions.setTint
 import dev.octoshrimpy.quik.databinding.ConversationListItemBinding
@@ -66,6 +67,7 @@ class ConversationsAdapter @Inject constructor(
             val textColorPrimary = parent.context.resolveThemeColor(android.R.attr.textColorPrimary)
 
             binding.title.setTypeface(binding.title.typeface, Typeface.BOLD)
+            binding.title.setTextColor(textColorPrimary)
 
             binding.snippet.setTypeface(binding.snippet.typeface, Typeface.BOLD)
             binding.snippet.setTextColor(textColorPrimary)
@@ -121,6 +123,9 @@ class ConversationsAdapter @Inject constructor(
             else -> Typeface.NORMAL
         }
         binding.snippet.setTypeface(binding.snippet.typeface, style)
+        if (!conversation.unread) {
+            binding.snippet.setTextColor(context.getColorCompat(R.color.conversationSnippet))
+        }
 
         binding.scheduled.isVisible = conversation.id in hasScheduledConversation
 

@@ -61,6 +61,8 @@
     <color name="bubbleOutgoingText">#FFFFFF</color>
     <color name="bubbleIncomingStroke">#111111</color>
     <color name="selectionWash">#1AE10600</color>
+    <color name="quoteExcerpt">#5C5C5C</color>
+    <color name="conversationSnippet">#454545</color>
 
     <!-- Monochrome speaker inks. White initials stay at 6:1 or better. -->
     <color name="speakerInk0">#1A1A1A</color>

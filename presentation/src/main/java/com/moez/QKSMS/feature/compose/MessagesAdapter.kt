@@ -46,6 +46,7 @@ import com.moez.QKSMS.common.QkMediaPlayer
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkRealmAdapter
 import dev.octoshrimpy.quik.common.base.QkViewHolder
+import dev.octoshrimpy.quik.common.util.AccentStartRuleDrawable
 import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.DateFormatter
 import dev.octoshrimpy.quik.common.util.TextViewStyler
@@ -203,7 +204,15 @@ class MessagesAdapter @Inject constructor(
         val next = if (position == itemCount - 1) null else getItem(position + 1)
 
         // Update the selected state
-        holder.itemView.isActivated = isSelected(message.id) || highlight == message.id
+        val rowSelected = isSelected(message.id) || highlight == message.id
+        holder.itemView.isActivated = rowSelected
+        val accent = colors.accentForThread(message.threadId)
+        val ruleWidth = 3.dpToPx(context)
+        holder.itemView.foreground = if (rowSelected) {
+            AccentStartRuleDrawable(accent, ruleWidth)
+        } else {
+            null
+        }
 
         // Get views based on message type
         val isOutgoing = message.isMe()
@@ -213,6 +222,7 @@ class MessagesAdapter @Inject constructor(
         val body: TextView
         val bubble: View
         val quote: View
+        val quoteRule: View
         val quoteName: TextView
         val quoteExcerpt: TextView
         val parts: androidx.recyclerview.widget.RecyclerView
@@ -221,7 +231,6 @@ class MessagesAdapter @Inject constructor(
         val status: TextView
         val meters: List<ImageView>
         var identity: View? = null
-        val accent = colors.accentForThread(message.threadId)
         val speaker = if (isOutgoing) 0 else accent
 
         if (isOutgoing) {
@@ -232,6 +241,7 @@ class MessagesAdapter @Inject constructor(
             body = binding.body
             bubble = binding.bubble
             quote = binding.quote
+            quoteRule = binding.quoteRule
             quoteName = binding.quoteName
             quoteExcerpt = binding.quoteExcerpt
             parts = binding.parts
@@ -302,6 +312,7 @@ class MessagesAdapter @Inject constructor(
             body = binding.body
             bubble = binding.bubble
             quote = binding.quote
+            quoteRule = binding.quoteRule
             quoteName = binding.quoteName
             quoteExcerpt = binding.quoteExcerpt
             parts = binding.parts
@@ -447,15 +458,17 @@ class MessagesAdapter @Inject constructor(
 
         if (quoted != null) {
             quote.setVisible(true)
+            quoteRule.setBackgroundTint(accent)
             quoteName.text = quoted.name
             quoteExcerpt.text = quoted.excerpt
-            val ink = if (isOutgoing) {
-                textColorOnAccent(accent)
+            if (isOutgoing) {
+                val ink = textColorOnAccent(accent)
+                quoteName.setTextColor(ink)
+                quoteExcerpt.setTextColor(ink.withAlpha(0xB3))
             } else {
-                context.resolveThemeColor(android.R.attr.textColorSecondary)
+                quoteName.setTextColor(context.resolveThemeColor(android.R.attr.textColorPrimary))
+                quoteExcerpt.setTextColor(context.getColorCompat(R.color.quoteExcerpt))
             }
-            quoteName.setTextColor(ink)
-            quoteExcerpt.setTextColor(ink.withAlpha(0xB3))
         } else {
             quote.setVisible(false)
         }

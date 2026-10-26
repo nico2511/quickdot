@@ -1,0 +1,103 @@
+<!--
+  ~ Copyright (C) 2019 Moez Bhatti <moez.bhatti@gmail.com>
+  ~
+  ~ This file is part of QKSMS.
+  ~
+  ~ QKSMS is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ QKSMS is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<resources>
+
+    <style name="TextStamp" parent="TextTertiary">
+        <item name="android:fontFamily">@font/doto_bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/doto_bold</item>
+        <item name="textFont">display</item>
+    </style>
+
+    <style name="TextDisplay">
+        <item name="android:fontFamily">@font/doto_bold</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/doto_bold</item>
+        <item name="textFont">display</item>
+        <item name="textSize">display</item>
+    </style>
+
+    <style name="TextHeadline">
+        <item name="android:fontFamily">@font/doto_bold</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/doto_bold</item>
+        <item name="textFont">display</item>
+    </style>
+
+    <style name="TextName" parent="TextPrimary">
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/doto_bold</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/doto_bold</item>
+        <item name="textFont">display</item>
+    </style>
+
+    <style name="TextMenu">
+        <item name="android:fontFamily">@font/doto_bold</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/doto_bold</item>
+        <item name="textFont">display</item>
+        <item name="textSize">secondary</item>
+    </style>
+
+    <style name="ToolbarText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@null</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/doto_bold</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/doto_bold</item>
+        <item name="textFont">display</item>
+        <item name="textSize">toolbar</item>
+    </style>
+
+    <style name="CollapsingToolbarCollapsedText">
+        <item name="android:fontFamily">@font/doto_bold</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/doto_bold</item>
+        <item name="textSize">toolbar</item>
+    </style>
+
+    <style name="CollapsingToolbarExpandedText">
+        <item name="android:fontFamily">@font/doto_bold</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textSize">44dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/doto_bold</item>
+    </style>
+
+</resources>

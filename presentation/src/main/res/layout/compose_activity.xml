@@ -498,7 +498,6 @@
                 android:maxLines="1"
                 android:textAllCaps="true"
                 android:textDirection="ltr"
-                android:textFontWeight="700"
                 android:textStyle="bold"
                 app:fontFamily="@font/doto_bold"
                 tools:text="Moez Bhatti" />

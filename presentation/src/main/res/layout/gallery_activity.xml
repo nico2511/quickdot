@@ -64,7 +64,6 @@
                 android:singleLine="true"
                 android:textAllCaps="true"
                 android:textColor="@color/textPrimaryDark"
-                android:textFontWeight="700"
                 android:textStyle="bold"
                 app:fontFamily="@font/doto_bold"
                 app:textFont="display"

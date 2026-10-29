@@ -15,6 +15,8 @@ import android.os.PowerManager;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
 
+import androidx.core.content.ContextCompat;
+
 import com.android.mms.MmsConfig;
 import timber.log.Timber;
 
@@ -52,39 +54,59 @@ public class DownloadManager {
         MmsDownloadReceiver receiver = new MmsDownloadReceiver();
         mMap.put(location, receiver);
 
-        // Use unique action in order to avoid cancellation of notifying download result.
-        context.getApplicationContext().registerReceiver(receiver, new IntentFilter(receiver.mAction));
+        Context appContext = context.getApplicationContext();
+        boolean registered = false;
+        try {
+            // Use unique action in order to avoid cancellation of notifying download result.
+            ContextCompat.registerReceiver(
+                    appContext,
+                    receiver,
+                    new IntentFilter(receiver.mAction),
+                    ContextCompat.RECEIVER_EXPORTED);
 
-        Timber.v("receiving with system method");
-        final String fileName = "download." + Math.abs(new Random().nextLong()) + ".dat";
-        File mDownloadFile = new File(context.getCacheDir(), fileName);
-        Uri contentUri = (new Uri.Builder())
-                .authority(context.getPackageName() + ".MmsFileProvider")
-                .path(fileName)
-                .scheme(ContentResolver.SCHEME_CONTENT)
-                .build();
-        Intent download = new Intent(receiver.mAction);
-        download.putExtra(MmsReceivedReceiver.EXTRA_FILE_PATH, mDownloadFile.getPath());
-        download.putExtra(MmsReceivedReceiver.EXTRA_LOCATION_URL, location);
-        download.putExtra(MmsReceivedReceiver.EXTRA_TRIGGER_PUSH, byPush);
-        download.putExtra(MmsReceivedReceiver.EXTRA_URI, uri);
-        download.putExtra(MmsReceivedReceiver.SUBSCRIPTION_ID, subscriptionId);
-        final PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                context, 0, download, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            registered = true;
 
-        final SmsManager smsManager = SmsManagerFactory.createSmsManager(subscriptionId);
+            Timber.v("receiving with system method");
+            final String fileName = "download." + Math.abs(new Random().nextLong()) + ".dat";
+            File mDownloadFile = new File(context.getCacheDir(), fileName);
+            Uri contentUri = (new Uri.Builder())
+                    .authority(context.getPackageName() + ".MmsFileProvider")
+                    .path(fileName)
+                    .scheme(ContentResolver.SCHEME_CONTENT)
+                    .build();
+            Intent download = new Intent(receiver.mAction);
+            download.putExtra(MmsReceivedReceiver.EXTRA_FILE_PATH, mDownloadFile.getPath());
+            download.putExtra(MmsReceivedReceiver.EXTRA_LOCATION_URL, location);
+            download.putExtra(MmsReceivedReceiver.EXTRA_TRIGGER_PUSH, byPush);
+            download.putExtra(MmsReceivedReceiver.EXTRA_URI, uri);
+            download.putExtra(MmsReceivedReceiver.SUBSCRIPTION_ID, subscriptionId);
+            final PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    context, 0, download, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        Bundle configOverrides = new Bundle();
-        String httpParams = MmsConfig.getHttpParams();
-        if (!TextUtils.isEmpty(httpParams)) {
-            configOverrides.putString(SmsManager.MMS_CONFIG_HTTP_PARAMS, httpParams);
-        } else {
-            // this doesn't seem to always work...
-            // configOverrides = smsManager.getCarrierConfigValues();
+            final SmsManager smsManager = SmsManagerFactory.createSmsManager(subscriptionId);
+
+            Bundle configOverrides = new Bundle();
+            String httpParams = MmsConfig.getHttpParams();
+            if (!TextUtils.isEmpty(httpParams)) {
+                configOverrides.putString(SmsManager.MMS_CONFIG_HTTP_PARAMS, httpParams);
+            } else {
+                // this doesn't seem to always work...
+                // configOverrides = smsManager.getCarrierConfigValues();
+            }
+
+            grantUriPermission(context, contentUri);
+            smsManager.downloadMultimediaMessage(context, location, contentUri, configOverrides, pendingIntent);
+        } catch (Exception e) {
+            mMap.remove(location);
+            PushReceiver.forgetDownloadedUrl(location);
+            if (registered) {
+                try {
+                    appContext.unregisterReceiver(receiver);
+                } catch (IllegalArgumentException ignored) {
+                }
+            }
+            Timber.e(e, "Failed to start MMS download for %s", location);
         }
-
-        grantUriPermission(context, contentUri);
-        smsManager.downloadMultimediaMessage(context, location, contentUri, configOverrides, pendingIntent);
     }
 
     private void grantUriPermission(Context context, Uri contentUri) {

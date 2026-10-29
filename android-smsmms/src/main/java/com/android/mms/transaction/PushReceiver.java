@@ -86,6 +86,12 @@ public class PushReceiver extends BroadcastReceiver {
     private static Set<String> downloadedUrls = new HashSet<String>();
     private static final ExecutorService PUSH_RECEIVER_EXECUTOR = Executors.newSingleThreadExecutor();
 
+    public static void forgetDownloadedUrl(String location) {
+        if (location != null) {
+            downloadedUrls.remove(location);
+        }
+    }
+
     private class ReceivePushTask extends AsyncTask<Intent,Void,Void> {
         private Context mContext;
         private PendingResult pendingResult;

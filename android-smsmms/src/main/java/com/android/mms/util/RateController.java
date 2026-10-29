@@ -23,6 +23,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SqliteWrapper;
+
+import androidx.core.content.ContextCompat;
 import android.provider.Telephony.Mms.Rate;
 
 import com.android.mms.logs.LogTag;
@@ -126,8 +128,8 @@ public class RateController {
         }
         sMutexLock = true;
 
-        mContext.registerReceiver(mBroadcastReceiver,
-                new IntentFilter(RATE_LIMIT_CONFIRMED_ACTION));
+        ContextCompat.registerReceiver(mContext, mBroadcastReceiver,
+                new IntentFilter(RATE_LIMIT_CONFIRMED_ACTION), ContextCompat.RECEIVER_EXPORTED);
 
         mAnswer = NO_ANSWER;
         try {

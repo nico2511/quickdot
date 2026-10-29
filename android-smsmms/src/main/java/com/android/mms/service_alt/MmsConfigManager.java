@@ -23,6 +23,8 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.telephony.SubscriptionInfo;
+
+import androidx.core.content.ContextCompat;
 import android.telephony.SubscriptionManager;
 import android.util.ArrayMap;
 import timber.log.Timber;
@@ -80,7 +82,8 @@ public class MmsConfigManager {
                     new IntentFilter("LOADED");
 
             try {
-                context.registerReceiver(mReceiver, intentFilterLoaded);
+                ContextCompat.registerReceiver(context, mReceiver, intentFilterLoaded,
+                        ContextCompat.RECEIVER_EXPORTED);
             } catch (Exception e) {
 
             }

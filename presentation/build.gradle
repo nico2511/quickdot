@@ -25,7 +25,7 @@ android {
     compileSdk 36
 
     defaultConfig {
-        applicationId 'com.nico2511.quickdot'
+        applicationId 'app.quickdot.sms'
         minSdkVersion 24
         targetSdkVersion 36
         versionCode 19
@@ -39,7 +39,7 @@ android {
         play {
             dimension "distribution"
             // Play Console listing. One-time product quickdot_pro.
-            applicationId "com.nico2511.quickdot"
+            applicationId "app.quickdot.sms"
             // Base64 X.509 license public key. Gradle property or env
             // PLAY_LICENSE_KEY. Empty in a release build fails closed:
             // purchases are not unlocked until the signature verifies.
@@ -60,7 +60,7 @@ android {
             dimension "distribution"
             // GitHub and F-Droid. Same id so it replaces the Play build.
             // No Play Billing dependency is added for this flavor.
-            applicationId "com.nico2511.quickdot"
+            applicationId "app.quickdot.sms"
         }
     }
 
@@ -154,9 +154,7 @@ configurations {
     fdroid
 }
 
-// Play Billing 9 pulls kotlin-stdlib 1.8, which already contains the JDK7/JDK8
-// classes this project still depends on at 1.7. Pin the stdlib so those classes
-// are not packaged twice. The compiler stays 1.7.21.
+// Pin kotlin-stdlib to the project Kotlin version (androidx.core 1.13+ needs 1.8+).
 configurations.configureEach {
     resolutionStrategy.force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     resolutionStrategy.force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

@@ -7,7 +7,7 @@ Canonical text for [nico2511.github.io/Legal/quickdot/](https://nico2511.github.
 
 ## Français
 
-**Application :** Quickdot (`com.nico2511.quickdot`), version 0.1.12 et suivantes, publiée sur Google Play  
+**Application :** Quickdot (`app.quickdot.sms`), version 0.1.12 et suivantes, publiée sur Google Play  
 **Éditeur :** nico2511 (développeur indépendant)  
 **Contact :** dev@cmaboite.me
 
@@ -72,7 +72,7 @@ Toute modification de cette politique sera publiée sur la page Legal avec une n
 
 ## English
 
-**App:** Quickdot (`com.nico2511.quickdot`), version 0.1.12 and later, published on Google Play  
+**App:** Quickdot (`app.quickdot.sms`), version 0.1.12 and later, published on Google Play  
 **Publisher:** nico2511 (independent developer)  
 **Contact:** dev@cmaboite.me
 

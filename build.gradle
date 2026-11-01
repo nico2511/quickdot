@@ -17,7 +17,7 @@ buildscript {
     ext.exoplayer_version = "r2.9.0"
     ext.glide_version = "4.16.0"
     ext.junit_version = '4.12'
-    ext.kotlin_version = '1.7.21'
+    ext.kotlin_version = '1.8.22'
     ext.lifecycle_version = '2.1.0'
     ext.material_version = '1.0.0'
     ext.mockito_version = '2.18.3'
@@ -78,6 +78,11 @@ tasks.register('clean', Delete) {
 
 subprojects {
     afterEvaluate {
+        tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+            kotlinOptions {
+                jvmTarget = "1.8"
+            }
+        }
         if (project.hasProperty('kapt')) {
             kapt {
                 // we expect this closure to run over a org.jetbrains.kotlin.gradle.plugin.KaptExtension

@@ -1,6 +1,6 @@
 # Play Console setup for Quickdot Pro
 
-The `play` flavor (`applicationId` `com.nico2511.quickdot`) sells one in-app product. The `foss` flavor does not call Play Billing and includes every Pro feature. Create the product before a license tester can complete a purchase. The price is configured only in Play Console; the app shows the formatted price from Play when available, otherwise the string `One-time purchase` / `Achat unique`.
+The `play` flavor (`applicationId` `app.quickdot.sms`) sells one in-app product. The `foss` flavor does not call Play Billing and includes every Pro feature. Create the product before a license tester can complete a purchase. The price is configured only in Play Console; the app shows the formatted price from Play when available, otherwise the string `One-time purchase` / `Achat unique`.
 
 ## What is free, Pro, and FOSS
 
@@ -18,7 +18,7 @@ Quickdot Pro is a **one-time** purchase, not a subscription and not a consumable
 ## 1. App
 
 1. Open [Play Console](https://play.google.com/console).
-2. Create the app, or open the existing one, with package name `com.nico2511.quickdot`.
+2. Create the app, or open the existing one, with package name `app.quickdot.sms`.
 3. Upload the signed `play` AAB (`Quickdot-v*-play-release.aab`) to an internal testing track. The product query returns nothing until the app build that asks for `quickdot_pro` is on a track the tester can install.
 
 ## 2. One-time product `quickdot_pro`

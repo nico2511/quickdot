@@ -1,5 +1,13 @@
 [
   {
+    "versionCode": 21,
+    "versionName": "0.1.20",
+    "fixed": [
+      "## What's Changed",
+      "* Restore default mono message bubbles; muted accent fills when custom"
+    ]
+  },
+  {
     "versionCode": 2239,
     "versionName": "4.3.7",
     "fixed": [

@@ -500,7 +500,7 @@ class MessagesAdapter @Inject constructor(
                     isOutgoing && customOutgoingFill != null ->
                         setBackgroundTint(customOutgoingFill)
                     isOutgoing ->
-                        setBackgroundTint(null)
+                        setBackgroundTint(context.getColorCompat(R.color.bubbleOutgoing))
                     bubbleCustom ->
                         applyIncomingBubbleCustomAccent(
                             BubbleTone.incomingFill(night),

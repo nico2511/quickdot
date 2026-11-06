@@ -21,9 +21,9 @@ object BubbleTone {
         return blendTowardReadableBody(base, accent)
     }
 
-    /** Incoming bubble body when using a custom accent: neutral dark fill. */
+    /** Incoming bubble body when using a custom accent: neutral fill (readable with theme primary). */
     fun incomingFill(night: Boolean): Int =
-        if (night) 0xFF2A2A2A.toInt() else 0xFF141414.toInt()
+        if (night) 0xFF2A2A2A.toInt() else 0xFFF3F3F3.toInt()
 
     /** Body text on an outgoing bubble fill, at least [MIN_BODY_CONTRAST] when possible. */
     fun bodyTextForOutgoingFill(fill: Int): Int {

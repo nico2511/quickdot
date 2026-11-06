@@ -21,6 +21,7 @@ package dev.octoshrimpy.quik.common.util.extensions
 import android.animation.LayoutTransition
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
@@ -97,6 +98,8 @@ fun View.applySpeakerStroke(color: Int) {
     val drawable = background?.mutate()
     if (drawable is GradientDrawable) {
         val width = (1.5f * resources.displayMetrics.density).toInt().coerceAtLeast(1)
+        // Reset solid fill from [applyIncomingBubbleCustomAccent] when the view is recycled.
+        drawable.setColor(Color.TRANSPARENT)
         drawable.setStroke(width, color)
     }
     backgroundTintList = null

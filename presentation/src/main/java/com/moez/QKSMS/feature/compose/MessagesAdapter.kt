@@ -47,12 +47,14 @@ import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkRealmAdapter
 import dev.octoshrimpy.quik.common.base.QkViewHolder
 import dev.octoshrimpy.quik.common.util.AccentStartRuleDrawable
+import dev.octoshrimpy.quik.common.util.BubbleTone
 import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.DateFormatter
 import dev.octoshrimpy.quik.common.util.TextViewStyler
 import dev.octoshrimpy.quik.common.util.extensions.dpToPx
 import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
+import dev.octoshrimpy.quik.common.util.extensions.applyIncomingBubbleCustomAccent
 import dev.octoshrimpy.quik.common.util.extensions.applySpeakerStroke
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setPadding
@@ -76,7 +78,6 @@ import dev.octoshrimpy.quik.databinding.MessageListItemInBinding
 import dev.octoshrimpy.quik.databinding.MessageListItemOutBinding
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.Preferences
-import dev.octoshrimpy.quik.util.textColorOnAccent
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
@@ -207,6 +208,8 @@ class MessagesAdapter @Inject constructor(
         val rowSelected = isSelected(message.id) || highlight == message.id
         holder.itemView.isActivated = rowSelected
         val accent = colors.accentForThread(message.threadId)
+        val bubbleCustom = colors.bubbleUsesThreadAccent(message.threadId)
+        val night = colors.accentNight()
         val ruleWidth = 3.dpToPx(context)
         holder.itemView.foreground = if (rowSelected) {
             AccentStartRuleDrawable(accent, ruleWidth)
@@ -216,6 +219,10 @@ class MessagesAdapter @Inject constructor(
 
         // Get views based on message type
         val isOutgoing = message.isMe()
+        val customOutgoingFill =
+            if (bubbleCustom && isOutgoing) BubbleTone.outgoingFill(accent, night) else null
+        val customOutgoingInk =
+            customOutgoingFill?.let { BubbleTone.bodyTextForOutgoingFill(it) }
         val timestamp: TextView
         val simIndex: TextView
         val sim: ImageView
@@ -449,7 +456,10 @@ class MessagesAdapter @Inject constructor(
             minHeight = if (quoted != null) 0 else 36.dpToPx(context)
             if (!emojiOnly) {
                 setTextColor(when {
-                    isOutgoing -> textColorOnAccent(accent)
+                    isOutgoing && customOutgoingInk != null ->
+                        customOutgoingInk
+                    isOutgoing ->
+                        context.getColorCompat(R.color.bubbleOutgoingText)
                     // Body text stays the theme primary so it clears AA on the page.
                     else -> context.resolveThemeColor(android.R.attr.textColorPrimary)
                 })
@@ -462,7 +472,8 @@ class MessagesAdapter @Inject constructor(
             quoteName.text = quoted.name
             quoteExcerpt.text = quoted.excerpt
             if (isOutgoing) {
-                val ink = textColorOnAccent(accent)
+                val ink = customOutgoingInk
+                    ?: context.getColorCompat(R.color.bubbleOutgoingText)
                 quoteName.setTextColor(ink)
                 quoteExcerpt.setTextColor(ink.withAlpha(0xB3))
             } else {
@@ -485,11 +496,20 @@ class MessagesAdapter @Inject constructor(
                 )
             )
             if (!emojiOnly) {
-                if (isOutgoing) {
-                    setBackgroundTint(accent)
-                } else {
-                    // The accent is the stroke only; a view tint would fill the bubble.
-                    applySpeakerStroke(accent)
+                when {
+                    isOutgoing && customOutgoingFill != null ->
+                        setBackgroundTint(customOutgoingFill)
+                    isOutgoing ->
+                        setBackgroundTint(null)
+                    bubbleCustom ->
+                        applyIncomingBubbleCustomAccent(
+                            BubbleTone.incomingFill(night),
+                            accent,
+                        )
+                    else ->
+                        applySpeakerStroke(
+                            context.getColorCompat(R.color.bubbleIncomingStroke),
+                        )
                 }
             }
         }

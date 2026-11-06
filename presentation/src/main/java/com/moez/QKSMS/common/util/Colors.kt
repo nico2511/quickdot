@@ -101,6 +101,25 @@ class Colors @Inject constructor(
         return AccentPaint.night(prefs.nightMode.get(), prefs.night.get(), system)
     }
 
+    /** Same night mode as accent painting (thread swatches, Graphite shift). */
+    fun accentNight(): Boolean = night()
+
+    /**
+     * True when the painted accent for this thread is not the default Signal red
+     * (after Pro gating and [AccentPaint.display]). Used to tint message bubbles only;
+     * chrome still uses [accentForThread].
+     */
+    fun bubbleUsesThreadAccent(threadId: Long, proUnlocked: Boolean = proBillingHook.isUnlocked()): Boolean {
+        val defaultSnapped = snapAccent(Preferences.DEFAULT_THEME_COLOR)
+        val effectiveDefault = resolveEffectiveAccentStored(
+            defaultSnapped,
+            proBillingHook.enforcementEnabled,
+            proUnlocked
+        )
+        val defaultPainted = AccentPaint.display(effectiveDefault, night())
+        return accentForThread(threadId, proUnlocked) != defaultPainted
+    }
+
     fun accentLabel(color: Int = accentColor()): String {
         val snapped = snapAccent(color)
         val preset = accents.find { it.color == snapped }

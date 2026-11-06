@@ -103,6 +103,20 @@ fun View.applySpeakerStroke(color: Int) {
 }
 
 /**
+ * Incoming bubble with a non-default accent: solid neutral fill + thin accent stroke
+ * (same geometry as [applySpeakerStroke]).
+ */
+fun View.applyIncomingBubbleCustomAccent(fill: Int, strokeAccent: Int) {
+    val drawable = background?.mutate()
+    if (drawable is GradientDrawable) {
+        val width = (1.5f * resources.displayMetrics.density).toInt().coerceAtLeast(1)
+        drawable.setColor(fill)
+        drawable.setStroke(width, strokeAccent)
+    }
+    backgroundTintList = null
+}
+
+/**
  * If a view captures clicks at all, then the parent won't ever receive touch events. This is a
  * problem when we're trying to capture link clicks, but tapping or long pressing other areas of
  * the view no longer work. Also problematic when we try to long press on an image in the message
